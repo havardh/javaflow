@@ -6,7 +6,7 @@ import java.util.List;
 public class EnumDefinitionBuilder {
 
   private String name;
-  private List<String> values;
+  private List<String> values = new ArrayList<>();
 
   private EnumDefinitionBuilder() {
   }
@@ -21,9 +21,6 @@ public class EnumDefinitionBuilder {
   }
 
   public EnumDefinitionBuilder withEnumValue(String name) {
-    if (values == null) {
-      values = new ArrayList<>();
-    }
     this.values.add(name);
     return this;
   }

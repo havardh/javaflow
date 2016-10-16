@@ -7,7 +7,7 @@ import com.github.javaparser.ast.type.Type;
 public class ClassDefinitionBuilder {
 
   private String name;
-  private List<FieldDefinition> fields;
+  private List<FieldDefinition> fields = new ArrayList<>();
 
   private ClassDefinitionBuilder() {
   }
@@ -22,9 +22,6 @@ public class ClassDefinitionBuilder {
   }
 
   public ClassDefinitionBuilder withField(Type type, String name) {
-    if (fields == null) {
-      fields = new ArrayList<>();
-    }
     this.fields.add(new FieldDefinition(type, name));
     return this;
   }
