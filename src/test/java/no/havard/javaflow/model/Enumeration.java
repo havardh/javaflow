@@ -1,4 +1,4 @@
-package no.havard.javaflow;
+package no.havard.javaflow.model;
 
 public enum Enumeration {
 

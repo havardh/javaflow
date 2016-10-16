@@ -1,19 +1,17 @@
 package no.havard.javaflow;
 
-import static no.havard.javaflow.DefinitionBuilder.DefinitionType.Class;
-import static no.havard.javaflow.DefinitionBuilder.DefinitionType.Enum;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import no.havard.javaflow.convertion.JavaFlowTypeConversion;
+import no.havard.javaflow.convertion.MemberVisitor;
+import no.havard.javaflow.model.Definition;
+import no.havard.javaflow.model.DefinitionBuilder;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class JavaFlow {
 
@@ -45,32 +43,5 @@ public class JavaFlow {
     return null;
   }
 
-
-  private static class MemberVisitor extends VoidVisitorAdapter<DefinitionBuilder> {
-
-    @Override
-    public void visit(EnumDeclaration n, DefinitionBuilder builder) {
-      super.visit(n, builder);
-      builder.withType(Enum);
-      builder.withName(n.getName());
-
-      n.getEntries().stream().forEach(dec -> builder.withEnumValue(dec.getName()));
-    }
-
-    @Override
-    public void visit(ClassOrInterfaceDeclaration n, DefinitionBuilder builder) {
-      super.visit(n, builder);
-      builder.withName(n.getName());
-      builder.withType(Class);
-    }
-
-    @Override
-    public void visit(FieldDeclaration field, DefinitionBuilder builder) {
-      super.visit(field, builder);
-
-      field.getVariables().stream()
-          .forEach(variable -> builder.withField(field.getType(), variable.getId().getName()));
-    }
-  }
 
 }

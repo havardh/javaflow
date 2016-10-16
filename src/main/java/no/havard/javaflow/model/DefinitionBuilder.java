@@ -1,6 +1,6 @@
-package no.havard.javaflow;
+package no.havard.javaflow.model;
 
-import static no.havard.javaflow.DefinitionBuilder.DefinitionType.Class;
+import static no.havard.javaflow.model.DefinitionBuilder.DefinitionType.Class;
 
 import java.util.ArrayList;
 import java.util.List;

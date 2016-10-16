@@ -1,4 +1,4 @@
-package no.havard.javaflow;
+package no.havard.javaflow.convertion;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

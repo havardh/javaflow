@@ -1,4 +1,4 @@
-package no.havard.javaflow;
+package no.havard.javaflow.model;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;

@@ -5,13 +5,17 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 
 
+import no.havard.javaflow.model.ClassDefinition;
+import no.havard.javaflow.model.EnumDefinition;
+import no.havard.javaflow.model.FieldDefinition;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 public class JavaFlowTest {
 
-  private static final String BASE_PATH = "src/test/java/no/havard/javaflow/";
+  private static final String BASE_PATH = "src/test/java/no/havard/javaflow/model/";
 
   @Nested
   class ClassDefinitions {

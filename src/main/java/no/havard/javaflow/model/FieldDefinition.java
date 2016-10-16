@@ -1,6 +1,6 @@
-package no.havard.javaflow;
+package no.havard.javaflow.model;
 
-import static java.lang.String.format;
+import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 
 import com.github.javaparser.ast.type.Type;
 
@@ -24,6 +24,6 @@ public class FieldDefinition {
 
   @Override
   public String toString() {
-    return format("%s: %s", name, JavaFlowTypeConversion.toFlow(type));
+    return String.format("%s: %s", name, JavaFlowTypeConversion.toFlow(type));
   }
 }
