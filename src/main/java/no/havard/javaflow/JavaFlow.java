@@ -1,11 +1,14 @@
 package no.havard.javaflow;
 
+import static java.lang.String.format;
+
 import static no.havard.javaflow.convertion.CompilationUnitConverter.convert;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 import no.havard.javaflow.model.Definition;
@@ -18,12 +21,19 @@ public class JavaFlow {
 
   public static void main(String args[]) {
     JavaFlowTypeConversion.init();
-    String filename = args[0];
+
+    Stream.of(args).forEach(JavaFlow::parseAndPrint);
+  }
+
+  public static void parseAndPrint(String filename) {
+    System.out.println(format("// %s", filename));
 
     Definition definition = parse(filename)
       .orElseThrow(() -> new IllegalArgumentException("Could not convert: " + filename));
 
     System.out.println(definition);
+    System.out.println();
+
   }
 
   public static Optional<Definition> parse(String file) {
