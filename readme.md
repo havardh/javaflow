@@ -1,6 +1,8 @@
 # Javaflow #
 
-A Java model to flowtype converter
+A Java model to flowtype converter.
+[![Build Status](https://travis-ci.org/havardh/javaflow.svg?branch=master)](https://travis-ci.org/havardh/javaflow)
+
 
 ## Usage ##
 
