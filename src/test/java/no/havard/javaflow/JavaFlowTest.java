@@ -24,7 +24,7 @@ public class JavaFlowTest {
 
     @BeforeEach
     void parse() {
-      def = (ClassDefinition) JavaFlow.parse(BASE_PATH + MODEL);
+      def = (ClassDefinition) JavaFlow.parse(BASE_PATH + MODEL).get();
     }
 
     @Test
@@ -49,7 +49,7 @@ public class JavaFlowTest {
 
     @BeforeEach
     public void parse() {
-      def = (EnumDefinition)JavaFlow.parse(BASE_PATH + ENUM);
+      def = (EnumDefinition)JavaFlow.parse(BASE_PATH + ENUM).get();
     }
 
     @Test

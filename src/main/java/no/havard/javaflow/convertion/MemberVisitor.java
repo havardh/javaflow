@@ -10,7 +10,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class MemberVisitor extends VoidVisitorAdapter<DefinitionBuilder> {
+class MemberVisitor extends VoidVisitorAdapter<DefinitionBuilder> {
 
   @Override
   public void visit(EnumDeclaration n, DefinitionBuilder builder) {
