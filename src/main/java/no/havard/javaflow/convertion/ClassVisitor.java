@@ -1,24 +1,21 @@
 package no.havard.javaflow.convertion;
 
-import static no.havard.javaflow.model.DefinitionBuilder.DefinitionType.Class;
-
-import no.havard.javaflow.model.DefinitionBuilder;
+import no.havard.javaflow.model.ClassDefinitionBuilder;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class ClassVisitor extends VoidVisitorAdapter<DefinitionBuilder> {
+public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
 
   @Override
-  public void visit(ClassOrInterfaceDeclaration n, DefinitionBuilder builder) {
+  public void visit(ClassOrInterfaceDeclaration n, ClassDefinitionBuilder builder) {
     super.visit(n, builder);
     builder.withName(n.getName());
-    builder.withType(Class);
   }
 
   @Override
-  public void visit(FieldDeclaration field, DefinitionBuilder builder) {
+  public void visit(FieldDeclaration field, ClassDefinitionBuilder builder) {
     super.visit(field, builder);
 
     field.getVariables().stream()
