@@ -13,17 +13,18 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 
 public final class CompilationUnitConverter {
 
-  private static MemberVisitor memberVisitor = new MemberVisitor();
+  private static ClassVisitor classVisitor = new ClassVisitor();
+  private static EnumVisitor enumVisitor = new EnumVisitor();
 
   public static Optional<Definition> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
       DefinitionBuilder builder = DefinitionBuilder.builder();
-      memberVisitor.visit(cu, builder);
+      classVisitor.visit(cu, builder);
       return of(builder.build());
     } else if (containsEnum(cu)) {
       DefinitionBuilder builder = DefinitionBuilder.builder();
-      memberVisitor.visit(cu, builder);
+      enumVisitor.visit(cu, builder);
       return of(builder.build());
     }
 
