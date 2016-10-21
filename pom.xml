@@ -9,6 +9,11 @@
   <version>1.0-SNAPSHOT</version>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -19,6 +24,7 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.19</version>
@@ -30,10 +36,62 @@
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>appassembler-maven-plugin</artifactId>
+	<executions>
+          <execution>
+            <id>assemble-standalone</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+	  </execution>
+	</executions>
+        <configuration>
+          <configurationDirectory>conf</configurationDirectory>
+          <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+          <programs>
+            <program>
+              <mainClass>no.havard.javaflow.JavaFlow</mainClass>
+              <name>javaflow</name>
+            </program>
+          </programs>
+          <platforms>
+            <platform>windows</platform>
+            <platform>unix</platform>
+          </platforms>
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>lib</repositoryName>
+        </configuration>
+      </plugin>
+      <plugin>
+	<artifactId>maven-assembly-plugin</artifactId>
+	<executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+		<descriptor>src/main/assembly/bin.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+	</executions>
+      </plugin>
     </plugins>
   </build>
 
   <dependencies>
+    <dependency>
+      <groupId>org.codehaus.mojo.appassembler</groupId>
+      <artifactId>appassembler-booter</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+
     <dependency>
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
