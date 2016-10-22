@@ -3,6 +3,13 @@
 A Java model to flowtype converter.
 [![Build Status](https://travis-ci.org/havardh/javaflow.svg?branch=master)](https://travis-ci.org/havardh/javaflow)
 
+## Package ##
+
+Packaging a zip file with all dependencies and the binary for running:
+
+`mvn clean package appassembler:assemble`
+
+This create a zip file in the target folder.
 
 ## Usage ##
 
