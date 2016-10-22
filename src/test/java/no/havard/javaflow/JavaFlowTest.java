@@ -6,10 +6,10 @@ import static org.hamcrest.Matchers.is;
 
 
 import no.havard.javaflow.model.ClassDefinition;
+import no.havard.javaflow.model.Definition;
 import no.havard.javaflow.model.EnumDefinition;
 import no.havard.javaflow.model.FieldDefinition;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -19,23 +19,19 @@ public class JavaFlowTest {
 
   @Nested
   class ClassDefinitions {
-    private static final String MODEL = "Model.java";
-    private ClassDefinition def;
-
-    @BeforeEach
-    void parse() {
-      def = (ClassDefinition) JavaFlow.parse(BASE_PATH + MODEL).get();
-    }
 
     @Test
     public void shouldSetNameOfClass() {
-      assertThat(def.getName(), is("Model"));
+      Definition definition = parse("Model");
+
+      assertThat(definition.getName(), is("Model"));
     }
 
     @Test
     public void shouldSetFieldOfClass() {
+      ClassDefinition definition = (ClassDefinition)parse("Model");
 
-      FieldDefinition field = def.getFieldDefinitions().get(0);
+      FieldDefinition field = definition.getFieldDefinitions().get(0);
 
       assertThat(field.getName(), is("yolo"));
       assertThat(field.getType().toString(), is("String"));
@@ -44,23 +40,24 @@ public class JavaFlowTest {
 
   @Nested
   class EnumDefinitions {
-    private static final String ENUM = "Enumeration.java";
-    private EnumDefinition def;
-
-    @BeforeEach
-    public void parse() {
-      def = (EnumDefinition)JavaFlow.parse(BASE_PATH + ENUM).get();
-    }
 
     @Test
     public void shouldSetNameOfEnum() {
-      assertThat(def.getName(), is("Enumeration"));
+      Definition definition = parse("Enumeration");
+
+      assertThat(definition.getName(), is("Enumeration"));
     }
 
     @Test
     public void shouldSetValuesOfEnum() {
-      assertThat(def.getValues(), contains("ONE", "TWO"));
+      EnumDefinition definition = (EnumDefinition)parse("Enumeration");
+
+      assertThat(definition.getValues(), contains("ONE", "TWO"));
     }
+  }
+
+  private static Definition parse(String name) {
+    return JavaFlow.parse(BASE_PATH + name + ".java").get();
   }
 
 }
