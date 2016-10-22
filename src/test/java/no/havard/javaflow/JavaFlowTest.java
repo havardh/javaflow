@@ -36,6 +36,14 @@ public class JavaFlowTest {
       assertThat(field.getName(), is("yolo"));
       assertThat(field.getType().toString(), is("String"));
     }
+
+    @Test
+    public void shouldAddParentNameToDefinition() {
+      Definition definition = parse("Sub");
+
+      assertThat(definition.getParent().get(), is("Super"));
+    }
+
   }
 
   @Nested
