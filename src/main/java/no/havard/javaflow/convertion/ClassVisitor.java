@@ -12,6 +12,9 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   public void visit(ClassOrInterfaceDeclaration n, ClassDefinitionBuilder builder) {
     super.visit(n, builder);
     builder.withName(n.getName());
+    
+    n.getExtends().stream().findFirst()
+        .ifPresent(parent -> builder.withParent(parent.getName()));
   }
 
   @Override
@@ -22,6 +25,3 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
       .forEach(variable -> builder.withField(field.getType(), variable.getId().getName()));
   }
 }
-
-
-
