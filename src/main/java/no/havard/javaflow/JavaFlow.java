@@ -1,12 +1,14 @@
 package no.havard.javaflow;
 
-import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 import static no.havard.javaflow.convertion.CompilationUnitConverter.convert;
+import static no.havard.javaflow.convertion.FileSetHandler.handleExtends;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -22,21 +24,21 @@ public class JavaFlow {
   public static void main(String args[]) {
     JavaFlowTypeConversion.init();
 
-    Stream.of(args).forEach(JavaFlow::parseAndPrint);
+    parseAll(args).stream()
+        .forEach(JavaFlow::print);
   }
 
-  public static void parseAndPrint(String filename) {
-    System.out.println(format("// %s", filename));
+  public static List<Definition> parseAll(String[] filenames) {
+    List<Definition> definitions = Stream.of(filenames)
+        .map(JavaFlow::parse)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(toList());
 
-    Definition definition = parse(filename)
-      .orElseThrow(() -> new IllegalArgumentException("Could not convert: " + filename));
-
-    System.out.println(definition);
-    System.out.println();
-
+    return handleExtends(definitions);
   }
 
-  public static Optional<Definition> parse(String file) {
+  static Optional<Definition> parse(String file) {
     try (FileInputStream inputStream = new FileInputStream(file)) {
       CompilationUnit compilationUnit = JavaParser.parse(inputStream);
 
@@ -55,5 +57,9 @@ public class JavaFlow {
     return Optional.empty();
   }
 
+  private static void print(Definition definition) {
+    System.out.println(definition);
+    System.out.println();
 
+  }
 }
