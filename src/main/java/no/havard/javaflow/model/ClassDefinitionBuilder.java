@@ -22,7 +22,7 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   public ClassDefinitionBuilder with(ClassDefinition classDefinition) {
     withName(classDefinition.name);
-    withParent(classDefinition.parent.orElse(null));
+    withParent(classDefinition.parent.map(Parent::getName).orElse(null));
     withFields(classDefinition.getFieldDefinitions().toArray(new FieldDefinition[]{}));
     return this;
   }

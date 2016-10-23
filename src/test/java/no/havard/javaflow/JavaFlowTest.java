@@ -7,16 +7,20 @@ import static java.util.stream.Collectors.toMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.Map;
+import java.util.Optional;
 
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.Definition;
 import no.havard.javaflow.model.EnumDefinition;
 import no.havard.javaflow.model.FieldDefinition;
+import no.havard.javaflow.model.Parent;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -48,48 +52,101 @@ public class JavaFlowTest {
     public void shouldAddParentNameToDefinition() {
       Definition definition = parse("Sub");
 
-      assertThat(definition.getParent().get(), is("Super"));
+      assertThat(definition.getParent().map(Parent::getName).get(), is("Super"));
     }
 
     @Nested
     public class Inheritance {
+      Map<String, Definition> definitions;
+      ClassDefinition top, sup, sub;
+
+      @BeforeEach
+      public void setup() {
+        definitions = parseAll("Top", "Sub", "Super");
+        top = (ClassDefinition) definitions.get("Top");
+        sup = (ClassDefinition) definitions.get("Super");
+        sub = (ClassDefinition) definitions.get("Sub");
+      }
 
       @Test
       public void shouldParseAllModels() {
-        Map<String, Definition> definitions = parseAll("Sub", "Super");
-
-        ClassDefinition sup = (ClassDefinition)definitions.get("Super");
-        ClassDefinition sub = (ClassDefinition)definitions.get("Sub");
-
         assertThat(sup, is(notNullValue()));
         assertThat(sub, is(notNullValue()));
       }
 
-      @Test
-      public void shouldCopyFieldsFromSuperIntoSub() {
-        Map<String, Definition> definitions = parseAll("Sub", "Super");
+      @Nested
+      public class ParentLinks {
 
-        ClassDefinition sub = (ClassDefinition)definitions.get("Sub");
+        @Test
+        public void shouldSetSubParentLinkToSuper() {
+          assertThat(sub.getParent().map(Parent::getReference).get(), is(sup));
+        }
 
-        assertThat(sub.getFieldDefinitions().size(), is(2));
+        @Test
+        public void shouldSetSupParentLinkToTop() {
+          assertThat(sup.getParent().map(Parent::getReference).get(), is(top));
+        }
+
+        @Test
+        public void shouldNotSetTopParentLink() {
+          assertThat(top.getParent(), is(Optional.empty()));
+        }
       }
 
-      @Test
-      public void shouldPlaceSuperFieldFirst() {
-        Map<String, Definition> definitions = parseAll("Sub", "Super");
+      @Nested
+      public class FieldDefinitions {
 
-        ClassDefinition sub = (ClassDefinition)definitions.get("Sub");
+        @Nested
+        public class Top {
 
-        assertThat(sub.getFieldDefinitions().get(0).getName(), is("superField"));
-      }
+          @Test
+          public void shouldHaveASingleField() {
+            assertThat(top.getFieldDefinitions(), hasSize(1));
+            assertThat(top.getFieldDefinitions().get(0).getName(), is("topField"));
+          }
+        }
 
-      @Test
-      public void shouldPlaceSubFieldLast() {
-        Map<String, Definition> definitions = parseAll("Sub", "Super");
+        @Nested
+        public class Super {
 
-        ClassDefinition sub = (ClassDefinition)definitions.get("Sub");
+          @Test
+          public void shouldInheritFieldFromTop() {
+            assertThat(sup.getFieldDefinitions(), hasSize(2));
+          }
 
-        assertThat(sub.getFieldDefinitions().get(1).getName(), is("subField"));
+          @Test
+          public void shouldHaveTopFieldsFirst() {
+            assertThat(sup.getFieldDefinitions().get(0).getName(), is("topField"));
+          }
+
+          @Test
+          public void shouldHaveOwnFieldLast() {
+            assertThat(sup.getFieldDefinitions().get(1).getName(), is("superField"));
+          }
+        }
+
+        @Nested
+        public class Sub {
+
+          @Test
+          public void shouldInheritFieldFromAllParents() {
+            assertThat(sub.getFieldDefinitions().size(), is(3));
+          }
+
+          @Test
+          public void shouldHaveFieldFromTopMostParentFirst() {
+            assertThat(sub.getFieldDefinitions().get(0).getName(), is("topField"));
+          }
+          @Test
+          public void shouldHaveAllParentFieldBeforeOwn() {
+            assertThat(sub.getFieldDefinitions().get(1).getName(), is("superField"));
+          }
+
+          @Test
+          public void shouldHaveOwnFieldLast() {
+            assertThat(sub.getFieldDefinitions().get(2).getName(), is("subField"));
+          }
+        }
       }
     }
   }
