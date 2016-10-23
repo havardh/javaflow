@@ -1,17 +1,14 @@
 package no.havard.javaflow.convertion;
 
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-
-import static no.havard.javaflow.model.ClassDefinitionBuilder.classDefinitionBuilder;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
-import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.Definition;
-import no.havard.javaflow.model.FieldDefinition;
+import no.havard.javaflow.model.Parent;
 
 public class FileSetHandler {
 
@@ -19,17 +16,17 @@ public class FileSetHandler {
     Map<String, Definition> definitionMap = definitions.stream()
         .collect(toMap(Definition::getName, identity()));
 
-    return definitions.stream()
-        .map(definition ->
-            definition.getParent()
-                .map(name -> classDefinitionBuilder()
-                    .withFields(((ClassDefinition)definitionMap
-                        .getOrDefault(name, ClassDefinition.empty()))
-                        .getFieldDefinitions().toArray(new FieldDefinition[]{}))
-                    .with((ClassDefinition) definition)
-                    .build())
-                .orElse((ClassDefinition)definition)
-        ).collect(toList());
+    definitions.stream().forEach(setParentReference(definitionMap));
+
+    return definitions;
+  }
+
+  private static Consumer<Definition> setParentReference(Map<String, Definition> definitionMap) {
+    return definition -> definition.getParent().ifPresent(updateParentReference(definitionMap));
+  }
+
+  private static Consumer<Parent> updateParentReference(Map<String, Definition> definitionMap) {
+    return parent -> parent.setReference(definitionMap.get(parent.getName()));
   }
 
 }

@@ -1,9 +1,10 @@
-package no.havard.javaflow.model;
-
-import static java.util.Arrays.stream;
+package no.havard.javaflow.model.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import no.havard.javaflow.model.ClassDefinition;
+import no.havard.javaflow.model.FieldDefinition;
 
 import com.github.javaparser.ast.type.Type;
 
@@ -20,13 +21,6 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     return new ClassDefinitionBuilder();
   }
 
-  public ClassDefinitionBuilder with(ClassDefinition classDefinition) {
-    withName(classDefinition.name);
-    withParent(classDefinition.parent.orElse(null));
-    withFields(classDefinition.getFieldDefinitions().toArray(new FieldDefinition[]{}));
-    return this;
-  }
-
   public ClassDefinitionBuilder withName(String name) {
     this.name = name;
     return this;
@@ -38,16 +32,7 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
   }
 
   public ClassDefinitionBuilder withField(Type type, String name) {
-    return withField(new FieldDefinition(type, name));
-  }
-
-  public ClassDefinitionBuilder withField(FieldDefinition definition) {
-    this.fields.add(definition);
-    return this;
-  }
-
-  public ClassDefinitionBuilder withFields(FieldDefinition ... definitions) {
-    stream(definitions).forEach(this::withField);
+    this.fields.add(new FieldDefinition(type, name));
     return this;
   }
 

@@ -1,6 +1,6 @@
 package no.havard.javaflow.convertion;
 
-import no.havard.javaflow.model.EnumDefinitionBuilder;
+import no.havard.javaflow.model.builders.EnumDefinitionBuilder;
 
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
