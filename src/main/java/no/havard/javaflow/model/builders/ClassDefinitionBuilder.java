@@ -1,7 +1,10 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.model.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import no.havard.javaflow.model.ClassDefinition;
+import no.havard.javaflow.model.FieldDefinition;
 
 import com.github.javaparser.ast.type.Type;
 

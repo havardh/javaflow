@@ -1,7 +1,9 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.model.builders;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import no.havard.javaflow.model.EnumDefinition;
 
 public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
 

@@ -1,6 +1,6 @@
 package no.havard.javaflow.convertion;
 
-import no.havard.javaflow.model.ClassDefinitionBuilder;
+import no.havard.javaflow.model.builders.ClassDefinitionBuilder;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;

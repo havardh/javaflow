@@ -2,12 +2,12 @@ package no.havard.javaflow.convertion;
 
 import static java.util.Optional.of;
 
-import static no.havard.javaflow.model.ClassDefinitionBuilder.classDefinitionBuilder;
-import static no.havard.javaflow.model.EnumDefinitionBuilder.enumDefinitionBuilder;
+import static no.havard.javaflow.model.builders.ClassDefinitionBuilder.classDefinitionBuilder;
+import static no.havard.javaflow.model.builders.EnumDefinitionBuilder.enumDefinitionBuilder;
 
 import java.util.Optional;
 
-import no.havard.javaflow.model.Builder;
+import no.havard.javaflow.model.builders.Builder;
 import no.havard.javaflow.model.Definition;
 
 import com.github.javaparser.ast.CompilationUnit;
