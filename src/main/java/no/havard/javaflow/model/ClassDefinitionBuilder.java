@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.github.javaparser.ast.type.Type;
 
-public class ClassDefinitionBuilder {
+public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   private String name;
   private String parent;
@@ -16,7 +16,7 @@ public class ClassDefinitionBuilder {
   private ClassDefinitionBuilder() {
   }
 
-  public static ClassDefinitionBuilder builder() {
+  public static ClassDefinitionBuilder classDefinitionBuilder() {
     return new ClassDefinitionBuilder();
   }
 
@@ -51,7 +51,7 @@ public class ClassDefinitionBuilder {
     return this;
   }
 
-  public Definition build() {
+  public ClassDefinition build() {
     if (parent == null) {
       return new ClassDefinition(name, fields);
     } else {
