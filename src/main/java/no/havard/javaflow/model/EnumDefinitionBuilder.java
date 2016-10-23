@@ -3,7 +3,7 @@ package no.havard.javaflow.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnumDefinitionBuilder {
+public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
 
   private String name;
   private List<String> values = new ArrayList<>();
@@ -11,7 +11,7 @@ public class EnumDefinitionBuilder {
   private EnumDefinitionBuilder() {
   }
 
-  public static EnumDefinitionBuilder builder() {
+  public static EnumDefinitionBuilder enumDefinitionBuilder() {
     return new EnumDefinitionBuilder();
   }
 
@@ -25,7 +25,7 @@ public class EnumDefinitionBuilder {
     return this;
   }
 
-  public Definition build() {
+  public EnumDefinition build() {
     return new EnumDefinition(name, values);
   }
 
