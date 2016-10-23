@@ -5,12 +5,15 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+import static no.havard.javaflow.convertion.FileSetHandler.handleExtends;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -174,11 +177,15 @@ public class JavaFlowTest {
   }
 
   private static Map<String, Definition> parseAll(String ...modelNames) {
-    return JavaFlow.parseAll(asList(modelNames)
+    List<Definition> definitions = JavaFlow.parseAll(asList(modelNames)
         .stream()
         .map(name -> BASE_PATH + name + ".java")
         .collect(toList())
-        .toArray(new String[]{}))
+        .toArray(new String[]{}));
+
+    handleExtends(definitions);
+
+    return definitions
         .stream()
         .collect(toMap(Definition::getName, identity()));
   }

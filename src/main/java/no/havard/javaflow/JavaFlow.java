@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 import no.havard.javaflow.model.Definition;
+import no.havard.javaflow.phases.writer.FlowWriter;
+import no.havard.javaflow.phases.writer.Writer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
@@ -21,21 +23,22 @@ import com.github.javaparser.ast.CompilationUnit;
 
 public class JavaFlow {
 
+  private static Writer<Definition> writer = new FlowWriter();
+
   public static void main(String args[]) {
     JavaFlowTypeConversion.init();
 
-    parseAll(args).stream()
-        .forEach(JavaFlow::print);
+    List<Definition> definitions = parseAll(args);
+    handleExtends(definitions);
+    definitions.stream().forEach(writer::write);
   }
 
   public static List<Definition> parseAll(String[] filenames) {
-    List<Definition> definitions = Stream.of(filenames)
+    return Stream.of(filenames)
         .map(JavaFlow::parse)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(toList());
-
-    return handleExtends(definitions);
   }
 
   static Optional<Definition> parse(String file) {
@@ -55,11 +58,5 @@ public class JavaFlow {
       System.exit(0);
     }
     return Optional.empty();
-  }
-
-  private static void print(Definition definition) {
-    System.out.println(definition);
-    System.out.println();
-
   }
 }
