@@ -1,9 +1,14 @@
 package no.havard.javaflow.model.builders;
 
+import static no.havard.javaflow.util.Maps.entriesToMap;
+import static no.havard.javaflow.util.Maps.entry;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.FieldDefinition;
@@ -11,6 +16,10 @@ import no.havard.javaflow.model.FieldDefinition;
 import com.github.javaparser.ast.type.Type;
 
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
+
+  private static Map<String, String> BUILTIN = Collections.unmodifiableMap(Stream.of(
+      entry("String", "java.util")
+  ).collect(entriesToMap()));
 
   private String packageName;
   private String name;
@@ -60,6 +69,8 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
   }
 
   private String resolvePackageName(Type type) {
-    return imports.getOrDefault(type.toString(), this.packageName);
+    return imports.getOrDefault(
+        type.toString(), BUILTIN.getOrDefault(type.toString(), this.packageName)
+    );
   }
 }
