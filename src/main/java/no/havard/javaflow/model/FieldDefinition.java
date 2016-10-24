@@ -1,5 +1,7 @@
 package no.havard.javaflow.model;
 
+import static java.lang.String.format;
+
 import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 
 public class FieldDefinition {
@@ -22,9 +24,13 @@ public class FieldDefinition {
     return name;
   }
 
+  public String getCanonicalName() {
+    return format("%s.%s", packageName, type);
+  }
+
   @Override
   public String toString() {
-    return String.format("%s: %s", name, JavaFlowTypeConversion.toFlow(type));
+    return format("%s: %s", name, JavaFlowTypeConversion.toFlow(getCanonicalName(), getType()));
   }
 
   public String getPackageName() {

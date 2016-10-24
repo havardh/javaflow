@@ -17,8 +17,14 @@ public class ClassDefinition extends Definition {
     this.fieldDefinitions = definitions;
   }
 
-  public ClassDefinition(String packageName, String name, String parent, List<FieldDefinition> definitions) {
-    super(packageName, name, new Parent(parent));
+  public ClassDefinition(
+      String packageName,
+      String name,
+      String parentPackageName,
+      String parent,
+      List<FieldDefinition> definitions
+  ) {
+    super(packageName, name, new Parent(parentPackageName, parent));
     this.fieldDefinitions = definitions;
   }
 

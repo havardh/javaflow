@@ -14,7 +14,7 @@ public class FileSetHandler {
 
   public static List<Definition> handleExtends(List<Definition> definitions) {
     Map<String, Definition> definitionMap = definitions.stream()
-        .collect(toMap(Definition::getName, identity()));
+        .collect(toMap(Definition::getCanonicalName, identity()));
 
     definitions.stream().forEach(setParentReference(definitionMap));
 
@@ -26,7 +26,7 @@ public class FileSetHandler {
   }
 
   private static Consumer<Parent> updateParentReference(Map<String, Definition> definitionMap) {
-    return parent -> parent.setReference(definitionMap.get(parent.getName()));
+    return parent -> parent.setReference(definitionMap.get(parent.getCanonicalName()));
   }
 
 }

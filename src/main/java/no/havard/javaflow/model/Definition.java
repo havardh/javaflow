@@ -1,5 +1,7 @@
 package no.havard.javaflow.model;
 
+import static java.lang.String.format;
+
 import java.util.Optional;
 
 public abstract class Definition {
@@ -21,6 +23,10 @@ public abstract class Definition {
 
   public String getPackageName() {
     return packageName;
+  }
+
+  public String getCanonicalName() {
+    return format("%s.%s", packageName, name);
   }
 
   public Optional<Parent> getParent() {

@@ -45,8 +45,8 @@ public final class JavaFlowTypeConversion {
 
   }
 
-  public static String toFlow(String type) {
-    return CUSTOM_TYPE_MAP.getOrDefault(type, TYPE_MAP.getOrDefault(type, type));
+  public static String toFlow(String name, String defaultName) {
+    return CUSTOM_TYPE_MAP.getOrDefault(name, TYPE_MAP.getOrDefault(name, defaultName));
   }
 
 }

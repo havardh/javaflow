@@ -62,7 +62,7 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     if (parent == null) {
       return new ClassDefinition(packageName, name, fields);
     } else {
-      return new ClassDefinition(packageName, name, parent, fields);
+      return new ClassDefinition(packageName, name, resolvePackageName(parent), parent, fields);
     }
   }
 
