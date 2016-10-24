@@ -1,13 +1,13 @@
 package no.havard.javaflow.convertion;
 
+import static no.havard.javaflow.util.Maps.entriesToMap;
+import static no.havard.javaflow.util.Maps.entry;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
@@ -21,7 +21,7 @@ public final class JavaFlowTypeConversion {
       entry("double", "number"),
       entry("Double", "?number"),
 
-      entry("String", "string"),
+      entry("String", "?string"),
 
       entry("boolean", "boolean"),
       entry("Boolean", "?boolean")
@@ -47,17 +47,11 @@ public final class JavaFlowTypeConversion {
   }
 
   public static String toFlow(Type type) {
+
+
     return CUSTOM_TYPE_MAP.getOrDefault(type.toString(),
         TYPE_MAP.getOrDefault(type.toString(),
             type.toString()));
-  }
-
-  private static Map.Entry<String, String> entry(String key, String value) {
-    return new AbstractMap.SimpleEntry<>(key, value);
-  }
-
-  private static Collector<Map.Entry<String, String>, ?, Map<String, String>> entriesToMap() {
-    return Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
   }
 
 }
