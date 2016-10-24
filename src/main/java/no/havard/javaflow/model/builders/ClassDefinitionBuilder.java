@@ -13,8 +13,6 @@ import java.util.stream.Stream;
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.FieldDefinition;
 
-import com.github.javaparser.ast.type.Type;
-
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   private static Map<String, String> BUILTIN = Collections.unmodifiableMap(Stream.of(
@@ -54,7 +52,7 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     return this;
   }
 
-  public ClassDefinitionBuilder withField(Type type, String name) {
+  public ClassDefinitionBuilder withField(String type, String name) {
     String packageName = resolvePackageName(type);
     this.fields.add(new FieldDefinition(packageName, type, name));
     return this;
@@ -68,9 +66,7 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     }
   }
 
-  private String resolvePackageName(Type type) {
-    return imports.getOrDefault(
-        type.toString(), BUILTIN.getOrDefault(type.toString(), this.packageName)
-    );
+  private String resolvePackageName(String type) {
+    return imports.getOrDefault(type, BUILTIN.getOrDefault(type, this.packageName));
   }
 }

@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
-import com.github.javaparser.ast.type.Type;
 
 public final class JavaFlowTypeConversion {
 
@@ -46,12 +45,8 @@ public final class JavaFlowTypeConversion {
 
   }
 
-  public static String toFlow(Type type) {
-
-
-    return CUSTOM_TYPE_MAP.getOrDefault(type.toString(),
-        TYPE_MAP.getOrDefault(type.toString(),
-            type.toString()));
+  public static String toFlow(String type) {
+    return CUSTOM_TYPE_MAP.getOrDefault(type, TYPE_MAP.getOrDefault(type, type));
   }
 
 }

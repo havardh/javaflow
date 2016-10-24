@@ -55,7 +55,7 @@ public class JavaFlowTest {
       FieldDefinition field = definition.getFieldDefinitions().get(0);
 
       assertThat(field.getName(), is("yolo"));
-      assertThat(field.getType().toString(), is("String"));
+      assertThat(field.getType(), is("String"));
     }
 
     @Test
