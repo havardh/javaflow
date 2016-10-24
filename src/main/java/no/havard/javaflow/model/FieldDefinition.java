@@ -6,10 +6,12 @@ import com.github.javaparser.ast.type.Type;
 
 public class FieldDefinition {
 
+  private final String packageName;
   private final Type type;
   private final String name;
 
-  public FieldDefinition(Type type, String name) {
+  public FieldDefinition(String packageName, Type type, String name) {
+    this.packageName = packageName;
     this.type = type;
     this.name = name;
   }
@@ -25,5 +27,9 @@ public class FieldDefinition {
   @Override
   public String toString() {
     return String.format("%s: %s", name, JavaFlowTypeConversion.toFlow(type));
+  }
+
+  public String getPackageName() {
+    return packageName;
   }
 }

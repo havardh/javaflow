@@ -1,7 +1,9 @@
 package no.havard.javaflow.model.builders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.FieldDefinition;
@@ -14,6 +16,7 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
   private String name;
   private String parent;
   private List<FieldDefinition> fields = new ArrayList<>();
+  private Map<String, String> imports = new HashMap<>();
 
   private ClassDefinitionBuilder() {
   }
@@ -24,6 +27,11 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   public ClassDefinitionBuilder withPackageName(String packageName) {
     this.packageName = packageName;
+    return this;
+  }
+
+  public ClassDefinitionBuilder withImport(String name, String packageName) {
+    imports.put(name, packageName);
     return this;
   }
 
@@ -38,7 +46,8 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
   }
 
   public ClassDefinitionBuilder withField(Type type, String name) {
-    this.fields.add(new FieldDefinition(type, name));
+    String packageName = resolvePackageName(type);
+    this.fields.add(new FieldDefinition(packageName, type, name));
     return this;
   }
 
@@ -48,5 +57,9 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     } else {
       return new ClassDefinition(packageName, name, parent, fields);
     }
+  }
+
+  private String resolvePackageName(Type type) {
+    return imports.getOrDefault(type.toString(), this.packageName);
   }
 }

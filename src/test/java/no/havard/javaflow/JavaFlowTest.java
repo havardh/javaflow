@@ -186,6 +186,24 @@ public class JavaFlowTest {
     }
   }
 
+  @Nested
+  class Packages {
+
+    @Test
+    public void shouldSetPackageNameForFields() {
+      ClassDefinition definition = (ClassDefinition)parse("Wrapper");
+
+      List<FieldDefinition> fields = definition.getFieldDefinitions();
+
+      FieldDefinition member = fields.get(0);
+      FieldDefinition packagedMember = fields.get(1);
+
+      assertThat(member.getPackageName(), is("no.havard.javaflow.model"));
+      assertThat(packagedMember.getPackageName(), is("no.havard.javaflow.model.packaged"));
+    }
+
+  }
+
   private static Definition parse(String name) {
     return JavaFlow.parse(BASE_PATH + name + ".java").get();
   }

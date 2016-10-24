@@ -1,7 +1,12 @@
 package no.havard.javaflow.convertion;
 
+import static java.util.stream.Collectors.joining;
+
+import java.util.stream.Stream;
+
 import no.havard.javaflow.model.builders.ClassDefinitionBuilder;
 
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -13,6 +18,17 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   public void visit(PackageDeclaration n, ClassDefinitionBuilder builder) {
     super.visit(n, builder);
     builder.withPackageName(n.getPackageName());
+  }
+
+  @Override
+  public void visit(ImportDeclaration n, ClassDefinitionBuilder builder) {
+    super.visit(n, builder);
+
+    String[] packages = n.getName().toString().split("\\.");
+    builder.withImport(
+        n.getName().getName(),
+        Stream.of(packages).limit(packages.length-1).collect(joining("."))
+    );
   }
 
   @Override
