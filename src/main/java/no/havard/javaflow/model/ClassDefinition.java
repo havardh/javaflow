@@ -10,19 +10,15 @@ import java.util.stream.Stream;
 
 public class ClassDefinition extends Definition {
 
-  public static ClassDefinition empty() {
-    return new ClassDefinition(null, emptyList());
-  }
-
   private final List<FieldDefinition> fieldDefinitions;
 
-  public ClassDefinition(String name, List<FieldDefinition> definitions) {
-    super(name);
+  public ClassDefinition(String packageName, String name, List<FieldDefinition> definitions) {
+    super(packageName, name);
     this.fieldDefinitions = definitions;
   }
 
-  public ClassDefinition(String name, String parent, List<FieldDefinition> definitions) {
-    super(name, new Parent(parent));
+  public ClassDefinition(String packageName, String name, String parent, List<FieldDefinition> definitions) {
+    super(packageName, name, new Parent(parent));
     this.fieldDefinitions = definitions;
   }
 

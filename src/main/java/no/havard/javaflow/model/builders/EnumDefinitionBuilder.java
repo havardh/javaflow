@@ -7,6 +7,7 @@ import no.havard.javaflow.model.EnumDefinition;
 
 public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
 
+  private String packageName;
   private String name;
   private List<String> values = new ArrayList<>();
 
@@ -15,6 +16,11 @@ public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
 
   public static EnumDefinitionBuilder enumDefinitionBuilder() {
     return new EnumDefinitionBuilder();
+  }
+
+  public EnumDefinitionBuilder withPackageName(String packageName) {
+    this.packageName = packageName;
+    return this;
   }
 
   public EnumDefinitionBuilder withName(String name) {
@@ -28,7 +34,7 @@ public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
   }
 
   public EnumDefinition build() {
-    return new EnumDefinition(name, values);
+    return new EnumDefinition(packageName, name, values);
   }
 
 }

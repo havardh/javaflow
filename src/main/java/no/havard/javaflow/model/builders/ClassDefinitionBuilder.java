@@ -10,6 +10,7 @@ import com.github.javaparser.ast.type.Type;
 
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
+  private String packageName;
   private String name;
   private String parent;
   private List<FieldDefinition> fields = new ArrayList<>();
@@ -19,6 +20,11 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   public static ClassDefinitionBuilder classDefinitionBuilder() {
     return new ClassDefinitionBuilder();
+  }
+
+  public ClassDefinitionBuilder withPackageName(String packageName) {
+    this.packageName = packageName;
+    return this;
   }
 
   public ClassDefinitionBuilder withName(String name) {
@@ -38,10 +44,9 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   public ClassDefinition build() {
     if (parent == null) {
-      return new ClassDefinition(name, fields);
+      return new ClassDefinition(packageName, name, fields);
     } else {
-      return new ClassDefinition(name, parent, fields);
+      return new ClassDefinition(packageName, name, parent, fields);
     }
   }
-
 }

@@ -42,6 +42,13 @@ public class JavaFlowTest {
     }
 
     @Test
+    public void shouldSetPackageOfClass() {
+      Definition definition = parse("Model");
+
+      assertThat(definition.getPackageName(), is("no.havard.javaflow.model"));
+    }
+
+    @Test
     public void shouldSetFieldOfClass() {
       ClassDefinition definition = (ClassDefinition)parse("Model");
 
@@ -162,6 +169,13 @@ public class JavaFlowTest {
       Definition definition = parse("Enumeration");
 
       assertThat(definition.getName(), is("Enumeration"));
+    }
+
+    @Test
+    public void shouldSetPackageNameOfEnum() {
+      Definition definition = parse("Enumeration");
+
+      assertThat(definition.getPackageName(), is("no.havard.javaflow.model"));
     }
 
     @Test
