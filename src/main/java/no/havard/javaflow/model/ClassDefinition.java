@@ -38,7 +38,7 @@ public class ClassDefinition extends Definition {
 
   @Override
   public String toString() {
-    return format("export type %s {\n  %s,\n};", this.name, getFieldDefinitions().stream()
+    return format("export type %s = {\n  %s,\n};", this.name, getFieldDefinitions().stream()
         .map(FieldDefinition::toString)
         .collect(joining(",\n  ")));
   }
