@@ -42,13 +42,20 @@ public class JavaFlowTest {
     }
 
     @Test
+    public void shouldSetPackageOfClass() {
+      Definition definition = parse("Model");
+
+      assertThat(definition.getPackageName(), is("no.havard.javaflow.model"));
+    }
+
+    @Test
     public void shouldSetFieldOfClass() {
       ClassDefinition definition = (ClassDefinition)parse("Model");
 
       FieldDefinition field = definition.getFieldDefinitions().get(0);
 
       assertThat(field.getName(), is("yolo"));
-      assertThat(field.getType().toString(), is("String"));
+      assertThat(field.getType(), is("String"));
     }
 
     @Test
@@ -165,11 +172,36 @@ public class JavaFlowTest {
     }
 
     @Test
+    public void shouldSetPackageNameOfEnum() {
+      Definition definition = parse("Enumeration");
+
+      assertThat(definition.getPackageName(), is("no.havard.javaflow.model"));
+    }
+
+    @Test
     public void shouldSetValuesOfEnum() {
       EnumDefinition definition = (EnumDefinition)parse("Enumeration");
 
       assertThat(definition.getValues(), contains("ONE", "TWO"));
     }
+  }
+
+  @Nested
+  class Packages {
+
+    @Test
+    public void shouldSetPackageNameForFields() {
+      ClassDefinition definition = (ClassDefinition)parse("Wrapper");
+
+      List<FieldDefinition> fields = definition.getFieldDefinitions();
+
+      FieldDefinition member = fields.get(0);
+      FieldDefinition packagedMember = fields.get(1);
+
+      assertThat(member.getPackageName(), is("no.havard.javaflow.model"));
+      assertThat(packagedMember.getPackageName(), is("no.havard.javaflow.model.packaged"));
+    }
+
   }
 
   private static Definition parse(String name) {

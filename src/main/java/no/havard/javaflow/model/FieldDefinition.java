@@ -1,20 +1,22 @@
 package no.havard.javaflow.model;
 
-import no.havard.javaflow.convertion.JavaFlowTypeConversion;
+import static java.lang.String.format;
 
-import com.github.javaparser.ast.type.Type;
+import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 
 public class FieldDefinition {
 
-  private final Type type;
+  private final String packageName;
+  private final String type;
   private final String name;
 
-  public FieldDefinition(Type type, String name) {
+  public FieldDefinition(String packageName, String type, String name) {
+    this.packageName = packageName;
     this.type = type;
     this.name = name;
   }
 
-  public Type getType() {
+  public String getType() {
     return type;
   }
 
@@ -22,8 +24,16 @@ public class FieldDefinition {
     return name;
   }
 
+  public String getCanonicalName() {
+    return format("%s.%s", packageName, type);
+  }
+
   @Override
   public String toString() {
-    return String.format("%s: %s", name, JavaFlowTypeConversion.toFlow(type));
+    return format("%s: %s", name, JavaFlowTypeConversion.toFlow(getCanonicalName(), getType()));
+  }
+
+  public String getPackageName() {
+    return packageName;
   }
 }
