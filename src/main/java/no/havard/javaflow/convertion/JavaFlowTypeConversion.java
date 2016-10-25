@@ -20,10 +20,11 @@ public final class JavaFlowTypeConversion {
       entry("double", "number"),
       entry("Double", "?number"),
 
-      entry("String", "?string"),
+      entry("java.util.Date", "?string"),
+      entry("java.util.String", "?string"),
 
       entry("boolean", "boolean"),
-      entry("Boolean", "?boolean")
+      entry("java.util.Boolean", "?boolean")
   );
 
   private static Map<String, String> TYPE_MAP = Collections.unmodifiableMap(TYPE_CONVERSIONS.collect(entriesToMap()));
