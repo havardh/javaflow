@@ -28,6 +28,7 @@ public class JavaFlow {
   public static void main(String args[]) {
     JavaFlowTypeConversion.init();
 
+    System.out.println("/* @flow */");
     List<Definition> definitions = parseAll(args);
     handleExtends(definitions);
     definitions.stream().forEach(writer::write);
