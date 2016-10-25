@@ -38,17 +38,17 @@
       </plugin>
 
       <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>appassembler-maven-plugin</artifactId>
-	<executions>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <executions>
           <execution>
             <id>assemble-standalone</id>
             <phase>package</phase>
             <goals>
               <goal>assemble</goal>
             </goals>
-	  </execution>
-	</executions>
+          </execution>
+        </executions>
         <configuration>
           <configurationDirectory>conf</configurationDirectory>
           <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
@@ -67,8 +67,8 @@
         </configuration>
       </plugin>
       <plugin>
-	<artifactId>maven-assembly-plugin</artifactId>
-	<executions>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
           <execution>
             <phase>package</phase>
             <goals>
@@ -76,11 +76,11 @@
             </goals>
             <configuration>
               <descriptors>
-		<descriptor>src/main/assembly/bin.xml</descriptor>
+                <descriptor>src/main/assembly/bin.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
-	</executions>
+        </executions>
       </plugin>
     </plugins>
   </build>
