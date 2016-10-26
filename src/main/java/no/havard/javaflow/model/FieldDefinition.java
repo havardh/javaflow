@@ -7,17 +7,17 @@ import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 public class FieldDefinition {
 
   private final String packageName;
-  private final String type;
+  private final Type type;
   private final String name;
 
-  public FieldDefinition(String packageName, String type, String name) {
+  public FieldDefinition(String packageName, Type type, String name) {
     this.packageName = packageName;
     this.type = type;
     this.name = name;
   }
 
   public String getType() {
-    return type;
+    return type.toString();
   }
 
   public String getName() {
