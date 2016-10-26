@@ -204,6 +204,25 @@ public class JavaFlowTest {
 
   }
 
+  @Nested
+  class Containers {
+
+    @Test
+    public void shouldSerializeListsAsArrays() {
+      ClassDefinition definition = (ClassDefinition)parse("ModelWithList");
+
+      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("Array<?string>"));
+    }
+
+    @Test
+  public void shouldSerializeMapAsMapTypes() {
+      ClassDefinition definition = (ClassDefinition)parse("ModelWithMap");
+
+      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("{[key: ?string]: ?string}"));
+    }
+
+  }
+
   private static Definition parse(String name) {
     return JavaFlow.parse(BASE_PATH + name + ".java").get();
   }

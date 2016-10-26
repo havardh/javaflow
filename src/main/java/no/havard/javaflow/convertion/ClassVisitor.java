@@ -45,6 +45,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
     super.visit(field, builder);
 
     field.getVariables().stream()
-      .forEach(variable -> builder.withField(field.getType().toString(), variable.getId().getName()));
+      .forEach(variable -> builder.withField(field.getType(), variable.getId().getName()));
   }
+
 }
