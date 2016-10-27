@@ -20,9 +20,15 @@ import no.havard.javaflow.model.Type;
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   private static Map<String, String> BUILTIN = Collections.unmodifiableMap(Stream.of(
-      entry("String", "java.util"),
-      entry("Double", "java.util"),
-      entry("Integer", "java.util")
+      entry("Boolean", "java.lang"),
+      entry("Byte", "java.lang"),
+      entry("Character", "java.lang"),
+      entry("Double", "java.lang"),
+      entry("Float", "java.lang"),
+      entry("Integer", "java.lang"),
+      entry("Long", "java.lang"),
+      entry("Short", "java.lang"),
+      entry("String", "java.lang")
   ).collect(entriesToMap()));
 
   private String packageName;
