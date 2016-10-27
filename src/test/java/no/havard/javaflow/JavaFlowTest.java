@@ -55,7 +55,7 @@ public class JavaFlowTest {
       FieldDefinition field = definition.getFieldDefinitions().get(0);
 
       assertThat(field.getName(), is("yolo"));
-      assertThat(field.getType(), is("String"));
+      assertThat(field.getType().getName(), is("String"));
     }
 
     @Test
@@ -165,6 +165,11 @@ public class JavaFlowTest {
         @Test
         public void shouldMapChar() {
           assertThat(typeMap.get("characterField"), is("?string"));
+        }
+
+        @Test
+        public void shouldMapString() {
+          assertThat(typeMap.get("stringField"), is("?string"));
         }
 
       }
@@ -316,16 +321,15 @@ public class JavaFlowTest {
     public void shouldSerializeListsAsArrays() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithList");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType(), is("Array<?string>"));
+      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("Array<?string>"));
     }
 
     @Test
   public void shouldSerializeMapAsMapTypes() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithMap");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType(), is("{[key: ?string]: ?number}"));
+      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("{[key: ?string]: ?number}"));
     }
-
   }
 
   private static Definition parse(String name) {

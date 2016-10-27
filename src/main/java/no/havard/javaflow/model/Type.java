@@ -6,32 +6,40 @@ import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 
 public class Type {
 
-  protected final String name;
+  protected final CanonicalName name;
 
-  private Type(String name) {
+  private Type(CanonicalName name) {
     this.name = name;
   }
 
   public String getName() {
-    return name;
+    return name.getName();
   }
 
-  public static Type object(String name) {
+  public String getCanonicalName() {
+    return name.getCanonicalName();
+  }
+
+  public String getPackageName() {
+    return name.getPackageName();
+  }
+
+  public static Type object(CanonicalName name) {
     return new Type(name);
   }
 
-  public static Type list(String name, String type) {
+  public static Type list(CanonicalName name, CanonicalName type) {
     return new ListType(name, type);
   }
 
-  public static Type map(String name, String key, String value) {
+  public static Type map(CanonicalName name, CanonicalName key, CanonicalName value) {
     return new MapType(name, key, value);
   }
 
   private static class ListType extends Type {
-    private final String type;
+    private final CanonicalName type;
 
-    public ListType(String name, String type) {
+    public ListType(CanonicalName name, CanonicalName type) {
       super(name);
       this.type = type;
     }
@@ -39,17 +47,17 @@ public class Type {
     @Override
     public String toString() {
       return format("%s<%s>",
-          name,
-          JavaFlowTypeConversion.toFlow(type, type)
+          name.getName(),
+          JavaFlowTypeConversion.toFlow(type.getCanonicalName(), type.getName())
       );
     }
   }
 
   private static class MapType extends Type {
-    private final String key;
-    private final String value;
+    private final CanonicalName key;
+    private final CanonicalName value;
 
-    public MapType(String name, String key, String value) {
+    public MapType(CanonicalName name, CanonicalName key, CanonicalName value) {
       super(name);
       this.key = key;
       this.value = value;
@@ -58,15 +66,15 @@ public class Type {
     @Override
     public String toString() {
       return format("{[key: %s]: %s}",
-          JavaFlowTypeConversion.toFlow(key, key),
-          JavaFlowTypeConversion.toFlow(value, value)
+          JavaFlowTypeConversion.toFlow(key.getCanonicalName(), key.getName()),
+          JavaFlowTypeConversion.toFlow(value.getCanonicalName(), value.getName())
       );
     }
   }
 
   @Override
   public String toString() {
-    return JavaFlowTypeConversion.toFlow(name, name);
+    return JavaFlowTypeConversion.toFlow(name.getCanonicalName(), name.getName());
   }
 }
 

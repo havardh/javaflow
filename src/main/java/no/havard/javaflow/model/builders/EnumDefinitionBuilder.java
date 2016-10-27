@@ -3,6 +3,7 @@ package no.havard.javaflow.model.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.model.EnumDefinition;
 
 public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
@@ -34,7 +35,7 @@ public class EnumDefinitionBuilder implements Builder<EnumDefinition> {
   }
 
   public EnumDefinition build() {
-    return new EnumDefinition(packageName, name, values);
+    return new EnumDefinition(new CanonicalName(packageName, name), values);
   }
 
 }

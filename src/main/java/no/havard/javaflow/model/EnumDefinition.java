@@ -9,8 +9,8 @@ public class EnumDefinition extends Definition {
 
   private final List<String> values;
 
-  public EnumDefinition(String packageName, String name, List<String> values) {
-    super(packageName, name);
+  public EnumDefinition(CanonicalName name, List<String> values) {
+    super(name);
     this.values = values;
   }
 

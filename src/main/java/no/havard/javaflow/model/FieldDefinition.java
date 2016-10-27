@@ -6,38 +6,32 @@ import no.havard.javaflow.convertion.JavaFlowTypeConversion;
 
 public class FieldDefinition {
 
-  private final String packageName;
-  private final Type type;
   private final String name;
+  private final Type type;
 
-  public FieldDefinition(String packageName, Type type, String name) {
-    this.packageName = packageName;
+  public FieldDefinition(String name, Type type) {
     this.type = type;
     this.name = name;
   }
 
-  public String getType() {
-    return type.toString();
+  public Type getType() {
+    return type;
   }
 
   public String getName() {
     return name;
   }
 
-  public String getCanonicalName() {
-    return format("%s.%s", packageName, type);
+  public String getFlowType() {
+    return JavaFlowTypeConversion.toFlow(type.getCanonicalName(), type.getName());
   }
 
-  public String getFlowType() {
-    return JavaFlowTypeConversion.toFlow(getCanonicalName(), getType());
+  public String getPackageName() {
+    return type.getPackageName();
   }
 
   @Override
   public String toString() {
-    return format("%s: %s", name, getFlowType());
-  }
-
-  public String getPackageName() {
-    return packageName;
+    return format("%s: %s", name, getType());
   }
 }

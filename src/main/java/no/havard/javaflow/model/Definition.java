@@ -1,32 +1,27 @@
 package no.havard.javaflow.model;
 
-import static java.lang.String.format;
-
 import java.util.Optional;
 
 public abstract class Definition {
-  private String packageName;
-  protected final String name;
+  protected final CanonicalName name;
   protected final Optional<Parent> parent;
 
-  public Definition(String packageName, String name) {
-    this.packageName = packageName;
+  public Definition(CanonicalName name) {
     this.name = name;
     this.parent = Optional.empty();
   }
 
-  public Definition(String packageName, String name, Parent parent) {
-    this.packageName = packageName;
+  public Definition(CanonicalName name, Parent parent) {
     this.name = name;
     this.parent = Optional.of(parent);
   }
 
   public String getPackageName() {
-    return packageName;
+    return name.getPackageName();
   }
 
   public String getCanonicalName() {
-    return format("%s.%s", packageName, name);
+    return name.getCanonicalName();
   }
 
   public Optional<Parent> getParent() {
@@ -38,7 +33,7 @@ public abstract class Definition {
   }
 
   public String getName() {
-    return name;
+    return name.getName();
   }
 }
 

@@ -13,9 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.FieldDefinition;
 import no.havard.javaflow.model.Type;
+
+import com.github.javaparser.ast.type.PrimitiveType;
 
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
@@ -66,17 +69,23 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   public ClassDefinitionBuilder withField(com.github.javaparser.ast.type.Type type, String name) {
     Type t = of(type);
-    String packageName = resolvePackageName(t.getName());
 
-    this.fields.add(new FieldDefinition(packageName, t, name));
+    this.fields.add(new FieldDefinition(name, t));
     return this;
   }
 
   public ClassDefinition build() {
     if (parent == null) {
-      return new ClassDefinition(packageName, name, fields);
+      return new ClassDefinition(
+          new CanonicalName(packageName, name),
+          fields
+      );
     } else {
-      return new ClassDefinition(packageName, name, resolvePackageName(parent), parent, fields);
+      return new ClassDefinition(
+          new CanonicalName(packageName, name),
+          new CanonicalName(resolvePackageName(parent), parent),
+          fields
+      );
     }
   }
 
@@ -89,7 +98,10 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
     if (isList(typeLiteral)) {
       String valueType = extractType(typeLiteral);
-      return list("Array", resolvePackageName(valueType) + "." + valueType);
+      return list(
+          new CanonicalName(null, "Array"),
+          new CanonicalName(resolvePackageName(valueType),  valueType)
+      );
     }
 
     if (isMap(typeLiteral)) {
@@ -97,13 +109,16 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
       String valType = extractValueType(typeLiteral);
 
       return map(
-          "Map",
-          resolvePackageName(keyType) + "." + keyType,
-          resolvePackageName(valType) + "." + valType
+          new CanonicalName(null, "Map"),
+          new CanonicalName(resolvePackageName(keyType), keyType),
+          new CanonicalName(resolvePackageName(valType), valType)
       );
     }
-
-    return object(typeLiteral);
+    if (type instanceof PrimitiveType) {
+      return object(new CanonicalName(typeLiteral));
+    } else {
+      return object(new CanonicalName(resolvePackageName(typeLiteral), typeLiteral));
+    }
   }
 
   private static boolean isList(String typeLiteral) {
