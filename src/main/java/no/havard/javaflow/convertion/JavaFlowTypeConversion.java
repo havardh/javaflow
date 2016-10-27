@@ -15,15 +15,21 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 public final class JavaFlowTypeConversion {
 
   private static Stream<Map.Entry<String, String>> TYPE_CONVERSIONS = Stream.of(
+      entry("byte", "number"),
+      entry("short", "number"),
       entry("int", "number"),
-      entry("Integer", "?number"),
+      entry("long", "number"),
+      entry("float", "number"),
       entry("double", "number"),
+      entry("boolean", "boolean"),
+      entry("char", "number"),
+
+      entry("Integer", "?number"),
       entry("Double", "?number"),
 
       entry("java.util.Date", "?string"),
       entry("java.util.String", "?string"),
 
-      entry("boolean", "boolean"),
       entry("java.util.Boolean", "?boolean")
   );
 

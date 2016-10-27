@@ -1,6 +1,6 @@
 package no.havard.javaflow;
 
-import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -63,6 +63,57 @@ public class JavaFlowTest {
       Definition definition = parse("Sub");
 
       assertThat(definition.getParent().map(Parent::getName).get(), is("Super"));
+    }
+
+    @Nested
+    class Types {
+
+      private Map<String, String> typeMap;
+
+      @BeforeEach
+      public void setup() {
+        typeMap = typeMap((ClassDefinition) parse("ModelWithPrimitive"));
+      }
+
+      @Test
+      public void shouldMapBytePrimitives() {
+        assertThat(typeMap.get("byteField"), is("number"));
+      }
+
+      @Test
+      public void shouldMapShortPrimitives() {
+        assertThat(typeMap.get("shortField"), is("number"));
+      }
+
+      @Test
+      public void shouldMapIntPrimitives() {
+        assertThat(typeMap.get("intField"), is("number"));
+      }
+
+      @Test
+      public void shouldMapLongPrimitives() {
+        assertThat(typeMap.get("longField"), is("number"));
+      }
+
+      @Test
+      public void shouldMapFloatPrimitive() {
+        assertThat(typeMap.get("floatField"), is("number"));
+      }
+
+      @Test
+      public void shouldMapDoublePrimitive() {
+        assertThat(typeMap.get("doubleField"), is("number"));
+      }
+
+      @Test
+      public void shouldMapBooleanPrimitives() {
+        assertThat(typeMap.get("booleanField"), is("boolean"));
+      }
+
+      @Test
+      public void shouldMapCharPrimitives() {
+        assertThat(typeMap.get("charField"), is("number"));
+      }
     }
 
     @Nested
@@ -211,14 +262,14 @@ public class JavaFlowTest {
     public void shouldSerializeListsAsArrays() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithList");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("Array<?string>"));
+      assertThat(definition.getFieldDefinitions().get(0).getType(), is("Array<?string>"));
     }
 
     @Test
   public void shouldSerializeMapAsMapTypes() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithMap");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("{[key: ?string]: ?string}"));
+      assertThat(definition.getFieldDefinitions().get(0).getType(), is("{[key: ?string]: ?string}"));
     }
 
   }
@@ -228,8 +279,7 @@ public class JavaFlowTest {
   }
 
   private static Map<String, Definition> parseAll(String ...modelNames) {
-    List<Definition> definitions = JavaFlow.parseAll(asList(modelNames)
-        .stream()
+    List<Definition> definitions = JavaFlow.parseAll(stream(modelNames)
         .map(name -> BASE_PATH + name + ".java")
         .collect(toList())
         .toArray(new String[]{}));
@@ -239,6 +289,12 @@ public class JavaFlowTest {
     return definitions
         .stream()
         .collect(toMap(Definition::getName, identity()));
+  }
+
+  private static Map<String, String> typeMap(ClassDefinition classDefinition) {
+    return classDefinition.getFieldDefinitions()
+        .stream()
+        .collect(toMap(FieldDefinition::getName, FieldDefinition::getFlowType));
   }
 
 }

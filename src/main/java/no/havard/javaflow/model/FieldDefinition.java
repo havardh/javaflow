@@ -28,9 +28,13 @@ public class FieldDefinition {
     return format("%s.%s", packageName, type);
   }
 
+  public String getFlowType() {
+    return JavaFlowTypeConversion.toFlow(getCanonicalName(), getType());
+  }
+
   @Override
   public String toString() {
-    return format("%s: %s", name, JavaFlowTypeConversion.toFlow(getCanonicalName(), getType()));
+    return format("%s: %s", name, getFlowType());
   }
 
   public String getPackageName() {
