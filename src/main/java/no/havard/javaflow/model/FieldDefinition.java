@@ -2,7 +2,7 @@ package no.havard.javaflow.model;
 
 import static java.lang.String.format;
 
-import no.havard.javaflow.convertion.JavaFlowTypeConversion;
+import static no.havard.javaflow.convertion.JavaFlowTypeConversion.toFlow;
 
 public class FieldDefinition {
 
@@ -23,7 +23,7 @@ public class FieldDefinition {
   }
 
   public String getFlowType() {
-    return JavaFlowTypeConversion.toFlow(type.getCanonicalName(), type.getName());
+    return toFlow(type.getCanonicalName());
   }
 
   public String getPackageName() {

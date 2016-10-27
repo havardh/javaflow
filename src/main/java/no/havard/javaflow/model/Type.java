@@ -2,7 +2,7 @@ package no.havard.javaflow.model;
 
 import static java.lang.String.format;
 
-import no.havard.javaflow.convertion.JavaFlowTypeConversion;
+import static no.havard.javaflow.convertion.JavaFlowTypeConversion.toFlow;
 
 public class Type {
 
@@ -16,8 +16,8 @@ public class Type {
     return name.getName();
   }
 
-  public String getCanonicalName() {
-    return name.getCanonicalName();
+  public CanonicalName getCanonicalName() {
+    return name;
   }
 
   public String getPackageName() {
@@ -48,7 +48,7 @@ public class Type {
     public String toString() {
       return format("%s<%s>",
           name.getName(),
-          JavaFlowTypeConversion.toFlow(type.getCanonicalName(), type.getName())
+          toFlow(type)
       );
     }
   }
@@ -65,16 +65,13 @@ public class Type {
 
     @Override
     public String toString() {
-      return format("{[key: %s]: %s}",
-          JavaFlowTypeConversion.toFlow(key.getCanonicalName(), key.getName()),
-          JavaFlowTypeConversion.toFlow(value.getCanonicalName(), value.getName())
-      );
+      return format("{[key: %s]: %s}", toFlow(key), toFlow(value));
     }
   }
 
   @Override
   public String toString() {
-    return JavaFlowTypeConversion.toFlow(name.getCanonicalName(), name.getName());
+    return toFlow(name);
   }
 }
 

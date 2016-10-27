@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import no.havard.javaflow.model.CanonicalName;
+
 import com.esotericsoftware.yamlbeans.YamlReader;
 
 public final class JavaFlowTypeConversion {
@@ -64,8 +66,11 @@ public final class JavaFlowTypeConversion {
 
   }
 
-  public static String toFlow(String name, String defaultName) {
-    return CUSTOM_TYPE_MAP.getOrDefault(name, TYPE_MAP.getOrDefault(name, defaultName));
+  public static String toFlow(CanonicalName canonicalName) {
+    String name = canonicalName.getName();
+    String fullName = canonicalName.getCanonicalName();
+
+    return CUSTOM_TYPE_MAP.getOrDefault(fullName, TYPE_MAP.getOrDefault(fullName, name));
   }
 
 }
