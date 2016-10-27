@@ -12,19 +12,17 @@ public class ClassDefinition extends Definition {
 
   private final List<FieldDefinition> fieldDefinitions;
 
-  public ClassDefinition(String packageName, String name, List<FieldDefinition> definitions) {
-    super(packageName, name);
+  public ClassDefinition(CanonicalName name, List<FieldDefinition> definitions) {
+    super(name);
     this.fieldDefinitions = definitions;
   }
 
   public ClassDefinition(
-      String packageName,
-      String name,
-      String parentPackageName,
-      String parent,
+      CanonicalName name,
+      CanonicalName parentName,
       List<FieldDefinition> definitions
   ) {
-    super(packageName, name, new Parent(parentPackageName, parent));
+    super(name, new Parent(parentName));
     this.fieldDefinitions = definitions;
   }
 
