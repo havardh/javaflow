@@ -1,5 +1,8 @@
 package no.havard.javaflow.convertion;
 
+import static java.util.Collections.unmodifiableMap;
+import static java.util.stream.Stream.concat;
+
 import static no.havard.javaflow.util.Maps.entriesToMap;
 import static no.havard.javaflow.util.Maps.entry;
 
@@ -14,7 +17,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 
 public final class JavaFlowTypeConversion {
 
-  private static Stream<Map.Entry<String, String>> TYPE_CONVERSIONS = Stream.of(
+  private static Stream<Map.Entry<String, String>> PRIMITIVES = Stream.of(
       entry("byte", "number"),
       entry("short", "number"),
       entry("int", "number"),
@@ -22,18 +25,27 @@ public final class JavaFlowTypeConversion {
       entry("float", "number"),
       entry("double", "number"),
       entry("boolean", "boolean"),
-      entry("char", "number"),
-
-      entry("Integer", "?number"),
-      entry("Double", "?number"),
-
-      entry("java.util.Date", "?string"),
-      entry("java.util.String", "?string"),
-
-      entry("java.util.Boolean", "?boolean")
+      entry("char", "string")
   );
 
-  private static Map<String, String> TYPE_MAP = Collections.unmodifiableMap(TYPE_CONVERSIONS.collect(entriesToMap()));
+  private static Stream<Map.Entry<String, String>> OBJECTS = Stream.of(
+      entry("java.util.Date", "?string"),
+
+      entry("java.lang.Boolean", "?boolean"),
+      entry("java.lang.Byte", "?number"),
+      entry("java.lang.Character", "?string"),
+      entry("java.lang.Double", "?number"),
+      entry("java.lang.Float", "?number"),
+      entry("java.lang.Integer", "?number"),
+      entry("java.lang.Long", "?number"),
+      entry("java.lang.Short", "?number"),
+      entry("java.lang.String", "?string")
+  );
+
+  private static Map<String, String> TYPE_MAP = unmodifiableMap(
+      concat(PRIMITIVES, OBJECTS).collect(entriesToMap())
+  );
+
   private static Map<String, String> CUSTOM_TYPE_MAP = Collections.emptyMap();
 
   private JavaFlowTypeConversion() {
