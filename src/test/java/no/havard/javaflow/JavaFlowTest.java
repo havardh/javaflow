@@ -323,7 +323,7 @@ public class JavaFlowTest {
   public void shouldSerializeMapAsMapTypes() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithMap");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType(), is("{[key: ?string]: ?string}"));
+      assertThat(definition.getFieldDefinitions().get(0).getType(), is("{[key: ?string]: ?number}"));
     }
 
   }

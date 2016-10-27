@@ -118,12 +118,12 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     return typeLiteral.substring(5, typeLiteral.length() - 1);
   }
 
-  private static String extractValueType(String typeLiteral) {
+  private static String extractKeyType(String typeLiteral) {
     int index = typeLiteral.indexOf(",");
     return typeLiteral.substring(4, index);
   }
 
-  private static String extractKeyType(String typeLiteral) {
+  private static String extractValueType(String typeLiteral) {
     int index = typeLiteral.indexOf(",");
     return typeLiteral.substring(index+2, typeLiteral.length() - 1);
   }
