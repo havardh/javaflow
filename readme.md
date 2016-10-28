@@ -5,8 +5,10 @@
 
 ## Example ##
 
-The `javaflow` utility takes a list of Java class files writes the flow types
+`javaflow` takes a list of Java class files, and writes the flow types
 for the models to the standard output.
+
+A simple example is the follwing convertion of `Post.java` to `post.js`.
 
 ```
 public class Post {
@@ -45,7 +47,7 @@ to corresponding flow types. This mapping can be overrided, or additional mappin
 An use case for providing custom type substitutions is when the Java model contains a type with
 a custom serialized form.
 
-Consider the model Person with the Ssn wrapper type below.
+Consider the model `Person` with the `Ssn` wrapper type below.
 
 ```
 no.havard.examples;
