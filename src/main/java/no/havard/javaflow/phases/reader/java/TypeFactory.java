@@ -1,4 +1,4 @@
-package no.havard.javaflow.convertion;
+package no.havard.javaflow.phases.reader.java;
 
 import static no.havard.javaflow.model.Type.list;
 import static no.havard.javaflow.model.Type.map;

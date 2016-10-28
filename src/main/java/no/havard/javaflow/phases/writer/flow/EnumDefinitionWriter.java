@@ -1,6 +1,7 @@
-package no.havard.javaflow.phases.writer;
+package no.havard.javaflow.phases.writer.flow;
 
 import no.havard.javaflow.model.EnumDefinition;
+import no.havard.javaflow.phases.writer.Writer;
 
 class EnumDefinitionWriter implements Writer<EnumDefinition> {
   @Override

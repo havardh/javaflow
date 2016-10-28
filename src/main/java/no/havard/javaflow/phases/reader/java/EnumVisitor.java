@@ -1,4 +1,4 @@
-package no.havard.javaflow.convertion;
+package no.havard.javaflow.phases.reader.java;
 
 import no.havard.javaflow.model.builders.EnumDefinitionBuilder;
 

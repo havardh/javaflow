@@ -2,7 +2,7 @@ package no.havard.javaflow.model;
 
 import static java.lang.String.format;
 
-import static no.havard.javaflow.convertion.JavaFlowTypeConversion.toFlow;
+import static no.havard.javaflow.JavaFlowTypeConversion.toFlow;
 
 public class Type {
 

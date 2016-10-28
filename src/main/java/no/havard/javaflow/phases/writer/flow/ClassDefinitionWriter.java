@@ -1,6 +1,7 @@
-package no.havard.javaflow.phases.writer;
+package no.havard.javaflow.phases.writer.flow;
 
 import no.havard.javaflow.model.ClassDefinition;
+import no.havard.javaflow.phases.writer.Writer;
 
 class ClassDefinitionWriter implements Writer<ClassDefinition> {
   @Override

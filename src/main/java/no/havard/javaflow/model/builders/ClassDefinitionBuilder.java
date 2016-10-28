@@ -1,6 +1,6 @@
 package no.havard.javaflow.model.builders;
 
-import static no.havard.javaflow.convertion.TypeFactory.factory;
+import static no.havard.javaflow.phases.reader.java.TypeFactory.factory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
