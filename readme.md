@@ -22,8 +22,8 @@ javaflow Post.java >post.js
 ```
 /* @flow */
 export type Post {
-  title: ?string,
-  text: ?string,
+  title: string,
+  text: string,
 };
 ```
 
@@ -69,7 +69,7 @@ Without any further configuration, `javaflow` would convert the types as follows
 ```
 /* @flow */
 export type Ssn = {
-  ssn: ?string,
+  ssn: string,
 };
 
 export type Person = {

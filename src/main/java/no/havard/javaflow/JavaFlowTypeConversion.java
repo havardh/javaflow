@@ -31,21 +31,21 @@ public final class JavaFlowTypeConversion {
   );
 
   private static Stream<Map.Entry<String, String>> OBJECTS = Stream.of(
-      entry("char[]", "?string"),
+      entry("char[]", "string"),
 
-      entry("java.util.Date", "?string"),
+      entry("java.util.Date", "string"),
       entry("java.util.Map", "Map"),
       entry("java.util.List", "Array"),
 
-      entry("java.lang.Boolean", "?boolean"),
-      entry("java.lang.Byte", "?number"),
-      entry("java.lang.Character", "?string"),
-      entry("java.lang.Double", "?number"),
-      entry("java.lang.Float", "?number"),
-      entry("java.lang.Integer", "?number"),
-      entry("java.lang.Long", "?number"),
-      entry("java.lang.Short", "?number"),
-      entry("java.lang.String", "?string")
+      entry("java.lang.Boolean", "boolean"),
+      entry("java.lang.Byte", "number"),
+      entry("java.lang.Character", "string"),
+      entry("java.lang.Double", "number"),
+      entry("java.lang.Float", "number"),
+      entry("java.lang.Integer", "number"),
+      entry("java.lang.Long", "number"),
+      entry("java.lang.Short", "number"),
+      entry("java.lang.String", "string")
   );
 
   private static Map<String, String> TYPE_MAP = unmodifiableMap(
