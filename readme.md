@@ -27,6 +27,12 @@ export type Post {
 };
 ```
 
+## Installation ##
+
+Download the most recent zip file under releasaes.
+Unzip the downloaded file to the desired location like `~/apps/javaflow`.
+Add <path-javaflow>/bin to your `PATH` variable.
+
 ## Multiple files ##
 
 To support inheritance `javaflow` accepts a list of files. All non-standard
