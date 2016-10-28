@@ -11,6 +11,8 @@ import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.FieldDefinition;
 
+import com.github.javaparser.ast.type.Type;
+
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   private String packageName;
@@ -46,8 +48,9 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     return this;
   }
 
-  public ClassDefinitionBuilder withField(com.github.javaparser.ast.type.Type type, String name) {
+  public ClassDefinitionBuilder withField(boolean isNullable, Type type, String name) {
     this.fields.add(new FieldDefinition(
+        isNullable,
         name,
         factory(packageName, imports).of(type)
     ));

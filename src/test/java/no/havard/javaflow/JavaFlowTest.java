@@ -343,6 +343,16 @@ public class JavaFlowTest {
     }
   }
 
+  @Nested
+  class Nullable {
+    @Test
+    public void shouldMapNullableTypes() {
+      ClassDefinition definition = (ClassDefinition) parse("ModelWithNullableField");
+
+      assertThat(definition.getFieldDefinitions().get(0).toString(), is("field: ?string"));
+    }
+  }
+
   private static Definition parse(String name) {
     return new JavaReader().read(BASE_PATH + name + ".java").get();
   }
