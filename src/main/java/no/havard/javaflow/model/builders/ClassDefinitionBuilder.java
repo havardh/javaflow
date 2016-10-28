@@ -31,7 +31,10 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
       entry("Integer", "java.lang"),
       entry("Long", "java.lang"),
       entry("Short", "java.lang"),
-      entry("String", "java.lang")
+      entry("String", "java.lang"),
+
+      entry("List", "java.util"),
+      entry("Map", "java.util")
   ).collect(entriesToMap()));
 
   private String packageName;
@@ -97,19 +100,21 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     String typeLiteral = type.toString();
 
     if (isList(typeLiteral)) {
-      String valueType = extractType(typeLiteral);
+      String tagType = extractTagType(typeLiteral);
+      String valType = extractType(typeLiteral);
       return list(
-          new CanonicalName(null, "Array"),
-          new CanonicalName(resolvePackageName(valueType),  valueType)
+          new CanonicalName(resolvePackageName(tagType), tagType),
+          new CanonicalName(resolvePackageName(valType),  valType)
       );
     }
 
     if (isMap(typeLiteral)) {
+      String tagType = extractTagType(typeLiteral);
       String keyType = extractKeyType(typeLiteral);
       String valType = extractValueType(typeLiteral);
 
       return map(
-          new CanonicalName(null, "Map"),
+          new CanonicalName(resolvePackageName(tagType), tagType),
           new CanonicalName(resolvePackageName(keyType), keyType),
           new CanonicalName(resolvePackageName(valType), valType)
       );
@@ -128,6 +133,10 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
   private static boolean isMap(String typeLiteral) {
     return typeLiteral.startsWith("Map<") && typeLiteral.endsWith(">");
+  }
+
+  private static String extractTagType(String typeLiteral) {
+    return typeLiteral.substring(0, typeLiteral.indexOf("<"));
   }
 
   private static String extractType(String typeLiteral) {
