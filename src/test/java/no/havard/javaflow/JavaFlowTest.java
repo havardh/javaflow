@@ -173,6 +173,17 @@ public class JavaFlowTest {
         }
 
       }
+
+      @Nested
+      class Arrays {
+
+        @Test
+        public void shouldMapCharArrayToString() {
+          Map<String, String> types = typeMap((ClassDefinition) parse("ModelWithArrays"));
+
+          assertThat(types.get("field"), is("?string"));
+        }
+      }
     }
 
     @Nested

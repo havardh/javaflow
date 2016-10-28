@@ -114,7 +114,8 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
           new CanonicalName(resolvePackageName(valType), valType)
       );
     }
-    if (type instanceof PrimitiveType) {
+
+    if (type instanceof PrimitiveType || typeLiteral.equals("char[]")) {
       return object(new CanonicalName(typeLiteral));
     } else {
       return object(new CanonicalName(resolvePackageName(typeLiteral), typeLiteral));

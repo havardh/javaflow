@@ -31,6 +31,8 @@ public final class JavaFlowTypeConversion {
   );
 
   private static Stream<Map.Entry<String, String>> OBJECTS = Stream.of(
+      entry("char[]", "?string"),
+
       entry("java.util.Date", "?string"),
 
       entry("java.lang.Boolean", "?boolean"),
