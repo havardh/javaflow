@@ -34,6 +34,8 @@ public final class JavaFlowTypeConversion {
       entry("char[]", "?string"),
 
       entry("java.util.Date", "?string"),
+      entry("java.util.Map", "Map"),
+      entry("java.util.List", "Array"),
 
       entry("java.lang.Boolean", "?boolean"),
       entry("java.lang.Byte", "?number"),

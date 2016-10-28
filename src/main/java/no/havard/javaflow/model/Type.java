@@ -47,7 +47,7 @@ public class Type {
     @Override
     public String toString() {
       return format("%s<%s>",
-          name.getName(),
+          toFlow(name),
           toFlow(type)
       );
     }
