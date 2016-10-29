@@ -6,10 +6,12 @@ import static no.havard.javaflow.JavaFlowTypeConversion.toFlow;
 
 public class FieldDefinition {
 
+  private final boolean isNullable;
   private final String name;
   private final Type type;
 
-  public FieldDefinition(String name, Type type) {
+  public FieldDefinition(boolean isNullable, String name, Type type) {
+    this.isNullable = isNullable;
     this.type = type;
     this.name = name;
   }
@@ -32,6 +34,11 @@ public class FieldDefinition {
 
   @Override
   public String toString() {
-    return format("%s: %s", name, getType());
+    return format(
+        "%s: %s%s",
+        name,
+        isNullable ? "?" : "",
+        getType()
+    );
   }
 }

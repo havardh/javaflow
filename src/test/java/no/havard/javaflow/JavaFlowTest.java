@@ -129,47 +129,47 @@ public class JavaFlowTest {
 
         @Test
         public void shouldMapByte() {
-          assertThat(typeMap.get("byteField"), is("?number"));
+          assertThat(typeMap.get("byteField"), is("number"));
         }
 
         @Test
         public void shouldMapShort() {
-          assertThat(typeMap.get("shortField"), is("?number"));
+          assertThat(typeMap.get("shortField"), is("number"));
         }
 
         @Test
         public void shouldMapInt() {
-          assertThat(typeMap.get("integerField"), is("?number"));
+          assertThat(typeMap.get("integerField"), is("number"));
         }
 
         @Test
         public void shouldMapLong() {
-          assertThat(typeMap.get("longField"), is("?number"));
+          assertThat(typeMap.get("longField"), is("number"));
         }
 
         @Test
         public void shouldMapFloat() {
-          assertThat(typeMap.get("floatField"), is("?number"));
+          assertThat(typeMap.get("floatField"), is("number"));
         }
 
         @Test
         public void shouldMapDouble() {
-          assertThat(typeMap.get("doubleField"), is("?number"));
+          assertThat(typeMap.get("doubleField"), is("number"));
         }
 
         @Test
         public void shouldMapBoolean() {
-          assertThat(typeMap.get("booleanField"), is("?boolean"));
+          assertThat(typeMap.get("booleanField"), is("boolean"));
         }
 
         @Test
         public void shouldMapChar() {
-          assertThat(typeMap.get("characterField"), is("?string"));
+          assertThat(typeMap.get("characterField"), is("string"));
         }
 
         @Test
         public void shouldMapString() {
-          assertThat(typeMap.get("stringField"), is("?string"));
+          assertThat(typeMap.get("stringField"), is("string"));
         }
 
       }
@@ -181,7 +181,7 @@ public class JavaFlowTest {
         public void shouldMapCharArrayToString() {
           Map<String, String> types = typeMap((ClassDefinition) parse("ModelWithArrays"));
 
-          assertThat(types.get("field"), is("?string"));
+          assertThat(types.get("field"), is("string"));
         }
       }
     }
@@ -332,14 +332,24 @@ public class JavaFlowTest {
     public void shouldSerializeListsAsArrays() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithList");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("Array<?string>"));
+      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("Array<string>"));
     }
 
     @Test
-  public void shouldSerializeMapAsMapTypes() {
+    public void shouldSerializeMapAsMapTypes() {
       ClassDefinition definition = (ClassDefinition)parse("ModelWithMap");
 
-      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("{[key: ?string]: ?number}"));
+      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("{[key: string]: number}"));
+    }
+  }
+
+  @Nested
+  class Nullable {
+    @Test
+    public void shouldMapNullableTypes() {
+      ClassDefinition definition = (ClassDefinition) parse("ModelWithNullableField");
+
+      assertThat(definition.getFieldDefinitions().get(0).toString(), is("field: ?string"));
     }
   }
 

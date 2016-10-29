@@ -10,6 +10,8 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
@@ -44,8 +46,19 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   public void visit(FieldDeclaration field, ClassDefinitionBuilder builder) {
     super.visit(field, builder);
 
-    field.getVariables().stream()
-      .forEach(variable -> builder.withField(field.getType(), variable.getId().getName()));
+    field.getVariables().forEach(variable -> builder.withField(
+        isNullable(field),
+        field.getType(),
+        variable.getId().getName()
+    ));
+  }
+
+  private boolean isNullable(FieldDeclaration field) {
+    return field.getAnnotations().stream()
+        .map(AnnotationExpr::getName)
+        .map(NameExpr::getName)
+        .filter(name -> name.equals("Nullable"))
+        .count() > 0;
   }
 
 }
