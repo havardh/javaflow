@@ -1,8 +1,6 @@
 package no.havard.javaflow.model;
 
-import static java.lang.String.format;
-
-import static no.havard.javaflow.JavaFlowTypeConversion.toFlow;
+import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
 
 public class FieldDefinition {
 
@@ -28,17 +26,12 @@ public class FieldDefinition {
     return toFlow(type.getCanonicalName());
   }
 
+  public boolean isNullable() {
+    return isNullable;
+  }
+
   public String getPackageName() {
     return type.getPackageName();
   }
 
-  @Override
-  public String toString() {
-    return format(
-        "%s: %s%s",
-        name,
-        isNullable ? "?" : "",
-        getType()
-    );
-  }
 }

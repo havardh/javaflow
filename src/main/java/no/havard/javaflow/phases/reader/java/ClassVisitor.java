@@ -2,8 +2,13 @@ package no.havard.javaflow.phases.reader.java;
 
 import static java.util.stream.Collectors.joining;
 
+import static no.havard.javaflow.phases.reader.java.TypeFactory.factory;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
+import no.havard.javaflow.model.FieldDefinition;
 import no.havard.javaflow.model.builders.ClassDefinitionBuilder;
 
 import com.github.javaparser.ast.ImportDeclaration;
@@ -16,9 +21,14 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
 
+  private String packageName;
+  private Map<String, String> imports = new HashMap<>();
+
   @Override
   public void visit(PackageDeclaration n, ClassDefinitionBuilder builder) {
     super.visit(n, builder);
+
+    packageName = n.getPackageName();
     builder.withPackageName(n.getPackageName());
   }
 
@@ -27,10 +37,11 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
     super.visit(n, builder);
 
     String[] packages = n.getName().toString().split("\\.");
-    builder.withImport(
-        n.getName().getName(),
-        Stream.of(packages).limit(packages.length-1).collect(joining("."))
-    );
+    String typeName = n.getName().getName();
+    String packageName = Stream.of(packages).limit(packages.length-1).collect(joining("."));
+
+    imports.put(typeName, packageName);
+    builder.withImport(typeName, packageName);
   }
 
   @Override
@@ -46,11 +57,11 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   public void visit(FieldDeclaration field, ClassDefinitionBuilder builder) {
     super.visit(field, builder);
 
-    field.getVariables().forEach(variable -> builder.withField(
+    field.getVariables().forEach(variable -> builder.withField(new FieldDefinition(
         isNullable(field),
-        field.getType(),
-        variable.getId().getName()
-    ));
+        variable.getId().getName(),
+        factory(packageName, imports).of(field.getType())
+    )));
   }
 
   private boolean isNullable(FieldDeclaration field) {

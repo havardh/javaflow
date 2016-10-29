@@ -1,4 +1,4 @@
-package no.havard.javaflow;
+package no.havard.javaflow.phases.writer.flow;
 
 import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Stream.concat;

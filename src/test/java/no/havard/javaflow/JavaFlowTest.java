@@ -325,34 +325,6 @@ public class JavaFlowTest {
 
   }
 
-  @Nested
-  class Containers {
-
-    @Test
-    public void shouldSerializeListsAsArrays() {
-      ClassDefinition definition = (ClassDefinition)parse("ModelWithList");
-
-      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("Array<string>"));
-    }
-
-    @Test
-    public void shouldSerializeMapAsMapTypes() {
-      ClassDefinition definition = (ClassDefinition)parse("ModelWithMap");
-
-      assertThat(definition.getFieldDefinitions().get(0).getType().toString(), is("{[key: string]: number}"));
-    }
-  }
-
-  @Nested
-  class Nullable {
-    @Test
-    public void shouldMapNullableTypes() {
-      ClassDefinition definition = (ClassDefinition) parse("ModelWithNullableField");
-
-      assertThat(definition.getFieldDefinitions().get(0).toString(), is("field: ?string"));
-    }
-  }
-
   private static Definition parse(String name) {
     return new JavaReader().read(BASE_PATH + name + ".java").get();
   }

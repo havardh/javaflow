@@ -1,7 +1,5 @@
 package no.havard.javaflow.model.builders;
 
-import static no.havard.javaflow.phases.reader.java.TypeFactory.factory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +8,6 @@ import java.util.Map;
 import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.FieldDefinition;
-
-import com.github.javaparser.ast.type.Type;
 
 public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
 
@@ -48,12 +44,8 @@ public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
     return this;
   }
 
-  public ClassDefinitionBuilder withField(boolean isNullable, Type type, String name) {
-    this.fields.add(new FieldDefinition(
-        isNullable,
-        name,
-        factory(packageName, imports).of(type)
-    ));
+  public ClassDefinitionBuilder withField(FieldDefinition fieldDefinition) {
+    this.fields.add(fieldDefinition);
     return this;
   }
 

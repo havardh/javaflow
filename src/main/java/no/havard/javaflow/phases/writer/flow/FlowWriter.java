@@ -1,5 +1,7 @@
 package no.havard.javaflow.phases.writer.flow;
 
+import java.io.IOException;
+
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.Definition;
 import no.havard.javaflow.model.EnumDefinition;
@@ -11,13 +13,13 @@ public class FlowWriter implements Writer<Definition> {
   private final EnumDefinitionWriter enumDefinitionWriter = new EnumDefinitionWriter();
 
   @Override
-  public void write(Definition definition) {
+  public void write(Definition definition, java.io.Writer writer) throws IOException {
     if (definition instanceof ClassDefinition) {
-      classDefinitionWriter.write((ClassDefinition) definition);
+      classDefinitionWriter.write((ClassDefinition) definition, writer);
     } else if (definition instanceof EnumDefinition) {
-      enumDefinitionWriter.write((EnumDefinition) definition);
+      enumDefinitionWriter.write((EnumDefinition) definition, writer);
     }
-    System.out.println();
+    writer.write("\n\n");
   }
 
 }
