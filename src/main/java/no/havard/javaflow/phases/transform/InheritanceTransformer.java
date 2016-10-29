@@ -1,4 +1,4 @@
-package no.havard.javaflow.convertion;
+package no.havard.javaflow.phases.transform;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
@@ -10,15 +10,13 @@ import java.util.function.Consumer;
 import no.havard.javaflow.model.Definition;
 import no.havard.javaflow.model.Parent;
 
-public class FileSetHandler {
+public class InheritanceTransformer implements Transformer {
 
-  public static List<Definition> handleExtends(List<Definition> definitions) {
+  public void transform(List<Definition> definitions) {
     Map<String, Definition> definitionMap = definitions.stream()
         .collect(toMap(Definition::getCanonicalName, identity()));
 
-    definitions.stream().forEach(setParentReference(definitionMap));
-
-    return definitions;
+    definitions.forEach(setParentReference(definitionMap));
   }
 
   private static Consumer<Definition> setParentReference(Map<String, Definition> definitionMap) {

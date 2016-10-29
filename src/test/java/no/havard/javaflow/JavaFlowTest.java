@@ -5,8 +5,6 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-import static no.havard.javaflow.convertion.FileSetHandler.handleExtends;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
@@ -22,6 +20,8 @@ import no.havard.javaflow.model.Definition;
 import no.havard.javaflow.model.EnumDefinition;
 import no.havard.javaflow.model.FieldDefinition;
 import no.havard.javaflow.model.Parent;
+import no.havard.javaflow.phases.reader.java.JavaReader;
+import no.havard.javaflow.phases.transform.InheritanceTransformer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -344,7 +344,7 @@ public class JavaFlowTest {
   }
 
   private static Definition parse(String name) {
-    return JavaFlow.parse(BASE_PATH + name + ".java").get();
+    return new JavaReader().read(BASE_PATH + name + ".java").get();
   }
 
   private static Map<String, Definition> parseAll(String ...modelNames) {
@@ -353,7 +353,7 @@ public class JavaFlowTest {
         .collect(toList())
         .toArray(new String[]{}));
 
-    handleExtends(definitions);
+    new InheritanceTransformer().transform(definitions);
 
     return definitions
         .stream()

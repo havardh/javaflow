@@ -1,8 +1,9 @@
-package no.havard.javaflow.phases.writer;
+package no.havard.javaflow.phases.writer.flow;
 
 import no.havard.javaflow.model.ClassDefinition;
 import no.havard.javaflow.model.Definition;
 import no.havard.javaflow.model.EnumDefinition;
+import no.havard.javaflow.phases.writer.Writer;
 
 public class FlowWriter implements Writer<Definition> {
 

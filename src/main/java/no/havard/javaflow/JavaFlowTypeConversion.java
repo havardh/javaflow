@@ -1,4 +1,4 @@
-package no.havard.javaflow.convertion;
+package no.havard.javaflow;
 
 import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Stream.concat;
