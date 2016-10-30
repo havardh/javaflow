@@ -14,5 +14,4 @@ public class Enum extends Definition {
   public List<String> getValues() {
     return values;
   }
-
 }

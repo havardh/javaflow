@@ -60,9 +60,9 @@ public class JavaFlowTest {
 
     @Test
     public void shouldAddParentNameToDefinition() {
-      Definition definition = parse("Sub");
+      Class aClass = (Class)parse("Sub");
 
-      assertThat(definition.getParent().map(Parent::getName).get(), is("Super"));
+      assertThat(aClass.getParent().map(Parent::getName).get(), is("Super"));
     }
 
     @Nested
