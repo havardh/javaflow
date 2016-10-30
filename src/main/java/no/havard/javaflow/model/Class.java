@@ -3,6 +3,8 @@ package no.havard.javaflow.model;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+import static no.havard.javaflow.util.Lists.union;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -34,10 +36,6 @@ public class Class extends Definition {
 
   private List<Field> getParentFieldDefinitions() {
     return  getParent().map(p -> (p.getReference()).getFields()).orElse(emptyList());
-  }
-
-  private static <T> List<T> union(List<T> a, List<T> b) {
-    return Stream.concat(a.stream(), b.stream()).collect(toList());
   }
 
   public Optional<Parent> getParent() {
