@@ -1,9 +1,5 @@
 package no.havard.javaflow.model;
 
-import static java.lang.String.format;
-
-import static no.havard.javaflow.JavaFlowTypeConversion.toFlow;
-
 public class Type {
 
   protected final CanonicalName name;
@@ -36,7 +32,7 @@ public class Type {
     return new MapType(name, key, value);
   }
 
-  private static class ListType extends Type {
+  public static class ListType extends Type {
     private final CanonicalName type;
 
     public ListType(CanonicalName name, CanonicalName type) {
@@ -44,16 +40,12 @@ public class Type {
       this.type = type;
     }
 
-    @Override
-    public String toString() {
-      return format("%s<%s>",
-          toFlow(name),
-          toFlow(type)
-      );
+    public CanonicalName getType() {
+      return type;
     }
   }
 
-  private static class MapType extends Type {
+  public static class MapType extends Type {
     private final CanonicalName key;
     private final CanonicalName value;
 
@@ -63,15 +55,13 @@ public class Type {
       this.value = value;
     }
 
-    @Override
-    public String toString() {
-      return format("{[key: %s]: %s}", toFlow(key), toFlow(value));
+    public CanonicalName getKeyType() {
+      return key;
     }
-  }
 
-  @Override
-  public String toString() {
-    return toFlow(name);
+    public CanonicalName getValueType() {
+      return value;
+    }
   }
 }
 

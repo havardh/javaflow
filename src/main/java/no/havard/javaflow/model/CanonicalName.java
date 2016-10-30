@@ -31,10 +31,5 @@ public class CanonicalName {
         ? format("%s.%s", packageName, name)
         : name;
   }
-
-  @Override
-  public String toString() {
-    return name;
-  }
 }
 
