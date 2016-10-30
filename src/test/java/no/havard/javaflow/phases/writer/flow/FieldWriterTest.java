@@ -1,6 +1,6 @@
 package no.havard.javaflow.phases.writer.flow;
 
-import static no.havard.javaflow.model.builders.FieldBuilder.fieldDefinition;
+import static no.havard.javaflow.model.builders.FieldBuilder.fieldBuilder;
 import static no.havard.javaflow.model.fixtures.TypeFixtures.stringType;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class FieldWriterTest extends WriterTest<Field> {
 
   @Test
   public void shouldSerializeFieldDefinition() throws IOException {
-    String flow = toFlow(fieldDefinition()
+    String flow = toFlow(fieldBuilder()
         .withName("field")
         .withType(stringType().build())
         .build());
@@ -30,7 +30,7 @@ public class FieldWriterTest extends WriterTest<Field> {
 
   @Test
   public void shouldPrependTypeOfNullableWithQuestionMark() throws IOException {
-    String flow = toFlow(fieldDefinition()
+    String flow = toFlow(fieldBuilder()
         .withName("field")
         .withIsNullable(true)
         .withType(stringType().build())

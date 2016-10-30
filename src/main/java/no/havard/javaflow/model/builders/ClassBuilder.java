@@ -8,6 +8,7 @@ import java.util.Map;
 import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.model.Class;
 import no.havard.javaflow.model.Field;
+import no.havard.javaflow.model.Parent;
 
 public class ClassBuilder implements Builder<Class> {
 
@@ -20,7 +21,7 @@ public class ClassBuilder implements Builder<Class> {
   private ClassBuilder() {
   }
 
-  public static ClassBuilder classDefinitionBuilder() {
+  public static ClassBuilder classBuilder() {
     return new ClassBuilder();
   }
 
@@ -50,18 +51,14 @@ public class ClassBuilder implements Builder<Class> {
   }
 
   public Class build() {
-    if (parent == null) {
-      return new Class(
-          new CanonicalName(packageName, name),
-          fields
-      );
-    } else {
-      return new Class(
-          new CanonicalName(packageName, name),
-          new CanonicalName(resolvePackageName(parent), parent),
-          fields
-      );
-    }
+    CanonicalName canonicalName = new CanonicalName(packageName, name);
+    CanonicalName parentCanonicalName = new CanonicalName(resolvePackageName(parent), parent);
+
+    return new Class(
+        canonicalName,
+        parent != null ? new Parent(parentCanonicalName) : null,
+        fields
+    );
   }
 
   private String resolvePackageName(String type) {

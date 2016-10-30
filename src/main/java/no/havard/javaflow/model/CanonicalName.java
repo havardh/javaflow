@@ -26,7 +26,6 @@ public class CanonicalName {
   }
 
   public String getCanonicalName() {
-
     return packageName != null
         ? format("%s.%s", packageName, name)
         : name;

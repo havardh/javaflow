@@ -15,7 +15,7 @@ public class EnumBuilder implements Builder<Enum> {
   private EnumBuilder() {
   }
 
-  public static EnumBuilder enumDefinitionBuilder() {
+  public static EnumBuilder enumBuilder() {
     return new EnumBuilder();
   }
 
