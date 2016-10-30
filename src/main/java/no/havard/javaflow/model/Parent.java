@@ -3,7 +3,7 @@ package no.havard.javaflow.model;
 public class Parent {
 
   private final CanonicalName name;
-  private Definition reference;
+  private Class reference;
 
   public Parent(CanonicalName name) {
     this.name = name;
@@ -17,11 +17,11 @@ public class Parent {
     return name.getCanonicalName();
   }
 
-  public Definition getReference() {
+  public Class getReference() {
     return reference;
   }
 
-  public void setReference(Definition reference) {
+  public void setReference(Class reference) {
     this.reference = reference;
   }
 }
