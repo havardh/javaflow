@@ -2,8 +2,8 @@ package no.havard.javaflow.phases.reader.java;
 
 import static java.util.Optional.of;
 
-import static no.havard.javaflow.model.builders.ClassBuilder.classDefinitionBuilder;
-import static no.havard.javaflow.model.builders.EnumBuilder.enumDefinitionBuilder;
+import static no.havard.javaflow.model.builders.ClassBuilder.classBuilder;
+import static no.havard.javaflow.model.builders.EnumBuilder.enumBuilder;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,9 +48,9 @@ public class JavaReader implements Reader {
   private static Optional<Definition> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      return of(convert(cu, classDefinitionBuilder(), classVisitor));
+      return of(convert(cu, classBuilder(), classVisitor));
     } else if (containsEnum(cu)) {
-      return of(convert(cu, enumDefinitionBuilder(), enumVisitor));
+      return of(convert(cu, enumBuilder(), enumVisitor));
     } else {
       return Optional.empty();
     }

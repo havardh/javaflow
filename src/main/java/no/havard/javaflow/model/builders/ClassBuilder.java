@@ -20,7 +20,7 @@ public class ClassBuilder implements Builder<Class> {
   private ClassBuilder() {
   }
 
-  public static ClassBuilder classDefinitionBuilder() {
+  public static ClassBuilder classBuilder() {
     return new ClassBuilder();
   }
 

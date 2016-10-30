@@ -16,7 +16,7 @@ public class EnumWriterTest extends WriterTest<Enum> {
 
   @Test
   public void shouldSerializeEnum() throws IOException {
-    String flow = toFlow(EnumBuilder.enumDefinitionBuilder()
+    String flow = toFlow(EnumBuilder.enumBuilder()
         .withName("Enum")
         .withEnumValue("Value1")
         .withEnumValue("Value2")

@@ -11,7 +11,7 @@ public final class FieldBuilder {
   private FieldBuilder() {
   }
 
-  public static FieldBuilder fieldDefinition() {
+  public static FieldBuilder fieldBuilder() {
     return new FieldBuilder();
   }
 
