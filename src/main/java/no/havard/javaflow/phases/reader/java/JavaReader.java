@@ -2,8 +2,8 @@ package no.havard.javaflow.phases.reader.java;
 
 import static java.util.Optional.of;
 
-import static no.havard.javaflow.model.builders.ClassDefinitionBuilder.classDefinitionBuilder;
-import static no.havard.javaflow.model.builders.EnumDefinitionBuilder.enumDefinitionBuilder;
+import static no.havard.javaflow.model.builders.ClassBuilder.classDefinitionBuilder;
+import static no.havard.javaflow.model.builders.EnumBuilder.enumDefinitionBuilder;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

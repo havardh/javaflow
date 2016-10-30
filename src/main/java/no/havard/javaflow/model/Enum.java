@@ -2,11 +2,11 @@ package no.havard.javaflow.model;
 
 import java.util.List;
 
-public class EnumDefinition extends Definition {
+public class Enum extends Definition {
 
   private final List<String> values;
 
-  public EnumDefinition(CanonicalName name, List<String> values) {
+  public Enum(CanonicalName name, List<String> values) {
     super(name);
     this.values = values;
   }

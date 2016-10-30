@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import no.havard.javaflow.model.FieldDefinition;
-import no.havard.javaflow.model.builders.ClassDefinitionBuilder;
+import no.havard.javaflow.model.Field;
+import no.havard.javaflow.model.builders.ClassBuilder;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -19,13 +19,13 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
+public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
   private String packageName;
   private Map<String, String> imports = new HashMap<>();
 
   @Override
-  public void visit(PackageDeclaration n, ClassDefinitionBuilder builder) {
+  public void visit(PackageDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
 
     packageName = n.getPackageName();
@@ -33,7 +33,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   }
 
   @Override
-  public void visit(ImportDeclaration n, ClassDefinitionBuilder builder) {
+  public void visit(ImportDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
 
     String[] packages = n.getName().toString().split("\\.");
@@ -45,7 +45,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   }
 
   @Override
-  public void visit(ClassOrInterfaceDeclaration n, ClassDefinitionBuilder builder) {
+  public void visit(ClassOrInterfaceDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
     builder.withName(n.getName());
 
@@ -54,10 +54,10 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassDefinitionBuilder> {
   }
 
   @Override
-  public void visit(FieldDeclaration field, ClassDefinitionBuilder builder) {
+  public void visit(FieldDeclaration field, ClassBuilder builder) {
     super.visit(field, builder);
 
-    field.getVariables().forEach(variable -> builder.withField(new FieldDefinition(
+    field.getVariables().forEach(variable -> builder.withField(new Field(
         isNullable(field),
         variable.getId().getName(),
         factory(packageName, imports).of(field.getType())

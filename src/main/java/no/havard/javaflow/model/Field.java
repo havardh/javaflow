@@ -2,13 +2,13 @@ package no.havard.javaflow.model;
 
 import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
 
-public class FieldDefinition {
+public class Field {
 
   private final boolean isNullable;
   private final String name;
   private final Type type;
 
-  public FieldDefinition(boolean isNullable, String name, Type type) {
+  public Field(boolean isNullable, String name, Type type) {
     this.isNullable = isNullable;
     this.type = type;
     this.name = name;

@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import no.havard.javaflow.model.ClassDefinition;
+import no.havard.javaflow.model.Class;
 import no.havard.javaflow.model.Definition;
-import no.havard.javaflow.model.EnumDefinition;
-import no.havard.javaflow.model.FieldDefinition;
+import no.havard.javaflow.model.Enum;
+import no.havard.javaflow.model.Field;
 import no.havard.javaflow.model.Parent;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
@@ -50,9 +50,9 @@ public class JavaFlowTest {
 
     @Test
     public void shouldSetFieldOfClass() {
-      ClassDefinition definition = (ClassDefinition)parse("Model");
+      Class definition = (Class)parse("Model");
 
-      FieldDefinition field = definition.getFieldDefinitions().get(0);
+      Field field = definition.getFields().get(0);
 
       assertThat(field.getName(), is("yolo"));
       assertThat(field.getType().getName(), is("String"));
@@ -74,7 +74,7 @@ public class JavaFlowTest {
 
         @BeforeEach
         public void setup() {
-          typeMap = typeMap((ClassDefinition) parse("ModelWithPrimitive"));
+          typeMap = typeMap((Class) parse("ModelWithPrimitive"));
         }
 
         @Test
@@ -124,7 +124,7 @@ public class JavaFlowTest {
 
         @BeforeEach
         public void setup() {
-          typeMap = typeMap((ClassDefinition) parse("ModelWithJavaLangObjects"));
+          typeMap = typeMap((Class) parse("ModelWithJavaLangObjects"));
         }
 
         @Test
@@ -179,7 +179,7 @@ public class JavaFlowTest {
 
         @Test
         public void shouldMapCharArrayToString() {
-          Map<String, String> types = typeMap((ClassDefinition) parse("ModelWithArrays"));
+          Map<String, String> types = typeMap((Class) parse("ModelWithArrays"));
 
           assertThat(types.get("field"), is("string"));
         }
@@ -189,14 +189,14 @@ public class JavaFlowTest {
     @Nested
     public class Inheritance {
       Map<String, Definition> definitions;
-      ClassDefinition top, sup, sub;
+      Class top, sup, sub;
 
       @BeforeEach
       public void setup() {
         definitions = parseAll("Top", "Sub", "Super");
-        top = (ClassDefinition) definitions.get("Top");
-        sup = (ClassDefinition) definitions.get("Super");
-        sub = (ClassDefinition) definitions.get("Sub");
+        top = (Class) definitions.get("Top");
+        sup = (Class) definitions.get("Super");
+        sub = (Class) definitions.get("Sub");
       }
 
       @Test
@@ -232,8 +232,8 @@ public class JavaFlowTest {
 
           @Test
           public void shouldHaveASingleField() {
-            assertThat(top.getFieldDefinitions(), hasSize(1));
-            assertThat(top.getFieldDefinitions().get(0).getName(), is("topField"));
+            assertThat(top.getFields(), hasSize(1));
+            assertThat(top.getFields().get(0).getName(), is("topField"));
           }
         }
 
@@ -242,17 +242,17 @@ public class JavaFlowTest {
 
           @Test
           public void shouldInheritFieldFromTop() {
-            assertThat(sup.getFieldDefinitions(), hasSize(2));
+            assertThat(sup.getFields(), hasSize(2));
           }
 
           @Test
           public void shouldHaveTopFieldsFirst() {
-            assertThat(sup.getFieldDefinitions().get(0).getName(), is("topField"));
+            assertThat(sup.getFields().get(0).getName(), is("topField"));
           }
 
           @Test
           public void shouldHaveOwnFieldLast() {
-            assertThat(sup.getFieldDefinitions().get(1).getName(), is("superField"));
+            assertThat(sup.getFields().get(1).getName(), is("superField"));
           }
         }
 
@@ -261,21 +261,21 @@ public class JavaFlowTest {
 
           @Test
           public void shouldInheritFieldFromAllParents() {
-            assertThat(sub.getFieldDefinitions().size(), is(3));
+            assertThat(sub.getFields().size(), is(3));
           }
 
           @Test
           public void shouldHaveFieldFromTopMostParentFirst() {
-            assertThat(sub.getFieldDefinitions().get(0).getName(), is("topField"));
+            assertThat(sub.getFields().get(0).getName(), is("topField"));
           }
           @Test
           public void shouldHaveAllParentFieldBeforeOwn() {
-            assertThat(sub.getFieldDefinitions().get(1).getName(), is("superField"));
+            assertThat(sub.getFields().get(1).getName(), is("superField"));
           }
 
           @Test
           public void shouldHaveOwnFieldLast() {
-            assertThat(sub.getFieldDefinitions().get(2).getName(), is("subField"));
+            assertThat(sub.getFields().get(2).getName(), is("subField"));
           }
         }
       }
@@ -301,7 +301,7 @@ public class JavaFlowTest {
 
     @Test
     public void shouldSetValuesOfEnum() {
-      EnumDefinition definition = (EnumDefinition)parse("Enumeration");
+      Enum definition = (Enum)parse("Enumeration");
 
       assertThat(definition.getValues(), contains("ONE", "TWO"));
     }
@@ -312,12 +312,12 @@ public class JavaFlowTest {
 
     @Test
     public void shouldSetPackageNameForFields() {
-      ClassDefinition definition = (ClassDefinition)parse("Wrapper");
+      Class definition = (Class)parse("Wrapper");
 
-      List<FieldDefinition> fields = definition.getFieldDefinitions();
+      List<Field> fields = definition.getFields();
 
-      FieldDefinition member = fields.get(0);
-      FieldDefinition packagedMember = fields.get(1);
+      Field member = fields.get(0);
+      Field packagedMember = fields.get(1);
 
       assertThat(member.getPackageName(), is("no.havard.javaflow.model"));
       assertThat(packagedMember.getPackageName(), is("no.havard.javaflow.model.packaged"));
@@ -342,10 +342,10 @@ public class JavaFlowTest {
         .collect(toMap(Definition::getName, identity()));
   }
 
-  private static Map<String, String> typeMap(ClassDefinition classDefinition) {
-    return classDefinition.getFieldDefinitions()
+  private static Map<String, String> typeMap(Class aClass) {
+    return aClass.getFields()
         .stream()
-        .collect(toMap(FieldDefinition::getName, FieldDefinition::getFlowType));
+        .collect(toMap(Field::getName, Field::getFlowType));
   }
 
 }

@@ -6,57 +6,57 @@ import java.util.List;
 import java.util.Map;
 
 import no.havard.javaflow.model.CanonicalName;
-import no.havard.javaflow.model.ClassDefinition;
-import no.havard.javaflow.model.FieldDefinition;
+import no.havard.javaflow.model.Class;
+import no.havard.javaflow.model.Field;
 
-public class ClassDefinitionBuilder implements Builder<ClassDefinition> {
+public class ClassBuilder implements Builder<Class> {
 
   private String packageName;
   private String name;
   private String parent;
-  private List<FieldDefinition> fields = new ArrayList<>();
+  private List<Field> fields = new ArrayList<>();
   private Map<String, String> imports = new HashMap<>();
 
-  private ClassDefinitionBuilder() {
+  private ClassBuilder() {
   }
 
-  public static ClassDefinitionBuilder classDefinitionBuilder() {
-    return new ClassDefinitionBuilder();
+  public static ClassBuilder classDefinitionBuilder() {
+    return new ClassBuilder();
   }
 
-  public ClassDefinitionBuilder withPackageName(String packageName) {
+  public ClassBuilder withPackageName(String packageName) {
     this.packageName = packageName;
     return this;
   }
 
-  public ClassDefinitionBuilder withImport(String name, String packageName) {
+  public ClassBuilder withImport(String name, String packageName) {
     imports.put(name, packageName);
     return this;
   }
 
-  public ClassDefinitionBuilder withName(String name) {
+  public ClassBuilder withName(String name) {
     this.name = name;
     return this;
   }
 
-  public ClassDefinitionBuilder withParent(String parent) {
+  public ClassBuilder withParent(String parent) {
     this.parent = parent;
     return this;
   }
 
-  public ClassDefinitionBuilder withField(FieldDefinition fieldDefinition) {
-    this.fields.add(fieldDefinition);
+  public ClassBuilder withField(Field field) {
+    this.fields.add(field);
     return this;
   }
 
-  public ClassDefinition build() {
+  public Class build() {
     if (parent == null) {
-      return new ClassDefinition(
+      return new Class(
           new CanonicalName(packageName, name),
           fields
       );
     } else {
-      return new ClassDefinition(
+      return new Class(
           new CanonicalName(packageName, name),
           new CanonicalName(resolvePackageName(parent), parent),
           fields
