@@ -1,4 +1,4 @@
-package no.havard.javaflow.model.builders;
+package no.havard.javaflow.ast.builders;
 
 public interface Builder<T> {
 

@@ -2,7 +2,7 @@ package no.havard.javaflow.phases.writer.flow;
 
 import java.io.IOException;
 
-import no.havard.javaflow.model.Enum;
+import no.havard.javaflow.ast.Enum;
 import no.havard.javaflow.phases.writer.Writer;
 
 class EnumWriter implements Writer<Enum> {

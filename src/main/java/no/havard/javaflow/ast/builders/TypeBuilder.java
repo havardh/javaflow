@@ -1,11 +1,9 @@
-package no.havard.javaflow.model.builders;
+package no.havard.javaflow.ast.builders;
 
-import static no.havard.javaflow.model.Type.list;
-import static no.havard.javaflow.model.Type.map;
-import static no.havard.javaflow.model.Type.object;
-
+import no.havard.javaflow.ast.List;
+import no.havard.javaflow.ast.Map;
 import no.havard.javaflow.model.CanonicalName;
-import no.havard.javaflow.model.Type;
+import no.havard.javaflow.ast.Type;
 
 public final class TypeBuilder {
   protected CanonicalName name;
@@ -19,6 +17,18 @@ public final class TypeBuilder {
 
   public static TypeBuilder type() {
     return new TypeBuilder();
+  }
+
+  public static Type object(CanonicalName name) {
+    return new Type(name);
+  }
+
+  public static Type list(CanonicalName name, CanonicalName type) {
+    return new List(name, type);
+  }
+
+  public static Type map(CanonicalName name, CanonicalName key, CanonicalName value) {
+    return new Map(name, key, value);
   }
 
   public TypeBuilder withName(CanonicalName name) {

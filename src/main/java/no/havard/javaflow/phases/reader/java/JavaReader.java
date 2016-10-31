@@ -2,16 +2,16 @@ package no.havard.javaflow.phases.reader.java;
 
 import static java.util.Optional.of;
 
-import static no.havard.javaflow.model.builders.ClassBuilder.classBuilder;
-import static no.havard.javaflow.model.builders.EnumBuilder.enumBuilder;
+import static no.havard.javaflow.ast.builders.ClassBuilder.classBuilder;
+import static no.havard.javaflow.ast.builders.EnumBuilder.enumBuilder;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
-import no.havard.javaflow.model.Definition;
-import no.havard.javaflow.model.builders.Builder;
+import no.havard.javaflow.ast.Definition;
+import no.havard.javaflow.ast.builders.Builder;
 import no.havard.javaflow.phases.reader.Reader;
 
 import com.github.javaparser.JavaParser;

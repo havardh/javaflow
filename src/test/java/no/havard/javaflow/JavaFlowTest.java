@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import no.havard.javaflow.model.Class;
-import no.havard.javaflow.model.Definition;
-import no.havard.javaflow.model.Enum;
-import no.havard.javaflow.model.Field;
-import no.havard.javaflow.model.Parent;
+import no.havard.javaflow.ast.Class;
+import no.havard.javaflow.ast.Definition;
+import no.havard.javaflow.ast.Enum;
+import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.Parent;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
 

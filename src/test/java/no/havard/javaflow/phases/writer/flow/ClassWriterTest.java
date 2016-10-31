@@ -1,11 +1,11 @@
 package no.havard.javaflow.phases.writer.flow;
 
-import static no.havard.javaflow.model.builders.ClassBuilder.classBuilder;
+import static no.havard.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static no.havard.javaflow.model.fixtures.FieldDefinitionFixtures.stringFieldDefinition;
 
 import java.io.IOException;
 
-import no.havard.javaflow.model.Class;
+import no.havard.javaflow.ast.Class;
 import no.havard.javaflow.phases.writer.WriterTest;
 
 import org.junit.jupiter.api.Test;

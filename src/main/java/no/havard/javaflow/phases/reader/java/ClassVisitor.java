@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import no.havard.javaflow.model.Field;
-import no.havard.javaflow.model.builders.ClassBuilder;
+import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.builders.ClassBuilder;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;

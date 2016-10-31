@@ -1,6 +1,11 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.ast;
+
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 
 import java.util.List;
+
+import no.havard.javaflow.model.CanonicalName;
 
 public class Parent {
 
@@ -24,7 +29,7 @@ public class Parent {
   }
 
   public List<Field> getFields() {
-    return reference.getFields();
+    return ofNullable(reference).map(Class::getFields).orElse(emptyList());
   }
 
   public void setReference(Class reference) {

@@ -1,4 +1,6 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.ast;
+
+import no.havard.javaflow.model.CanonicalName;
 
 public abstract class Definition {
   protected final CanonicalName name;

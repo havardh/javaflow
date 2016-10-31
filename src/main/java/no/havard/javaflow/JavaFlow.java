@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import no.havard.javaflow.model.Definition;
+import no.havard.javaflow.ast.Definition;
 import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;

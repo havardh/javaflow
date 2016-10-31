@@ -1,4 +1,4 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.ast;
 
 import static java.util.Collections.emptyList;
 
@@ -6,6 +6,8 @@ import static no.havard.javaflow.util.Lists.union;
 
 import java.util.List;
 import java.util.Optional;
+
+import no.havard.javaflow.model.CanonicalName;
 
 public class Class extends Definition {
 
@@ -19,10 +21,7 @@ public class Class extends Definition {
   }
 
   public List<Field> getFields() {
-    return union(
-        getParentFields(),
-        fields
-    );
+    return union(getParentFields(), fields);
   }
 
   private List<Field> getParentFields() {

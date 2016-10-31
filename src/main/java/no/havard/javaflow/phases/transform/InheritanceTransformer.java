@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import no.havard.javaflow.model.Class;
-import no.havard.javaflow.model.Definition;
-import no.havard.javaflow.model.Parent;
+import no.havard.javaflow.ast.Class;
+import no.havard.javaflow.ast.Definition;
+import no.havard.javaflow.ast.Parent;
 
 public class InheritanceTransformer implements Transformer {
 

@@ -1,6 +1,6 @@
 package no.havard.javaflow.phases.reader.java;
 
-import no.havard.javaflow.model.builders.EnumBuilder;
+import no.havard.javaflow.ast.builders.EnumBuilder;
 
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;

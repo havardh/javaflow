@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 
-import no.havard.javaflow.model.Type;
+import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.writer.WriterTest;
 
 import org.junit.jupiter.api.Test;
