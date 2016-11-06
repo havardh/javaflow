@@ -76,9 +76,9 @@ public class TypeFactory {
     }
 
     if (type instanceof PrimitiveType || typeLiteral.equals("char[]")) {
-      return object(new CanonicalName(typeLiteral));
+      return TypeBuilder.primitive(CanonicalName.primitive(typeLiteral));
     } else {
-      return object(new CanonicalName(resolvePackageName(typeLiteral), typeLiteral));
+      return object(canonicalNameFactory.build(typeLiteral));
     }
   }
 

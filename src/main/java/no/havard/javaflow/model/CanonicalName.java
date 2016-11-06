@@ -7,14 +7,17 @@ public class CanonicalName {
   private final String packageName;
   private final String name;
 
-  public CanonicalName(String name) {
-    this.packageName = null;
+  private CanonicalName(String packageName, String name) {
+    this.packageName = packageName;
     this.name = name;
   }
 
-  public CanonicalName(String packageName, String name) {
-    this.packageName = packageName;
-    this.name = name;
+  public static CanonicalName primitive(String name) {
+    return new CanonicalName(null, name);
+  }
+
+  public static CanonicalName object(String packageName, String name) {
+    return new CanonicalName(packageName, name);
   }
 
   public String getName() {

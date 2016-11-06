@@ -63,6 +63,7 @@ public class ClassBuilder implements Builder<Class> {
 
   private String resolvePackageName(String type) {
     return imports.getOrDefault(type, this.packageName);
+    return new Class(object(packageName, name), parent, fields);
   }
 
 }

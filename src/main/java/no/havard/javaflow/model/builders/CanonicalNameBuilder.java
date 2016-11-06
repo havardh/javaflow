@@ -1,5 +1,7 @@
 package no.havard.javaflow.model.builders;
 
+import static no.havard.javaflow.model.CanonicalName.object;
+
 import no.havard.javaflow.model.CanonicalName;
 
 public final class CanonicalNameBuilder {
@@ -24,7 +26,7 @@ public final class CanonicalNameBuilder {
   }
 
   public CanonicalName build() {
-    return new CanonicalName(packageName, name);
+    return object(packageName, name);
   }
 }
 
