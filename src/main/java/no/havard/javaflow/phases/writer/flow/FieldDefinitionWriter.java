@@ -5,6 +5,7 @@ import java.io.IOException;
 import no.havard.javaflow.ast.Field;
 import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.writer.Writer;
+import no.havard.javaflow.phases.writer.flow.converter.Converter;
 
 public class FieldDefinitionWriter implements Writer<Field> {
 

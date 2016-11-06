@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.havard.javaflow.model.CanonicalName;
-import no.havard.javaflow.phases.writer.flow.Converter;
+import no.havard.javaflow.phases.writer.flow.converter.Converter;
 
 public class MapConverter implements Converter {
 

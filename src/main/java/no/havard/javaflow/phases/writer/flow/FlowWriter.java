@@ -6,6 +6,7 @@ import no.havard.javaflow.ast.Class;
 import no.havard.javaflow.ast.Enum;
 import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.writer.Writer;
+import no.havard.javaflow.phases.writer.flow.converter.Converter;
 
 public class FlowWriter implements Writer<Type> {
 

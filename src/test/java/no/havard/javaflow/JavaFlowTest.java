@@ -24,7 +24,7 @@ import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
 import no.havard.javaflow.phases.transform.Transformer;
-import no.havard.javaflow.phases.writer.flow.JavaFlowConverter;
+import no.havard.javaflow.phases.writer.flow.converter.JavaFlowConverter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

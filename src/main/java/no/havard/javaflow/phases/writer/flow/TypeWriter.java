@@ -6,6 +6,7 @@ import no.havard.javaflow.ast.List;
 import no.havard.javaflow.ast.Map;
 import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.writer.Writer;
+import no.havard.javaflow.phases.writer.flow.converter.Converter;
 
 public class TypeWriter implements Writer<Type> {
 

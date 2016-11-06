@@ -1,4 +1,4 @@
-package no.havard.javaflow.phases.writer.flow;
+package no.havard.javaflow.phases.writer.flow.converter;
 
 import no.havard.javaflow.model.CanonicalName;
 

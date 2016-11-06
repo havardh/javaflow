@@ -5,9 +5,9 @@ import static java.util.Arrays.asList;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
 import no.havard.javaflow.phases.transform.SortedTypeTransformer;
-import no.havard.javaflow.phases.writer.flow.Converter;
+import no.havard.javaflow.phases.writer.flow.converter.Converter;
 import no.havard.javaflow.phases.writer.flow.FlowWriter;
-import no.havard.javaflow.phases.writer.flow.JavaFlowConverter;
+import no.havard.javaflow.phases.writer.flow.converter.JavaFlowConverter;
 
 public class JavaFlow {
 
