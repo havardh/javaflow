@@ -56,11 +56,12 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   @Override
   public void visit(FieldDeclaration field, ClassBuilder builder) {
     super.visit(field, builder);
+    TypeFactory factory = new TypeFactory(packageName, imports);
 
     field.getVariables().forEach(variable -> builder.withField(new Field(
         isNullable(field),
         variable.getId().getName(),
-        factory(packageName, imports).of(field.getType())
+        factory.build(field.getType())
     )));
   }
 

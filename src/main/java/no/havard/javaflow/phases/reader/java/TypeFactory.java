@@ -3,63 +3,32 @@ package no.havard.javaflow.phases.reader.java;
 import static no.havard.javaflow.ast.builders.TypeBuilder.list;
 import static no.havard.javaflow.ast.builders.TypeBuilder.map;
 import static no.havard.javaflow.ast.builders.TypeBuilder.object;
-import static no.havard.javaflow.util.Maps.entriesToMap;
-import static no.havard.javaflow.util.Maps.entry;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.ast.Type;
+import no.havard.javaflow.ast.builders.TypeBuilder;
+import no.havard.javaflow.model.CanonicalName;
 
 import com.github.javaparser.ast.type.PrimitiveType;
 
 public class TypeFactory {
 
-  private static Map<String, String> BUILTIN = Collections.unmodifiableMap(Stream.of(
-      entry("Boolean", "java.lang"),
-      entry("Byte", "java.lang"),
-      entry("Character", "java.lang"),
-      entry("Double", "java.lang"),
-      entry("Float", "java.lang"),
-      entry("Integer", "java.lang"),
-      entry("Long", "java.lang"),
-      entry("Short", "java.lang"),
-      entry("String", "java.lang"),
+  private CanonicalNameFactory canonicalNameFactory;
 
-      entry("List", "java.util"),
-      entry("Map", "java.util")
-  ).collect(entriesToMap()));
-
-  private final String packageName;
-  private final Map<String, String> imports;
-
-  private TypeFactory(String packageName, Map<String, String> imports) {
-    this.packageName = packageName;
-    this.imports = imports;
+  public TypeFactory(String packageName, Map<String, String> imports) {
+    this.canonicalNameFactory = new CanonicalNameFactory(packageName, imports);
   }
 
-  public static TypeFactory factory(
-      String packageName,
-      Map<String, String> imports
-  ) {
-    return new TypeFactory(packageName, imports);
-  }
-
-  private String resolvePackageName(String type) {
-    return imports.getOrDefault(type, BUILTIN.getOrDefault(type, this.packageName));
-  }
-
-  public Type of(com.github.javaparser.ast.type.Type type) {
+  public Type build(com.github.javaparser.ast.type.Type type) {
     String typeLiteral = type.toString();
 
     if (isList(typeLiteral)) {
       String tagType = extractTagType(typeLiteral);
       String valType = extractType(typeLiteral);
       return list(
-          new CanonicalName(resolvePackageName(tagType), tagType),
-          new CanonicalName(resolvePackageName(valType),  valType)
+          canonicalNameFactory.build(tagType),
+          canonicalNameFactory.build(valType)
       );
     }
 
@@ -69,9 +38,9 @@ public class TypeFactory {
       String valType = extractValueType(typeLiteral);
 
       return map(
-          new CanonicalName(resolvePackageName(tagType), tagType),
-          new CanonicalName(resolvePackageName(keyType), keyType),
-          new CanonicalName(resolvePackageName(valType), valType)
+          canonicalNameFactory.build(tagType),
+          canonicalNameFactory.build(keyType),
+          canonicalNameFactory.build(valType)
       );
     }
 
