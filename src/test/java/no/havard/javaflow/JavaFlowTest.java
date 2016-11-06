@@ -5,6 +5,8 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
@@ -345,7 +347,11 @@ public class JavaFlowTest {
   private static Map<String, String> typeMap(Class aClass) {
     return aClass.getFields()
         .stream()
-        .collect(toMap(Field::getName, Field::getFlowType));
+        .collect(toMap(Field::getName, JavaFlowTest::fieldToFlow));
+  }
+
+  private static String fieldToFlow(Field field) {
+    return toFlow(field.getCanonicalName());
   }
 
 }

@@ -2,6 +2,8 @@ package no.havard.javaflow.ast;
 
 import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
 
+import no.havard.javaflow.model.CanonicalName;
+
 public class Field {
 
   private final boolean isNullable;
@@ -22,10 +24,6 @@ public class Field {
     return name;
   }
 
-  public String getFlowType() {
-    return toFlow(type.getCanonicalName());
-  }
-
   public boolean isNullable() {
     return isNullable;
   }
@@ -34,4 +32,7 @@ public class Field {
     return type.getPackageName();
   }
 
+  public CanonicalName getCanonicalName() {
+    return type.getCanonicalName();
+  }
 }
