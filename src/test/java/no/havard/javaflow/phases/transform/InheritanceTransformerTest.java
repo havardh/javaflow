@@ -50,4 +50,26 @@ public class InheritanceTransformerTest {
     assertThat(child.getParent().get().getReference(), is(parent));
   }
 
+  @Test
+  public void shouldResolveNameConflictsWithPackageName() {
+    no.havard.javaflow.ast.Class parentA = classBuilder()
+        .withName("Parent")
+        .withPackageName("no.havard.a")
+        .build();
+
+    no.havard.javaflow.ast.Class parentB = classBuilder()
+        .withName("Parent")
+        .withPackageName("no.havard.b")
+        .build();
+
+    no.havard.javaflow.ast.Class child = classBuilder()
+        .withName("Child")
+        .withParent(new Parent(CanonicalName.object("no.havard.a", "Parent")))
+        .build();
+
+    transformer.transform(asList(parentA, parentB, child));
+
+    assertThat(child.getParent().get().getReference(), is(parentA));
+  }
+
 }
