@@ -21,7 +21,7 @@ import no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion;
 public class JavaFlow {
 
   private static Reader reader = new JavaReader();
-  private static Transformer transformer = new InheritanceTransformer();
+  private static List<Transformer> transformers = Collections.singletonList(new InheritanceTransformer());
   private static Writer<Type> writer = new FlowWriter();
 
   public static void main(String args[]) {
@@ -44,7 +44,7 @@ public class JavaFlow {
   }
 
   private static void transform(List<Type> types) {
-    transformer.transform(types);
+    transformers.forEach(transformer -> transformer.transform(types));
   }
 
   private static String write(List<Type> types) {
