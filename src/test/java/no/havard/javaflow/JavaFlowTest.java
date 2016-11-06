@@ -22,8 +22,10 @@ import no.havard.javaflow.ast.Enum;
 import no.havard.javaflow.ast.Field;
 import no.havard.javaflow.ast.Parent;
 import no.havard.javaflow.ast.Type;
+import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
+import no.havard.javaflow.phases.transform.Transformer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -332,12 +334,16 @@ public class JavaFlowTest {
   }
 
   private static Map<String, Type> parseAll(String ...modelNames) {
-    List<Type> types = JavaFlow.read(stream(modelNames)
-        .map(name -> BASE_PATH + name + ".java")
-        .collect(toList())
-        .toArray(new String[]{}));
+    Reader reader = new JavaReader();
+    Transformer transformer = new InheritanceTransformer();
 
-    new InheritanceTransformer().transform(types);
+    List<Type> types = stream(modelNames)
+        .map(name -> BASE_PATH + name + ".java")
+        .map(reader::read)
+        .map(Optional::get)
+        .collect(toList());
+
+    transformer.transform(types);
 
     return types
         .stream()

@@ -1,7 +1,5 @@
 package no.havard.javaflow.ast;
 
-import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
-
 import no.havard.javaflow.model.CanonicalName;
 
 public class Field {
