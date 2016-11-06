@@ -11,7 +11,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.List;
 
+import no.havard.javaflow.ast.Parent;
 import no.havard.javaflow.ast.Type;
+import no.havard.javaflow.model.CanonicalName;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,11 +37,12 @@ public class InheritanceTransformerTest {
   public void shouldLinkClassesWithParentOnMatchingName() {
     no.havard.javaflow.ast.Class parent = classBuilder()
         .withName("Parent")
+        .withPackageName("no.havard.a")
         .build();
 
     no.havard.javaflow.ast.Class child = classBuilder()
         .withName("Child")
-        .withParent("Parent")
+        .withParent(new Parent(CanonicalName.object("no.havard.a", "Parent")))
         .build();
 
     transformer.transform(asList(parent, child));
