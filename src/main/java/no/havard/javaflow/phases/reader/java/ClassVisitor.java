@@ -2,13 +2,12 @@ package no.havard.javaflow.phases.reader.java;
 
 import static java.util.stream.Collectors.joining;
 
-import static no.havard.javaflow.phases.reader.java.TypeFactory.factory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.Parent;
 import no.havard.javaflow.ast.builders.ClassBuilder;
 
 import com.github.javaparser.ast.ImportDeclaration;
@@ -41,16 +40,16 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     String packageName = Stream.of(packages).limit(packages.length-1).collect(joining("."));
 
     imports.put(typeName, packageName);
-    builder.withImport(typeName, packageName);
   }
 
   @Override
   public void visit(ClassOrInterfaceDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
     builder.withName(n.getName());
+    CanonicalNameFactory factory = new CanonicalNameFactory(packageName, imports);
 
     n.getExtends().stream().findFirst()
-        .ifPresent(parent -> builder.withParent(parent.getName()));
+        .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getName()))));
   }
 
   @Override
