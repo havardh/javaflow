@@ -1,9 +1,9 @@
 package no.havard.javaflow.model.fixtures;
 
-import static no.havard.javaflow.model.builders.FieldBuilder.fieldBuilder;
+import static no.havard.javaflow.ast.builders.FieldBuilder.fieldBuilder;
 import static no.havard.javaflow.model.fixtures.TypeFixtures.*;
 
-import no.havard.javaflow.model.builders.FieldBuilder;
+import no.havard.javaflow.ast.builders.FieldBuilder;
 
 public class FieldDefinitionFixtures {
 

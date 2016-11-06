@@ -1,4 +1,4 @@
-package no.havard.javaflow.model.builders;
+package no.havard.javaflow.ast.builders;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import no.havard.javaflow.model.CanonicalName;
-import no.havard.javaflow.model.Class;
-import no.havard.javaflow.model.Field;
-import no.havard.javaflow.model.Parent;
+import no.havard.javaflow.ast.Class;
+import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.Parent;
 
 public class ClassBuilder implements Builder<Class> {
 

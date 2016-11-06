@@ -1,10 +1,10 @@
 package no.havard.javaflow.model.fixtures;
 
 import static no.havard.javaflow.model.builders.CanonicalNameBuilder.canonicalName;
-import static no.havard.javaflow.model.builders.TypeBuilder.type;
+import static no.havard.javaflow.ast.builders.TypeBuilder.type;
 import static no.havard.javaflow.model.fixtures.CanonicalNameFixtures.stringName;
 
-import no.havard.javaflow.model.builders.TypeBuilder;
+import no.havard.javaflow.ast.builders.TypeBuilder;
 
 public class TypeFixtures {
 

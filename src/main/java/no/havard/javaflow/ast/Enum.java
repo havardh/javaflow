@@ -1,8 +1,10 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.ast;
 
 import java.util.List;
 
-public class Enum extends Definition {
+import no.havard.javaflow.model.CanonicalName;
+
+public class Enum extends Type {
 
   private final List<String> values;
 

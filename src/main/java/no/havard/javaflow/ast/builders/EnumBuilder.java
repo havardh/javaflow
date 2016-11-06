@@ -1,10 +1,10 @@
-package no.havard.javaflow.model.builders;
+package no.havard.javaflow.ast.builders;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import no.havard.javaflow.model.CanonicalName;
-import no.havard.javaflow.model.Enum;
+import no.havard.javaflow.ast.Enum;
 
 public class EnumBuilder implements Builder<Enum> {
 

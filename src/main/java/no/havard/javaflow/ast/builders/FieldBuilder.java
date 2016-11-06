@@ -1,7 +1,7 @@
-package no.havard.javaflow.model.builders;
+package no.havard.javaflow.ast.builders;
 
-import no.havard.javaflow.model.Field;
-import no.havard.javaflow.model.Type;
+import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.Type;
 
 public final class FieldBuilder {
   private boolean isNullable;

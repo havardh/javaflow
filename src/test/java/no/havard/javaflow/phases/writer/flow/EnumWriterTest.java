@@ -2,8 +2,8 @@ package no.havard.javaflow.phases.writer.flow;
 
 import java.io.IOException;
 
-import no.havard.javaflow.model.Enum;
-import no.havard.javaflow.model.builders.EnumBuilder;
+import no.havard.javaflow.ast.Enum;
+import no.havard.javaflow.ast.builders.EnumBuilder;
 import no.havard.javaflow.phases.writer.WriterTest;
 
 import org.junit.jupiter.api.Test;

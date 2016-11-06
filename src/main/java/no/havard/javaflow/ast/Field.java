@@ -1,4 +1,4 @@
-package no.havard.javaflow.model;
+package no.havard.javaflow.ast;
 
 import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
 

@@ -1,8 +1,8 @@
 package no.havard.javaflow.phases.reader.java;
 
-import static no.havard.javaflow.model.Type.list;
-import static no.havard.javaflow.model.Type.map;
-import static no.havard.javaflow.model.Type.object;
+import static no.havard.javaflow.ast.builders.TypeBuilder.list;
+import static no.havard.javaflow.ast.builders.TypeBuilder.map;
+import static no.havard.javaflow.ast.builders.TypeBuilder.object;
 import static no.havard.javaflow.util.Maps.entriesToMap;
 import static no.havard.javaflow.util.Maps.entry;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import no.havard.javaflow.model.CanonicalName;
-import no.havard.javaflow.model.Type;
+import no.havard.javaflow.ast.Type;
 
 import com.github.javaparser.ast.type.PrimitiveType;
 

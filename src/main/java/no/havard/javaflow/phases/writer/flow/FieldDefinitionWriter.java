@@ -2,8 +2,8 @@ package no.havard.javaflow.phases.writer.flow;
 
 import java.io.IOException;
 
-import no.havard.javaflow.model.Field;
-import no.havard.javaflow.model.Type;
+import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.writer.Writer;
 
 public class FieldDefinitionWriter implements Writer<Field> {

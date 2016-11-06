@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import no.havard.javaflow.model.Class;
-import no.havard.javaflow.model.Definition;
-import no.havard.javaflow.model.Enum;
-import no.havard.javaflow.model.Field;
-import no.havard.javaflow.model.Parent;
+import no.havard.javaflow.ast.Class;
+import no.havard.javaflow.ast.Enum;
+import no.havard.javaflow.ast.Field;
+import no.havard.javaflow.ast.Parent;
+import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
 
@@ -32,27 +32,27 @@ public class JavaFlowTest {
   private static final String BASE_PATH = "src/test/java/no/havard/javaflow/model/";
 
   @Nested
-  class ClassDefinitions {
+  class Classes {
 
     @Test
     public void shouldSetNameOfClass() {
-      Definition definition = parse("Model");
+      Type type = parse("Model");
 
-      assertThat(definition.getName(), is("Model"));
+      assertThat(type.getName(), is("Model"));
     }
 
     @Test
     public void shouldSetPackageOfClass() {
-      Definition definition = parse("Model");
+      Type type = parse("Model");
 
-      assertThat(definition.getPackageName(), is("no.havard.javaflow.model"));
+      assertThat(type.getPackageName(), is("no.havard.javaflow.model"));
     }
 
     @Test
     public void shouldSetFieldOfClass() {
-      Class definition = (Class)parse("Model");
+      Class aClass = (Class)parse("Model");
 
-      Field field = definition.getFields().get(0);
+      Field field = aClass.getFields().get(0);
 
       assertThat(field.getName(), is("yolo"));
       assertThat(field.getType().getName(), is("String"));
@@ -188,15 +188,15 @@ public class JavaFlowTest {
 
     @Nested
     public class Inheritance {
-      Map<String, Definition> definitions;
+      Map<String, Type> typeMap;
       Class top, sup, sub;
 
       @BeforeEach
       public void setup() {
-        definitions = parseAll("Top", "Sub", "Super");
-        top = (Class) definitions.get("Top");
-        sup = (Class) definitions.get("Super");
-        sub = (Class) definitions.get("Sub");
+        typeMap = parseAll("Top", "Sub", "Super");
+        top = (Class) typeMap.get("Top");
+        sup = (Class) typeMap.get("Super");
+        sub = (Class) typeMap.get("Sub");
       }
 
       @Test
@@ -225,7 +225,7 @@ public class JavaFlowTest {
       }
 
       @Nested
-      public class FieldDefinitions {
+      public class Fields {
 
         @Nested
         public class Top {
@@ -283,27 +283,27 @@ public class JavaFlowTest {
   }
 
   @Nested
-  class EnumDefinitions {
+  class Enums {
 
     @Test
     public void shouldSetNameOfEnum() {
-      Definition definition = parse("Enumeration");
+      Type type = parse("Enumeration");
 
-      assertThat(definition.getName(), is("Enumeration"));
+      assertThat(type.getName(), is("Enumeration"));
     }
 
     @Test
     public void shouldSetPackageNameOfEnum() {
-      Definition definition = parse("Enumeration");
+      Type type = parse("Enumeration");
 
-      assertThat(definition.getPackageName(), is("no.havard.javaflow.model"));
+      assertThat(type.getPackageName(), is("no.havard.javaflow.model"));
     }
 
     @Test
     public void shouldSetValuesOfEnum() {
-      Enum definition = (Enum)parse("Enumeration");
+      Enum anEnum = (Enum)parse("Enumeration");
 
-      assertThat(definition.getValues(), contains("ONE", "TWO"));
+      assertThat(anEnum.getValues(), contains("ONE", "TWO"));
     }
   }
 
@@ -312,9 +312,9 @@ public class JavaFlowTest {
 
     @Test
     public void shouldSetPackageNameForFields() {
-      Class definition = (Class)parse("Wrapper");
+      Class aClass = (Class)parse("Wrapper");
 
-      List<Field> fields = definition.getFields();
+      List<Field> fields = aClass.getFields();
 
       Field member = fields.get(0);
       Field packagedMember = fields.get(1);
@@ -325,21 +325,21 @@ public class JavaFlowTest {
 
   }
 
-  private static Definition parse(String name) {
+  private static Type parse(String name) {
     return new JavaReader().read(BASE_PATH + name + ".java").get();
   }
 
-  private static Map<String, Definition> parseAll(String ...modelNames) {
-    List<Definition> definitions = JavaFlow.parseAll(stream(modelNames)
+  private static Map<String, Type> parseAll(String ...modelNames) {
+    List<Type> types = JavaFlow.parseAll(stream(modelNames)
         .map(name -> BASE_PATH + name + ".java")
         .collect(toList())
         .toArray(new String[]{}));
 
-    new InheritanceTransformer().transform(definitions);
+    new InheritanceTransformer().transform(types);
 
-    return definitions
+    return types
         .stream()
-        .collect(toMap(Definition::getName, identity()));
+        .collect(toMap(Type::getName, identity()));
   }
 
   private static Map<String, String> typeMap(Class aClass) {
