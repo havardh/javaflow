@@ -1,5 +1,7 @@
 package no.havard.javaflow.ast;
 
+import static java.lang.String.format;
+
 import no.havard.javaflow.model.CanonicalName;
 
 public class Type {
@@ -26,5 +28,9 @@ public class Type {
     return name.getPackageName();
   }
 
+  @Override
+  public String toString() {
+    return format("Type[%s]", name);
+  }
 }
 
