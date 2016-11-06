@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class FieldWriterTest extends WriterTest<Field> {
 
   public FieldWriterTest() {
-    super(new FieldDefinitionWriter());
+    super(new FieldDefinitionWriter(new JavaFlowConverter()));
   }
 
   @Test

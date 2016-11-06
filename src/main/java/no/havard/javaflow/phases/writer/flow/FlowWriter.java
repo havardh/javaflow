@@ -9,8 +9,13 @@ import no.havard.javaflow.phases.writer.Writer;
 
 public class FlowWriter implements Writer<Type> {
 
-  private final ClassWriter classWriter = new ClassWriter();
-  private final EnumWriter enumWriter = new EnumWriter();
+  private final ClassWriter classWriter;
+  private final EnumWriter enumWriter;
+
+  public FlowWriter(Converter converter) {
+     classWriter = new ClassWriter(converter);
+     enumWriter = new EnumWriter();
+  }
 
   @Override
   public void write(Type type, java.io.Writer writer) throws IOException {

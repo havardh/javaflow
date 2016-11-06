@@ -5,19 +5,15 @@ import static java.util.stream.Stream.concat;
 
 import static no.havard.javaflow.util.Maps.entriesToMap;
 import static no.havard.javaflow.util.Maps.entry;
+import static no.havard.javaflow.util.TypeMap.emptyTypeMap;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import no.havard.javaflow.model.CanonicalName;
+import no.havard.javaflow.util.TypeMap;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
-
-public final class JavaFlowTypeConversion {
+public final class JavaFlowConverter implements Converter {
 
   private static Stream<Map.Entry<String, String>> PRIMITIVES = Stream.of(
       entry("byte", "number"),
@@ -52,29 +48,21 @@ public final class JavaFlowTypeConversion {
       concat(PRIMITIVES, OBJECTS).collect(entriesToMap())
   );
 
-  private static Map<String, String> CUSTOM_TYPE_MAP = Collections.emptyMap();
+  private final TypeMap customTypeMap;
 
-  private JavaFlowTypeConversion() {
+  public JavaFlowConverter() {
+    customTypeMap = emptyTypeMap();
   }
 
-  public static void init() {
-    try (FileReader fileReader = new FileReader("types.yml")) {
-      YamlReader yamlReader = new YamlReader(fileReader);
-
-      CUSTOM_TYPE_MAP = (Map<String, String>)yamlReader.read();
-    } catch (FileNotFoundException e) {
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.exit(0);
-    }
-
+  public JavaFlowConverter(String filename) {
+    customTypeMap = new TypeMap(filename);
   }
 
-  public static String toFlow(CanonicalName canonicalName) {
+  public String convert(CanonicalName canonicalName) {
     String name = canonicalName.getName();
     String fullName = canonicalName.getCanonicalName();
 
-    return CUSTOM_TYPE_MAP.getOrDefault(fullName, TYPE_MAP.getOrDefault(fullName, name));
+    return customTypeMap.getOrDefault(fullName, TYPE_MAP.getOrDefault(fullName, name));
   }
 
 }

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class ClassWriterTest extends WriterTest<Class> {
 
   public ClassWriterTest() {
-    super(new ClassWriter());
+    super(new ClassWriter(new JavaFlowConverter()));
   }
 
   @Test

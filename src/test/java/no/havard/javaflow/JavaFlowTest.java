@@ -5,8 +5,6 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
@@ -26,6 +24,7 @@ import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
 import no.havard.javaflow.phases.transform.Transformer;
+import no.havard.javaflow.phases.writer.flow.JavaFlowConverter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -34,6 +33,7 @@ import org.junit.jupiter.api.Test;
 public class JavaFlowTest {
 
   private static final String BASE_PATH = "src/test/java/no/havard/javaflow/model/";
+  private static final JavaFlowConverter CONVERTER = new JavaFlowConverter();
 
   @Nested
   class Classes {
@@ -357,7 +357,7 @@ public class JavaFlowTest {
   }
 
   private static String fieldToFlow(Field field) {
-    return toFlow(field.getCanonicalName());
+    return CONVERTER.convert(field.getCanonicalName());
   }
 
 }

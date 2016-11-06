@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 public class TypeWriterTest extends WriterTest<Type> {
 
   public TypeWriterTest() {
-    super(new TypeWriter());
+    super(new TypeWriter(new JavaFlowConverter()));
   }
 
   @Test

@@ -8,7 +8,11 @@ import no.havard.javaflow.phases.writer.Writer;
 
 public class FieldDefinitionWriter implements Writer<Field> {
 
-  private static Writer<Type> typeWriter = new TypeWriter();
+  private Writer<Type> typeWriter;
+
+  public FieldDefinitionWriter(Converter converter) {
+    this.typeWriter = new TypeWriter(converter);
+  }
 
   @Override
   public void write(Field field, java.io.Writer writer) throws IOException {

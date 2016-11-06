@@ -1,7 +1,5 @@
 package no.havard.javaflow.phases.writer.flow;
 
-import static no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion.toFlow;
-
 import java.io.IOException;
 
 import no.havard.javaflow.ast.List;
@@ -11,6 +9,12 @@ import no.havard.javaflow.phases.writer.Writer;
 
 public class TypeWriter implements Writer<Type> {
 
+  private final Converter converter;
+
+  public TypeWriter(Converter converter) {
+    this.converter = converter;
+  }
+
   @Override
   public void write(Type type, java.io.Writer writer) throws IOException {
     if (type instanceof Map) {
@@ -18,22 +22,22 @@ public class TypeWriter implements Writer<Type> {
     } else if (type instanceof List) {
       write((List) type, writer);
     } else {
-      writer.write(toFlow(type.getCanonicalName()));
+      writer.write(converter.convert(type.getCanonicalName()));
     }
   }
 
   private void write(Map map, java.io.Writer writer) throws IOException {
     writer.write("{[key: ");
-    writer.write(toFlow(map.getKeyType()));
+    writer.write(converter.convert(map.getKeyType()));
     writer.write("]: ");
-    writer.write(toFlow(map.getValueType()));
+    writer.write(converter.convert(map.getValueType()));
     writer.write("}");
   }
 
   private void write(List list, java.io.Writer writer) throws IOException {
-    writer.write(toFlow(list.getCanonicalName()));
+    writer.write(converter.convert(list.getCanonicalName()));
     writer.write("<");
-    writer.write(toFlow(list.getType()));
+    writer.write(converter.convert(list.getType()));
     writer.write(">");
   }
 }

@@ -5,13 +5,14 @@ import static java.util.Arrays.asList;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
 import no.havard.javaflow.phases.transform.SortedTypeTransformer;
+import no.havard.javaflow.phases.writer.flow.Converter;
 import no.havard.javaflow.phases.writer.flow.FlowWriter;
-import no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion;
+import no.havard.javaflow.phases.writer.flow.JavaFlowConverter;
 
 public class JavaFlow {
 
   public static void main(String args[]) {
-    JavaFlowTypeConversion.init();
+    Converter converter = new JavaFlowConverter("types.yml");
 
     Execution execution = new Execution(
         new JavaReader(),
@@ -19,7 +20,7 @@ public class JavaFlow {
             new InheritanceTransformer(),
             new SortedTypeTransformer()
         ),
-        new FlowWriter()
+        new FlowWriter(converter)
     );
 
     System.out.println(execution.run(args));
