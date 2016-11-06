@@ -330,7 +330,7 @@ public class JavaFlowTest {
   }
 
   private static Map<String, Type> parseAll(String ...modelNames) {
-    List<Type> types = JavaFlow.parseAll(stream(modelNames)
+    List<Type> types = JavaFlow.read(stream(modelNames)
         .map(name -> BASE_PATH + name + ".java")
         .collect(toList())
         .toArray(new String[]{}));
