@@ -23,9 +23,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 public class JavaReader implements Reader {
 
-  private static ClassVisitor classVisitor = new ClassVisitor();
-  private static EnumVisitor enumVisitor = new EnumVisitor();
-
   public Optional<Type> read(String file) {
     try (FileInputStream inputStream = new FileInputStream(file)) {
       CompilationUnit compilationUnit = JavaParser.parse(inputStream);
@@ -48,9 +45,9 @@ public class JavaReader implements Reader {
   private static Optional<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      return of(convert(cu, classBuilder(), classVisitor));
+      return of(convert(cu, classBuilder(), new ClassVisitor()));
     } else if (containsEnum(cu)) {
-      return of(convert(cu, enumBuilder(), enumVisitor));
+      return of(convert(cu, enumBuilder(), new EnumVisitor()));
     } else {
       return Optional.empty();
     }
