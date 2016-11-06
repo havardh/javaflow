@@ -1,10 +1,10 @@
 package no.havard.javaflow;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -13,6 +13,7 @@ import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
+import no.havard.javaflow.phases.transform.SortedTypeTransformer;
 import no.havard.javaflow.phases.transform.Transformer;
 import no.havard.javaflow.phases.writer.Writer;
 import no.havard.javaflow.phases.writer.flow.FlowWriter;
@@ -21,7 +22,10 @@ import no.havard.javaflow.phases.writer.flow.JavaFlowTypeConversion;
 public class JavaFlow {
 
   private static Reader reader = new JavaReader();
-  private static List<Transformer> transformers = Collections.singletonList(new InheritanceTransformer());
+  private static List<Transformer> transformers = asList(
+      new InheritanceTransformer(),
+      new SortedTypeTransformer()
+  );
   private static Writer<Type> writer = new FlowWriter();
 
   public static void main(String args[]) {
