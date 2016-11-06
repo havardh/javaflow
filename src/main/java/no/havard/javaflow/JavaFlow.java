@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -25,18 +26,33 @@ public class JavaFlow {
 
   public static void main(String args[]) {
     JavaFlowTypeConversion.init();
-    System.out.print(convert(args));
+    System.out.print(run(args));
   }
 
-  private static String convert(String[] filenames) {
-    StringWriter stringWriter = new StringWriter();
+  private static String run(String[] filenames) {
+    List<Type> types = read(filenames);
+    transform(types);
+    return write(types);
+  }
 
-    stringWriter.write("/* @flow */\n");
-    List<Type> types = parseAll(filenames);
+  static List<Type> read(String[] filenames) {
+    return Stream.of(filenames)
+        .map(reader::read)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(toList());
+  }
+
+  private static void transform(List<Type> types) {
     transformer.transform(types);
-    types.forEach(t -> {
+  }
+
+  private static String write(List<Type> types) {
+    StringWriter stringWriter = new StringWriter();
+    stringWriter.write("/* @flow */\n");
+    types.forEach(type -> {
       try {
-        writer.write(t, stringWriter);
+        writer.write(type, stringWriter);
       } catch (IOException e) {
         e.printStackTrace();
         System.exit(1);
@@ -44,14 +60,6 @@ public class JavaFlow {
     });
 
     return stringWriter.toString();
-  }
-
-  static List<Type> parseAll(String[] filenames) {
-    return Stream.of(filenames)
-        .map(reader::read)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(toList());
   }
 
 }
