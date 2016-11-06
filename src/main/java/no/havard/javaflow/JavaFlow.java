@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import no.havard.javaflow.ast.Definition;
+import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
@@ -21,7 +21,7 @@ public class JavaFlow {
 
   private static Reader reader = new JavaReader();
   private static Transformer transformer = new InheritanceTransformer();
-  private static Writer<Definition> writer = new FlowWriter();
+  private static Writer<Type> writer = new FlowWriter();
 
   public static void main(String args[]) {
     JavaFlowTypeConversion.init();
@@ -32,9 +32,9 @@ public class JavaFlow {
     StringWriter stringWriter = new StringWriter();
 
     stringWriter.write("/* @flow */\n");
-    List<Definition> definitions = parseAll(filenames);
-    transformer.transform(definitions);
-    definitions.forEach(t -> {
+    List<Type> types = parseAll(filenames);
+    transformer.transform(types);
+    types.forEach(t -> {
       try {
         writer.write(t, stringWriter);
       } catch (IOException e) {
@@ -46,7 +46,7 @@ public class JavaFlow {
     return stringWriter.toString();
   }
 
-  static List<Definition> parseAll(String[] filenames) {
+  static List<Type> parseAll(String[] filenames) {
     return Stream.of(filenames)
         .map(reader::read)
         .filter(Optional::isPresent)

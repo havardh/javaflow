@@ -9,30 +9,30 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import no.havard.javaflow.ast.Class;
-import no.havard.javaflow.ast.Definition;
 import no.havard.javaflow.ast.Parent;
+import no.havard.javaflow.ast.Type;
 
 public class InheritanceTransformer implements Transformer {
 
-  public void transform(List<Definition> definitions) {
+  public void transform(List<Type> types) {
 
-    List<Class> classes = definitions.stream()
-        .filter(definition -> definition instanceof Class)
-        .map(definition -> (Class) definition)
+    List<Class> classes = types.stream()
+        .filter(type -> type instanceof Class)
+        .map(type -> (Class) type)
         .collect(toList());
 
-    Map<String, Class> definitionMap = classes.stream()
-        .collect(toMap(Class::getCanonicalName, identity()));
+    Map<String, Class> typeMap = classes.stream()
+        .collect(toMap(Class::getFullName, identity()));
 
-    classes.forEach(setParentReference(definitionMap));
+    classes.forEach(setParentReference(typeMap));
   }
 
-  private static Consumer<Class> setParentReference(Map<String, Class> definitionMap) {
-    return definition -> definition.getParent().ifPresent(updateParentReference(definitionMap));
+  private static Consumer<Class> setParentReference(Map<String, Class> typeMap) {
+    return aClass -> aClass.getParent().ifPresent(updateParentReference(typeMap));
   }
 
-  private static Consumer<Parent> updateParentReference(Map<String, Class> definitionMap) {
-    return parent -> parent.setReference(definitionMap.get(parent.getCanonicalName()));
+  private static Consumer<Parent> updateParentReference(Map<String, Class> typeMap) {
+    return parent -> parent.setReference(typeMap.get(parent.getCanonicalName()));
   }
 
 }

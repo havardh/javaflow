@@ -14,6 +14,10 @@ public class Type {
     return name.getName();
   }
 
+  public String getFullName() {
+    return name.getCanonicalName();
+  }
+
   public CanonicalName getCanonicalName() {
     return name;
   }

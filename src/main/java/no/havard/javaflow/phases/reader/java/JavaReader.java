@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
-import no.havard.javaflow.ast.Definition;
+import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.ast.builders.Builder;
 import no.havard.javaflow.phases.reader.Reader;
 
@@ -26,7 +26,7 @@ public class JavaReader implements Reader {
   private static ClassVisitor classVisitor = new ClassVisitor();
   private static EnumVisitor enumVisitor = new EnumVisitor();
 
-  public Optional<Definition> read(String file) {
+  public Optional<Type> read(String file) {
     try (FileInputStream inputStream = new FileInputStream(file)) {
       CompilationUnit compilationUnit = JavaParser.parse(inputStream);
 
@@ -45,7 +45,7 @@ public class JavaReader implements Reader {
     return Optional.empty();
   }
 
-  private static Optional<Definition> convert(CompilationUnit cu) {
+  private static Optional<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
       return of(convert(cu, classBuilder(), classVisitor));
@@ -56,7 +56,7 @@ public class JavaReader implements Reader {
     }
   }
 
-  private static <T extends Definition> T convert(
+  private static <T extends Type> T convert(
       CompilationUnit cu,
       Builder<T> builder,
       VoidVisitor visitor

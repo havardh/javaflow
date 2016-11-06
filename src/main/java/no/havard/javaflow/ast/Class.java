@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import no.havard.javaflow.model.CanonicalName;
 
-public class Class extends Definition {
+public class Class extends Type {
 
   private final Parent parent;
   private final List<Field> fields;

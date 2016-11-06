@@ -4,7 +4,7 @@ import java.util.List;
 
 import no.havard.javaflow.model.CanonicalName;
 
-public class Enum extends Definition {
+public class Enum extends Type {
 
   private final List<String> values;
 
