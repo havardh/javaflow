@@ -8,6 +8,7 @@ import no.havard.javaflow.phases.transform.SortedTypeTransformer;
 import no.havard.javaflow.phases.writer.flow.converter.Converter;
 import no.havard.javaflow.phases.writer.flow.FlowWriter;
 import no.havard.javaflow.phases.writer.flow.converter.JavaFlowConverter;
+import no.havard.javaflow.phases.adapter.FileAdapter;
 
 public class JavaFlow {
 
@@ -15,6 +16,7 @@ public class JavaFlow {
     Converter converter = new JavaFlowConverter("types.yml");
 
     Execution execution = new Execution(
+        new FileAdapter(),
         new JavaReader(),
         asList(
             new InheritanceTransformer(),

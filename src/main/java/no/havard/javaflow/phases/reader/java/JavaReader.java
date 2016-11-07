@@ -1,20 +1,20 @@
 package no.havard.javaflow.phases.reader.java;
 
+import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 import static no.havard.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static no.havard.javaflow.ast.builders.EnumBuilder.enumBuilder;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import static com.github.javaparser.JavaParser.parse;
+
+import java.io.StringReader;
 import java.util.Optional;
 
 import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.ast.builders.Builder;
 import no.havard.javaflow.phases.reader.Reader;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -24,22 +24,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public class JavaReader implements Reader {
 
   public Optional<Type> read(String file) {
-    try (FileInputStream inputStream = new FileInputStream(file)) {
-      CompilationUnit compilationUnit = JavaParser.parse(inputStream);
 
-      return convert(compilationUnit);
-
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      System.exit(0);
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.exit(0);
+    try {
+      CompilationUnit cu = parse(new StringReader(file));
+      return convert(cu);
     } catch (ParseException e) {
       e.printStackTrace();
-      System.exit(0);
+      System.exit(1);
     }
-    return Optional.empty();
+
+    return empty();
   }
 
   private static Optional<Type> convert(CompilationUnit cu) {

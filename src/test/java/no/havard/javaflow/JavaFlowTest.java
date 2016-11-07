@@ -20,6 +20,7 @@ import no.havard.javaflow.ast.Enum;
 import no.havard.javaflow.ast.Field;
 import no.havard.javaflow.ast.Parent;
 import no.havard.javaflow.ast.Type;
+import no.havard.javaflow.phases.adapter.FileAdapter;
 import no.havard.javaflow.phases.reader.Reader;
 import no.havard.javaflow.phases.reader.java.JavaReader;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
@@ -330,15 +331,21 @@ public class JavaFlowTest {
   }
 
   private static Type parse(String name) {
-    return new JavaReader().read(BASE_PATH + name + ".java").get();
+    return new FileAdapter().read(BASE_PATH + name + ".java")
+        .map(new JavaReader()::read)
+        .map(Optional::get)
+        .orElse(null);
   }
 
   private static Map<String, Type> parseAll(String ...modelNames) {
+    FileAdapter adapter = new FileAdapter();
     Reader reader = new JavaReader();
     Transformer transformer = new InheritanceTransformer();
 
     List<Type> types = stream(modelNames)
         .map(name -> BASE_PATH + name + ".java")
+        .map(adapter::read)
+        .map(Optional::get)
         .map(reader::read)
         .map(Optional::get)
         .collect(toList());
