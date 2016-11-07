@@ -33,7 +33,7 @@ public class Execution {
     this.writer = writer;
   }
 
-  public String run(String filenames[]) {
+  public String run(String... filenames) {
     List<String> files = read(filenames);
     List<Type> types = parse(files);
     transform(types);
