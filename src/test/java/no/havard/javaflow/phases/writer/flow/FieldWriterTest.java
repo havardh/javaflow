@@ -2,6 +2,7 @@ package no.havard.javaflow.phases.writer.flow;
 
 import static no.havard.javaflow.ast.builders.FieldBuilder.fieldBuilder;
 import static no.havard.javaflow.model.fixtures.TypeFixtures.stringType;
+import static no.havard.javaflow.testutil.Assertions.assertStringEqual;
 import static no.havard.javaflow.testutil.MapConverterFixture.stringMap;
 
 import java.io.IOException;
