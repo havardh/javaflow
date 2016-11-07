@@ -1,4 +1,4 @@
-package no.havard.javaflow.phases.reader.java;
+package no.havard.javaflow.phases.parser.java;
 
 import static no.havard.javaflow.model.CanonicalName.object;
 import static no.havard.javaflow.util.Maps.entriesToMap;

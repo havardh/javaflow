@@ -9,26 +9,26 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import no.havard.javaflow.ast.Type;
-import no.havard.javaflow.phases.reader.Reader;
+import no.havard.javaflow.phases.parser.Parser;
 import no.havard.javaflow.phases.transform.Transformer;
 import no.havard.javaflow.phases.writer.Writer;
-import no.havard.javaflow.phases.adapter.FileAdapter;
+import no.havard.javaflow.phases.reader.FileReader;
 
 public class Execution {
 
-  private final FileAdapter adapter;
-  private final Reader reader;
+  private final FileReader reader;
+  private final Parser parser;
   private final List<Transformer> transformers;
   private final Writer<Type> writer;
 
   public Execution(
-      FileAdapter adapter,
-      Reader reader,
+      FileReader reader,
+      Parser parser,
       List<Transformer> transformers,
       Writer<Type> writer
   ) {
-    this.adapter = adapter;
     this.reader = reader;
+    this.parser = parser;
     this.transformers = transformers;
     this.writer = writer;
   }
@@ -42,7 +42,7 @@ public class Execution {
 
   private List<String> read(String[] filenames) {
     return Stream.of(filenames)
-        .map(adapter::read)
+        .map(reader::read)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(toList());
@@ -50,7 +50,7 @@ public class Execution {
 
   private List<Type> parse(List<String> files) {
     return files.stream()
-        .map(reader::read)
+        .map(parser::parse)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(toList());

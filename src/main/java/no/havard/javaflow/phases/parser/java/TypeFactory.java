@@ -1,4 +1,4 @@
-package no.havard.javaflow.phases.reader.java;
+package no.havard.javaflow.phases.parser.java;
 
 import static no.havard.javaflow.ast.builders.TypeBuilder.list;
 import static no.havard.javaflow.ast.builders.TypeBuilder.map;

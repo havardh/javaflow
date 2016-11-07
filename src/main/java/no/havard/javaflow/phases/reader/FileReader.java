@@ -1,4 +1,4 @@
-package no.havard.javaflow.phases.adapter;
+package no.havard.javaflow.phases.reader;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class FileAdapter {
+public class FileReader {
 
   public Optional<String> read(String filename) {
     try {
