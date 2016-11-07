@@ -3,6 +3,7 @@ package no.havard.javaflow.phases.writer.flow;
 import static no.havard.javaflow.model.fixtures.TypeFixtures.listType;
 import static no.havard.javaflow.model.fixtures.TypeFixtures.mapType;
 import static no.havard.javaflow.model.fixtures.TypeFixtures.stringType;
+import static no.havard.javaflow.testutil.MapConverterFixture.stringMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,7 +18,9 @@ import org.junit.jupiter.api.Test;
 public class TypeWriterTest extends WriterTest<Type> {
 
   public TypeWriterTest() {
-    super(new TypeWriter());
+    super(new TypeWriter(stringMap()
+        .with("java.util.List", "Array")
+        .build()));
   }
 
   @Test

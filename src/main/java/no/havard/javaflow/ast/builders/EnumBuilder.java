@@ -1,9 +1,10 @@
 package no.havard.javaflow.ast.builders;
 
+import static no.havard.javaflow.model.CanonicalName.object;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import no.havard.javaflow.model.CanonicalName;
 import no.havard.javaflow.ast.Enum;
 
 public class EnumBuilder implements Builder<Enum> {
@@ -35,7 +36,7 @@ public class EnumBuilder implements Builder<Enum> {
   }
 
   public Enum build() {
-    return new Enum(new CanonicalName(packageName, name), values);
+    return new Enum(object(packageName, name), values);
   }
 
 }

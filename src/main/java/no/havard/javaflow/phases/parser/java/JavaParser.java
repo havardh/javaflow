@@ -1,56 +1,45 @@
-package no.havard.javaflow.phases.reader.java;
+package no.havard.javaflow.phases.parser.java;
 
+import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 import static no.havard.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static no.havard.javaflow.ast.builders.EnumBuilder.enumBuilder;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.StringReader;
 import java.util.Optional;
 
 import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.ast.builders.Builder;
-import no.havard.javaflow.phases.reader.Reader;
+import no.havard.javaflow.phases.parser.Parser;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-public class JavaReader implements Reader {
+public class JavaParser implements Parser {
 
-  private static ClassVisitor classVisitor = new ClassVisitor();
-  private static EnumVisitor enumVisitor = new EnumVisitor();
+  public Optional<Type> parse(String file) {
 
-  public Optional<Type> read(String file) {
-    try (FileInputStream inputStream = new FileInputStream(file)) {
-      CompilationUnit compilationUnit = JavaParser.parse(inputStream);
-
-      return convert(compilationUnit);
-
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      System.exit(0);
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.exit(0);
+    try {
+      CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(file));
+      return convert(cu);
     } catch (ParseException e) {
       e.printStackTrace();
-      System.exit(0);
+      System.exit(1);
     }
-    return Optional.empty();
+
+    return empty();
   }
 
   private static Optional<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      return of(convert(cu, classBuilder(), classVisitor));
+      return of(convert(cu, classBuilder(), new ClassVisitor()));
     } else if (containsEnum(cu)) {
-      return of(convert(cu, enumBuilder(), enumVisitor));
+      return of(convert(cu, enumBuilder(), new EnumVisitor()));
     } else {
       return Optional.empty();
     }

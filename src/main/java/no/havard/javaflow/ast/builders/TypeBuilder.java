@@ -19,6 +19,10 @@ public final class TypeBuilder {
     return new TypeBuilder();
   }
 
+  public static Type primitive(CanonicalName name) {
+    return new Type(name);
+  }
+
   public static Type object(CanonicalName name) {
     return new Type(name);
   }

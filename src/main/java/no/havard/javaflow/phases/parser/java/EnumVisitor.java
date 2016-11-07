@@ -1,4 +1,4 @@
-package no.havard.javaflow.phases.reader.java;
+package no.havard.javaflow.phases.parser.java;
 
 import no.havard.javaflow.ast.builders.EnumBuilder;
 

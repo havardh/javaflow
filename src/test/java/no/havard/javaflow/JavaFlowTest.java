@@ -20,8 +20,12 @@ import no.havard.javaflow.ast.Enum;
 import no.havard.javaflow.ast.Field;
 import no.havard.javaflow.ast.Parent;
 import no.havard.javaflow.ast.Type;
-import no.havard.javaflow.phases.reader.java.JavaReader;
+import no.havard.javaflow.phases.reader.FileReader;
+import no.havard.javaflow.phases.parser.Parser;
+import no.havard.javaflow.phases.parser.java.JavaParser;
 import no.havard.javaflow.phases.transform.InheritanceTransformer;
+import no.havard.javaflow.phases.transform.Transformer;
+import no.havard.javaflow.phases.writer.flow.converter.JavaFlowConverter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -30,6 +34,7 @@ import org.junit.jupiter.api.Test;
 public class JavaFlowTest {
 
   private static final String BASE_PATH = "src/test/java/no/havard/javaflow/model/";
+  private static final JavaFlowConverter CONVERTER = new JavaFlowConverter();
 
   @Nested
   class Classes {
@@ -326,16 +331,26 @@ public class JavaFlowTest {
   }
 
   private static Type parse(String name) {
-    return new JavaReader().read(BASE_PATH + name + ".java").get();
+    return new FileReader().read(BASE_PATH + name + ".java")
+        .map(new JavaParser()::parse)
+        .map(Optional::get)
+        .orElse(null);
   }
 
   private static Map<String, Type> parseAll(String ...modelNames) {
-    List<Type> types = JavaFlow.read(stream(modelNames)
-        .map(name -> BASE_PATH + name + ".java")
-        .collect(toList())
-        .toArray(new String[]{}));
+    FileReader adapter = new FileReader();
+    Parser parser = new JavaParser();
+    Transformer transformer = new InheritanceTransformer();
 
-    new InheritanceTransformer().transform(types);
+    List<Type> types = stream(modelNames)
+        .map(name -> BASE_PATH + name + ".java")
+        .map(adapter::read)
+        .map(Optional::get)
+        .map(parser::parse)
+        .map(Optional::get)
+        .collect(toList());
+
+    transformer.transform(types);
 
     return types
         .stream()
@@ -345,7 +360,11 @@ public class JavaFlowTest {
   private static Map<String, String> typeMap(Class aClass) {
     return aClass.getFields()
         .stream()
-        .collect(toMap(Field::getName, Field::getFlowType));
+        .collect(toMap(Field::getName, JavaFlowTest::fieldToFlow));
+  }
+
+  private static String fieldToFlow(Field field) {
+    return CONVERTER.convert(field.getCanonicalName());
   }
 
 }

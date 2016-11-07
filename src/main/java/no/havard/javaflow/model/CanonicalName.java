@@ -2,19 +2,33 @@ package no.havard.javaflow.model;
 
 import static java.lang.String.format;
 
+import static no.havard.javaflow.model.builders.CanonicalNameBuilder.canonicalName;
+
 public class CanonicalName {
 
   private final String packageName;
   private final String name;
 
-  public CanonicalName(String name) {
-    this.packageName = null;
+  private CanonicalName(String packageName, String name) {
+    this.packageName = packageName;
     this.name = name;
   }
 
-  public CanonicalName(String packageName, String name) {
-    this.packageName = packageName;
-    this.name = name;
+  public static CanonicalName fromString(String canonicalName) {
+    int lastDot = canonicalName.lastIndexOf('.');
+
+    return canonicalName()
+        .withPackageName(canonicalName.substring(0, lastDot))
+        .withName(canonicalName.substring(lastDot+1, canonicalName.length()))
+        .build();
+  }
+
+  public static CanonicalName primitive(String name) {
+    return new CanonicalName(null, name);
+  }
+
+  public static CanonicalName object(String packageName, String name) {
+    return new CanonicalName(packageName, name);
   }
 
   public String getName() {

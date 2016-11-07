@@ -2,6 +2,7 @@ package no.havard.javaflow.phases.writer.flow;
 
 import static no.havard.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static no.havard.javaflow.model.fixtures.FieldDefinitionFixtures.stringFieldDefinition;
+import static no.havard.javaflow.testutil.MapConverterFixture.stringMap;
 
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 public class ClassWriterTest extends WriterTest<Class> {
 
   public ClassWriterTest() {
-    super(new ClassWriter());
+    super(new ClassWriter(stringMap().build()));
   }
 
   @Test
