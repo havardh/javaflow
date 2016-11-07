@@ -1,5 +1,7 @@
 package no.havard.javaflow.phases.writer.flow;
 
+import static no.havard.javaflow.testutil.Assertions.assertStringEqual;
+
 import java.io.IOException;
 
 import no.havard.javaflow.ast.Enum;
