@@ -21,10 +21,7 @@ public class CanonicalNameFactory {
       entry("Integer", "java.lang"),
       entry("Long", "java.lang"),
       entry("Short", "java.lang"),
-      entry("String", "java.lang"),
-
-      entry("List", "java.util"),
-      entry("Map", "java.util")
+      entry("String", "java.lang")
   ).collect(entriesToMap()));
 
   private final String packageName;

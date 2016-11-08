@@ -57,5 +57,27 @@ public class ExecutionIntegrationTest {
     );
   }
 
+  @Test
+  public void shouldParseModelWithList() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithList.java");
+
+    assertStringEqual(flowCode,
+        "/* @flow */",
+        "export type ModelWithList = {",
+        "  words: Array<string>,",
+        "};");
+  }
+
+  @Test
+  public void shouldParseModelWithMap() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithMap.java");
+
+    assertStringEqual(flowCode,
+        "/* @flow */",
+        "export type ModelWithMap = {",
+        "  field: {[key: string]: number},",
+        "};");
+  }
+
 }
 
