@@ -1,18 +1,16 @@
 package no.havard.javaflow.phases.parser.java;
 
 import static no.havard.javaflow.model.CanonicalName.object;
-import static no.havard.javaflow.util.Maps.entriesToMap;
+import static no.havard.javaflow.util.Maps.collect;
 import static no.havard.javaflow.util.Maps.entry;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import no.havard.javaflow.model.CanonicalName;
 
 public class CanonicalNameFactory {
 
-  private static Map<String, String> BUILTIN = Collections.unmodifiableMap(Stream.of(
+  private static Map<String, String> BUILTIN = collect(
       entry("Boolean", "java.lang"),
       entry("Byte", "java.lang"),
       entry("Character", "java.lang"),
@@ -22,7 +20,7 @@ public class CanonicalNameFactory {
       entry("Long", "java.lang"),
       entry("Short", "java.lang"),
       entry("String", "java.lang")
-  ).collect(entriesToMap()));
+  );
 
   private final String packageName;
   private final Map<String, String> imports;
