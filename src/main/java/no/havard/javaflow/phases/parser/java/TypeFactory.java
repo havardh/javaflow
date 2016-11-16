@@ -52,7 +52,8 @@ public class TypeFactory {
   }
 
   private static boolean isList(String typeLiteral) {
-    return typeLiteral.startsWith("List<") && typeLiteral.endsWith(">");
+    return typeLiteral.startsWith("List<") && typeLiteral.endsWith(">")
+        || typeLiteral.startsWith("Collection<") && typeLiteral.endsWith(">");
   }
 
   private static boolean isMap(String typeLiteral) {
@@ -64,7 +65,7 @@ public class TypeFactory {
   }
 
   private static String extractType(String typeLiteral) {
-    return typeLiteral.substring(5, typeLiteral.length() - 1);
+    return typeLiteral.substring(typeLiteral.indexOf("<") + 1, typeLiteral.length() - 1);
   }
 
   private static String extractKeyType(String typeLiteral) {

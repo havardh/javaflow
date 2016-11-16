@@ -32,6 +32,7 @@ public final class JavaFlowConverter implements Converter {
       entry("java.util.Date", "string"),
       entry("java.util.Map", "Map"),
       entry("java.util.List", "Array"),
+      entry("java.util.Collection", "Array"),
 
       entry("java.lang.Boolean", "boolean"),
       entry("java.lang.Byte", "number"),
