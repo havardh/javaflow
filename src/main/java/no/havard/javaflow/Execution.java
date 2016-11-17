@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.phases.parser.Parser;
 import no.havard.javaflow.phases.transform.Transformer;
+import no.havard.javaflow.phases.verifier.Verifier;
 import no.havard.javaflow.phases.writer.Writer;
 import no.havard.javaflow.phases.reader.FileReader;
 
@@ -19,17 +20,20 @@ public class Execution {
   private final FileReader reader;
   private final Parser parser;
   private final List<Transformer> transformers;
+  private final List<Verifier> verifiers;
   private final Writer<Type> writer;
 
   public Execution(
       FileReader reader,
       Parser parser,
       List<Transformer> transformers,
+      List<Verifier> verifiers,
       Writer<Type> writer
   ) {
     this.reader = reader;
     this.parser = parser;
     this.transformers = transformers;
+    this.verifiers = verifiers;
     this.writer = writer;
   }
 
@@ -37,7 +41,12 @@ public class Execution {
     List<String> files = read(filenames);
     List<Type> types = parse(files);
     transform(types);
+    verify(types);
     return write(types);
+  }
+
+  private void verify(List<Type> types) {
+    verifiers.forEach(verifier -> verifier.verify(types));
   }
 
   private List<String> read(String[] filenames) {

@@ -1,5 +1,8 @@
 package no.havard.javaflow.ast;
 
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+
 import no.havard.javaflow.model.CanonicalName;
 
 public class Field {
@@ -10,8 +13,8 @@ public class Field {
 
   public Field(boolean isNullable, String name, Type type) {
     this.isNullable = isNullable;
-    this.type = type;
-    this.name = name;
+    this.type = requireNonNull(type);
+    this.name = requireNonNull(name);
   }
 
   public Type getType() {
@@ -32,5 +35,11 @@ public class Field {
 
   public CanonicalName getCanonicalName() {
     return type.getCanonicalName();
+  }
+
+
+  @Override
+  public String toString() {
+    return format("%s: %s", name, getCanonicalName());
   }
 }
