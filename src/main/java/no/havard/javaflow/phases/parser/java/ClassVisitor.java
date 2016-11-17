@@ -16,6 +16,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
@@ -60,7 +61,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     field.getVariables().forEach(variable -> builder.withField(new Field(
         isNullable(field),
         variable.getId().getName(),
-        factory.build(field.getType())
+        factory.build(field.getType().toString(), field.getType() instanceof PrimitiveType)
     )));
   }
 
