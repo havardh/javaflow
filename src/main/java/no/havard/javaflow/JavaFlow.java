@@ -13,7 +13,8 @@ import no.havard.javaflow.phases.reader.FileReader;
 public class JavaFlow {
 
   public static void main(String args[]) {
-    Converter converter = new JavaFlowConverter("types.yml");
+    TypeMap typeMap = new TypeMap("types.yml");
+    Converter converter = new JavaFlowConverter(typeMap);
 
     Execution execution = new Execution(
         new FileReader(),
