@@ -79,5 +79,15 @@ public class ExecutionIntegrationTest {
         "};");
   }
 
+  @Test
+  public void shouldParseModelWithCollection() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithCollection.java");
+
+    assertStringEqual(flowCode,
+        "/* @flow */",
+        "export type ModelWithCollection = {",
+        "  strings: Array<string>,",
+        "};");
+  }
 }
 

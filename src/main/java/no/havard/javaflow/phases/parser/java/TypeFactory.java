@@ -10,8 +10,6 @@ import no.havard.javaflow.ast.Type;
 import no.havard.javaflow.ast.builders.TypeBuilder;
 import no.havard.javaflow.model.CanonicalName;
 
-import com.github.javaparser.ast.type.PrimitiveType;
-
 public class TypeFactory {
 
   private CanonicalNameFactory canonicalNameFactory;
@@ -20,9 +18,7 @@ public class TypeFactory {
     this.canonicalNameFactory = new CanonicalNameFactory(packageName, imports);
   }
 
-  public Type build(com.github.javaparser.ast.type.Type type) {
-    String typeLiteral = type.toString();
-
+  public Type build(String typeLiteral, boolean isPrimitive) {
     if (isList(typeLiteral)) {
       String tagType = extractTagType(typeLiteral);
       String valType = extractType(typeLiteral);
@@ -44,7 +40,7 @@ public class TypeFactory {
       );
     }
 
-    if (type instanceof PrimitiveType || typeLiteral.equals("char[]")) {
+    if (isPrimitive || typeLiteral.equals("char[]")) {
       return TypeBuilder.primitive(CanonicalName.primitive(typeLiteral));
     } else {
       return object(canonicalNameFactory.build(typeLiteral));
@@ -52,7 +48,8 @@ public class TypeFactory {
   }
 
   private static boolean isList(String typeLiteral) {
-    return typeLiteral.startsWith("List<") && typeLiteral.endsWith(">");
+    return typeLiteral.startsWith("List<") && typeLiteral.endsWith(">")
+        || typeLiteral.startsWith("Collection<") && typeLiteral.endsWith(">");
   }
 
   private static boolean isMap(String typeLiteral) {
@@ -64,7 +61,7 @@ public class TypeFactory {
   }
 
   private static String extractType(String typeLiteral) {
-    return typeLiteral.substring(5, typeLiteral.length() - 1);
+    return typeLiteral.substring(typeLiteral.indexOf("<") + 1, typeLiteral.length() - 1);
   }
 
   private static String extractKeyType(String typeLiteral) {
