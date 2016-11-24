@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import no.havard.javaflow.ast.Type;
+import no.havard.javaflow.phases.filetransform.FileTransformer;
 import no.havard.javaflow.phases.parser.Parser;
 import no.havard.javaflow.phases.transform.Transformer;
 import no.havard.javaflow.phases.verifier.Verifier;
@@ -22,19 +23,22 @@ public class Execution {
   private final List<Transformer> transformers;
   private final List<Verifier> verifiers;
   private final Writer<Type> writer;
+  private final List<FileTransformer> fileTransformers;
 
   public Execution(
       FileReader reader,
       Parser parser,
       List<Transformer> transformers,
       List<Verifier> verifiers,
-      Writer<Type> writer
+      Writer<Type> writer,
+      List<FileTransformer> fileTransformers
   ) {
     this.reader = reader;
     this.parser = parser;
     this.transformers = transformers;
     this.verifiers = verifiers;
     this.writer = writer;
+    this.fileTransformers = fileTransformers;
   }
 
   public String run(String... filenames) {
@@ -42,7 +46,9 @@ public class Execution {
     List<Type> types = parse(files);
     transform(types);
     verify(types);
-    return write(types);
+    String output = write(types);
+
+    return transformFile(output);
   }
 
   private void verify(List<Type> types) {
@@ -71,7 +77,6 @@ public class Execution {
 
   private String write(List<Type> types) {
     StringWriter stringWriter = new StringWriter();
-    stringWriter.write("/* @flow */\n");
     types.forEach(type -> {
       try {
         writer.write(type, stringWriter);
@@ -82,6 +87,16 @@ public class Execution {
     });
 
     return stringWriter.toString();
+  }
+
+  private String transformFile(String inputFile) {
+    String file = inputFile;
+
+    for (FileTransformer transformer : fileTransformers) {
+      file = transformer.transform(file);
+    }
+
+    return file;
   }
 }
 
