@@ -20,12 +20,13 @@ public class FlowWriter implements Writer<Type> {
 
   @Override
   public void write(Type type, java.io.Writer writer) throws IOException {
+    writer.write("\n");
     if (type instanceof Class) {
       classWriter.write((Class) type, writer);
     } else if (type instanceof Enum) {
       enumWriter.write((Enum) type, writer);
     }
-    writer.write("\n\n");
+    writer.write("\n");
   }
 
 }

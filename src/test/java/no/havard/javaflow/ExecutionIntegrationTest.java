@@ -60,7 +60,7 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "Enumeration.java");
 
     assertStringEqual(flowCode,
-        "export type Enumeration = ",
+        "export type Enumeration =",
         "  | \"ONE\"",
         "  | \"TWO\";"
     );
@@ -102,7 +102,9 @@ public class ExecutionIntegrationTest {
         BASE_PATH + "Wrapper.java",
         BASE_PATH + "Member.java",
         BASE_PATH + "packaged/PackagedMember.java"
-    );
+    ) + "\n";
+
+    System.out.print(flowCode);
 
     assertStringEqual(flowCode,
         "export type Member = {};",

@@ -37,7 +37,7 @@ public class JavaFlow {
         )
     );
 
-    System.out.println(execution.run(args));
+    System.out.print(execution.run(args));
   }
 
 }

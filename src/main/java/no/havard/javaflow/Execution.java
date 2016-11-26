@@ -86,6 +86,8 @@ public class Execution {
       }
     });
 
+    stringWriter.write("\n");
+
     return stringWriter.toString();
   }
 
