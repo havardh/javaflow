@@ -1,6 +1,7 @@
 package no.havard.javaflow;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import static no.havard.javaflow.testutil.Assertions.assertStringEqual;
@@ -38,7 +39,8 @@ public class ExecutionIntegrationTest {
             new SortedTypeTransformer()
         ),
         singletonList(new MemberFieldsPresentVerifier(emptyTypeMap())),
-        new FlowWriter(new JavaFlowConverter())
+        new FlowWriter(new JavaFlowConverter()),
+        emptyList()
     );
   }
 
@@ -47,7 +49,6 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "Model.java");
 
     assertStringEqual(flowCode,
-        "/* @flow */",
         "export type Model = {",
         "  yolo: string,",
         "};"
@@ -59,7 +60,6 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "Enumeration.java");
 
     assertStringEqual(flowCode,
-        "/* @flow */",
         "export type Enumeration = ",
         "  | \"ONE\"",
         "  | \"TWO\";"
@@ -71,7 +71,6 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "ModelWithList.java");
 
     assertStringEqual(flowCode,
-        "/* @flow */",
         "export type ModelWithList = {",
         "  words: Array<string>,",
         "};");
@@ -82,7 +81,6 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "ModelWithMap.java");
 
     assertStringEqual(flowCode,
-        "/* @flow */",
         "export type ModelWithMap = {",
         "  field: {[key: string]: number},",
         "};");
@@ -93,7 +91,6 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "ModelWithCollection.java");
 
     assertStringEqual(flowCode,
-        "/* @flow */",
         "export type ModelWithCollection = {",
         "  strings: Array<string>,",
         "};");
@@ -108,7 +105,6 @@ public class ExecutionIntegrationTest {
     );
 
     assertStringEqual(flowCode,
-        "/* @flow */",
         "export type Member = {};",
         "",
         "export type PackagedMember = {};",
