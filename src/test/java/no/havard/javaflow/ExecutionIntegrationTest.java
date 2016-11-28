@@ -60,7 +60,7 @@ public class ExecutionIntegrationTest {
     String flowCode = execution.run(BASE_PATH + "Enumeration.java");
 
     assertStringEqual(flowCode,
-        "export type Enumeration = ",
+        "export type Enumeration =",
         "  | \"ONE\"",
         "  | \"TWO\";"
     );

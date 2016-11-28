@@ -10,9 +10,9 @@ class EnumWriter implements Writer<Enum> {
   public void write(Enum anEnum, java.io.Writer writer) throws IOException {
     writer.write("export type ");
     writer.write(anEnum.getName());
-    writer.write(" = ");
+    writer.write(" =");
     writeValues(anEnum, writer);
-    writer.write(";\n");
+    writer.write(";");
   }
 
   private void writeValues(Enum anEnum, java.io.Writer writer) throws IOException {

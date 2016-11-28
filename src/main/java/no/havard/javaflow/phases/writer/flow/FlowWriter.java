@@ -25,7 +25,6 @@ public class FlowWriter implements Writer<Type> {
     } else if (type instanceof Enum) {
       enumWriter.write((Enum) type, writer);
     }
-    writer.write("\n\n");
   }
 
 }

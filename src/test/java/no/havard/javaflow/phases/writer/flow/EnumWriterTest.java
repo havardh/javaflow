@@ -25,7 +25,7 @@ public class EnumWriterTest extends WriterTest<Enum> {
         .build());
 
     assertStringEqual(flow,
-        "export type Enum = ",
+        "export type Enum =",
         "  | \"Value1\"",
         "  | \"Value2\";"
     );
