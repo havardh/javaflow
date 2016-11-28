@@ -1,6 +1,12 @@
 package no.havard.javaflow;
 
-import static java.util.stream.Collectors.toList;
+import no.havard.javaflow.ast.Type;
+import no.havard.javaflow.phases.filetransform.FileTransformer;
+import no.havard.javaflow.phases.parser.Parser;
+import no.havard.javaflow.phases.reader.FileReader;
+import no.havard.javaflow.phases.transform.Transformer;
+import no.havard.javaflow.phases.verifier.Verifier;
+import no.havard.javaflow.phases.writer.Writer;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -8,13 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import no.havard.javaflow.ast.Type;
-import no.havard.javaflow.phases.filetransform.FileTransformer;
-import no.havard.javaflow.phases.parser.Parser;
-import no.havard.javaflow.phases.transform.Transformer;
-import no.havard.javaflow.phases.verifier.Verifier;
-import no.havard.javaflow.phases.writer.Writer;
-import no.havard.javaflow.phases.reader.FileReader;
+import static java.util.stream.Collectors.toList;
 
 public class Execution {
 
@@ -77,14 +77,21 @@ public class Execution {
 
   private String write(List<Type> types) {
     StringWriter stringWriter = new StringWriter();
-    types.forEach(type -> {
+
+    for (int i=0; i<types.size(); i++) {
+      if (i != 0) {
+        stringWriter.write("\n");
+      }
       try {
-        writer.write(type, stringWriter);
+        writer.write(types.get(i), stringWriter);
       } catch (IOException e) {
         e.printStackTrace();
         System.exit(1);
       }
-    });
+      if (i != types.size() - 1) {
+        stringWriter.write("\n");
+      }
+    }
 
     return stringWriter.toString();
   }
