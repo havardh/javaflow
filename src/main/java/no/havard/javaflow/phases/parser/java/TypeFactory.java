@@ -19,7 +19,7 @@ public class TypeFactory {
   }
 
   public Type build(String typeLiteral, boolean isPrimitive) {
-    if (isList(typeLiteral)) {
+    if (isList(typeLiteral) || isSet(typeLiteral)) {
       String tagType = extractTagType(typeLiteral);
       String valType = extractType(typeLiteral);
       return list(
@@ -50,6 +50,10 @@ public class TypeFactory {
   private static boolean isList(String typeLiteral) {
     return typeLiteral.startsWith("List<") && typeLiteral.endsWith(">")
         || typeLiteral.startsWith("Collection<") && typeLiteral.endsWith(">");
+  }
+
+  private static boolean isSet(String typeLiteral) {
+    return typeLiteral.startsWith("Set<") && typeLiteral.endsWith(">");
   }
 
   private static boolean isMap(String typeLiteral) {

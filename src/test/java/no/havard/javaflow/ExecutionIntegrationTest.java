@@ -97,6 +97,16 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithSet() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithSet.java");
+
+    assertStringEqual(flowCode,
+        "export type ModelWithSet = {",
+        "  strings: Array<string>,",
+        "};");
+  }
+
+  @Test
   public void shouldParseModelWithMember() {
     String flowCode = execution.run(
         BASE_PATH + "Wrapper.java",

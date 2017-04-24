@@ -26,7 +26,7 @@ buildscript {
 }
 
 junitPlatform {
-    // platformVersion '1.0.0-SNAPSHOT'
+    platformVersion '1.0.0-M2'
     engines {
         // include 'junit-jupiter', 'junit-vintage'
         // exclude 'custom-engine'

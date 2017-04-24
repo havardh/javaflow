@@ -28,6 +28,13 @@ public class TypeFactoryTest {
     }
 
     @Test
+    public void shouldBeAnInstanceOfListWhenSetType() {
+      Type type = factory.build("Set<String>", false);
+
+      assertThat(type, instanceOf(List.class));
+    }
+
+    @Test
     public void shouldSetSubType() {
       List list = (List)factory.build("Collection<String>", false);
 
