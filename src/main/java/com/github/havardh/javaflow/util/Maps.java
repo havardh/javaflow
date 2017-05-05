@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 
 public class Maps {
 
-  public static Map.Entry<String, String> entry(String key, String value) {
+  public static <K, V> Map.Entry<K, V> entry(K key, V value) {
     return new AbstractMap.SimpleEntry<>(key, value);
   }
 
-  public static Map<String, String> collect(Map.Entry<String, String>... entries) {
+  public static <K, V> Map<K, V> collect(Map.Entry<K, V>... entries) {
     return Collections.unmodifiableMap(stream(entries).collect(entriesToMap()));
   }
 
-  public static Collector<Map.Entry<String, String>, ?, Map<String, String>> entriesToMap() {
+  public static <K, V> Collector<Map.Entry<K, V>, ?, Map<K, V>> entriesToMap() {
     return Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
   }
 }
