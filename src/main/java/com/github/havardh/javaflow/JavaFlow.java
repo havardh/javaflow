@@ -13,7 +13,7 @@ import com.github.havardh.javaflow.phases.verifier.MemberFieldsPresentVerifier;
 import com.github.havardh.javaflow.phases.writer.flow.FlowWriter;
 import com.github.havardh.javaflow.phases.writer.flow.converter.Converter;
 import com.github.havardh.javaflow.phases.writer.flow.converter.JavaFlowConverter;
-import com.github.havardh.javaflow.util.TypeMap;
+import com.github.havardh.javaflow.model.TypeMap;
 
 public class JavaFlow {
 

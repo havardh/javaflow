@@ -18,7 +18,7 @@ import com.github.havardh.javaflow.ast.Field;
 import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.exceptions.MissingTypeException;
 import com.github.havardh.javaflow.model.CanonicalName;
-import com.github.havardh.javaflow.util.TypeMap;
+import com.github.havardh.javaflow.model.TypeMap;
 
 public class MemberFieldsPresentVerifier implements Verifier {
 

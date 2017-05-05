@@ -1,4 +1,4 @@
-package com.github.havardh.javaflow.util;
+package com.github.havardh.javaflow.model;
 
 import static java.util.Collections.emptyMap;
 
