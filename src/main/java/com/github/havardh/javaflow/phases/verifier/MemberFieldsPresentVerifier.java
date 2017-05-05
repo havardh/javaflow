@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.toSet;
 
 import static com.github.havardh.javaflow.definitions.Objects.isObject;
 import static com.github.havardh.javaflow.definitions.Primitives.isPrimitive;
-import static com.github.havardh.javaflow.util.Lists.union;
+import static com.github.havardh.javaflow.util.Lists.concat;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +43,7 @@ public class MemberFieldsPresentVerifier implements Verifier {
           .filter(field -> !customTypes.containsKey(field.getType().getFullName()))
           .forEach(field -> missingTypes.compute(type, (ignored, fields) -> fields == null
               ? singletonList(field)
-              : union(fields, singletonList(field))));
+              : concat(fields, singletonList(field))));
     }
 
 

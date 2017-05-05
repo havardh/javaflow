@@ -20,7 +20,7 @@ public class Class extends Type {
   }
 
   public List<Field> getFields() {
-    return Lists.union(getParentFields(), fields);
+    return Lists.concat(getParentFields(), fields);
   }
 
   private List<Field> getParentFields() {
