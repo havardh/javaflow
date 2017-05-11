@@ -8,25 +8,12 @@ import java.util.List;
 
 import com.github.havardh.javaflow.model.CanonicalName;
 
-public class Parent {
+public class Parent extends Type {
 
-  private final CanonicalName name;
   private Class reference;
 
   public Parent(CanonicalName name) {
-    this.name = name;
-  }
-
-  public String getName() {
-    return name.getName();
-  }
-
-  public String getCanonicalName() {
-    return name.getCanonicalName();
-  }
-
-  public Class getReference() {
-    return reference;
+    super(name);
   }
 
   public List<Field> getFields() {
@@ -36,4 +23,9 @@ public class Parent {
   public void setReference(Class reference) {
     this.reference = reference;
   }
+
+  public Class getReference() {
+    return reference;
+  }
+
 }

@@ -9,7 +9,7 @@ class EnumWriter implements Writer<Enum> {
   @Override
   public void write(Enum anEnum, java.io.Writer writer) throws IOException {
     writer.write("export type ");
-    writer.write(anEnum.getName());
+    writer.write(anEnum.getCanonicalName().getName());
     writer.write(" =");
     writeValues(anEnum, writer);
     writer.write(";");

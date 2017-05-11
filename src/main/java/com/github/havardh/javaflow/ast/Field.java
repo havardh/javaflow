@@ -29,17 +29,8 @@ public class Field {
     return isNullable;
   }
 
-  public String getPackageName() {
-    return type.getPackageName();
-  }
-
-  public CanonicalName getCanonicalName() {
-    return type.getCanonicalName();
-  }
-
-
   @Override
   public String toString() {
-    return format("%s: %s", name, getCanonicalName());
+    return format("%s: %s", name, type.getCanonicalName());
   }
 }

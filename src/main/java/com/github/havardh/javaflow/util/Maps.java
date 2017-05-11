@@ -18,7 +18,7 @@ public class Maps {
     return Collections.unmodifiableMap(stream(entries).collect(entriesToMap()));
   }
 
-  public static <K, V> Collector<Map.Entry<K, V>, ?, Map<K, V>> entriesToMap() {
+  private static <K, V> Collector<Map.Entry<K, V>, ?, Map<K, V>> entriesToMap() {
     return Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
   }
 }

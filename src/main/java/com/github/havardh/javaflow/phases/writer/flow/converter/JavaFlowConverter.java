@@ -19,7 +19,7 @@ public final class JavaFlowConverter implements Converter {
 
   public String convert(CanonicalName canonicalName) {
     String name = canonicalName.getName();
-    String fullName = canonicalName.getCanonicalName();
+    String fullName = canonicalName.toString();
 
     return customTypeMap.getOrDefault(fullName, getOrDefault(fullName, name));
   }

@@ -22,7 +22,7 @@ public class InheritanceTransformer implements Transformer {
         .collect(toList());
 
     Map<String, Class> typeMap = classes.stream()
-        .collect(toMap(Class::getFullName, identity()));
+        .collect(toMap(Class::toString, identity()));
 
     classes.forEach(setParentReference(typeMap));
   }
@@ -32,7 +32,7 @@ public class InheritanceTransformer implements Transformer {
   }
 
   private static Consumer<Parent> updateParentReference(Map<String, Class> typeMap) {
-    return parent -> parent.setReference(typeMap.get(parent.getCanonicalName()));
+    return parent -> parent.setReference(typeMap.get(parent.getCanonicalName().toString()));
   }
 
 }

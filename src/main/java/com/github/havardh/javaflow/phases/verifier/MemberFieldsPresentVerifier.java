@@ -38,9 +38,9 @@ public class MemberFieldsPresentVerifier implements Verifier {
     for (Type type : types.stream().filter(t -> t instanceof Class).collect(toList())) {
       ((Class) type).getFields().stream()
           .filter(field -> !nameSet.contains(field.getType().getCanonicalName()))
-          .filter(field -> !isObject(field.getType().getFullName()))
-          .filter(field -> !isPrimitive(field.getType().getFullName()))
-          .filter(field -> !customTypes.containsKey(field.getType().getFullName()))
+          .filter(field -> !isObject(field.getType().toString()))
+          .filter(field -> !isPrimitive(field.getType().toString()))
+          .filter(field -> !customTypes.containsKey(field.getType().toString()))
           .forEach(field -> missingTypes.compute(type, (ignored, fields) -> fields == null
               ? singletonList(field)
               : concat(fields, singletonList(field))));

@@ -21,10 +21,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 public class JavaParser implements Parser {
 
-  public Optional<Type> parse(String file) {
 
     try {
-      CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(file));
+      CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(source));
       return convert(cu);
     } catch (ParseException e) {
       e.printStackTrace();

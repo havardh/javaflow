@@ -18,7 +18,7 @@ class ClassWriter implements Writer<Class> {
   @Override
   public void write(Class aClass, java.io.Writer writer) throws IOException {
     writer.write("export type ");
-    writer.write(aClass.getName());
+    writer.write(aClass.getCanonicalName().getName());
     writer.write(" = {");
     writeFields(aClass, writer);
     writer.write("};");

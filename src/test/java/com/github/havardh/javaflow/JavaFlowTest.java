@@ -20,6 +20,7 @@ import com.github.havardh.javaflow.ast.Enum;
 import com.github.havardh.javaflow.ast.Field;
 import com.github.havardh.javaflow.ast.Parent;
 import com.github.havardh.javaflow.ast.Type;
+import com.github.havardh.javaflow.model.CanonicalName;
 import com.github.havardh.javaflow.phases.reader.FileReader;
 import com.github.havardh.javaflow.phases.parser.Parser;
 import com.github.havardh.javaflow.phases.parser.java.JavaParser;
@@ -43,14 +44,14 @@ public class JavaFlowTest {
     public void shouldSetNameOfClass() {
       Type type = parse("Model");
 
-      assertThat(type.getName(), is("Model"));
+      assertThat(type.getCanonicalName().getName(), is("Model"));
     }
 
     @Test
     public void shouldSetPackageOfClass() {
       Type type = parse("Model");
 
-      assertThat(type.getPackageName(), is("com.github.havardh.javaflow.model"));
+      assertThat(type.getCanonicalName().getPackageName(), is("com.github.havardh.javaflow.model"));
     }
 
     @Test
@@ -60,14 +61,18 @@ public class JavaFlowTest {
       Field field = aClass.getFields().get(0);
 
       assertThat(field.getName(), is("yolo"));
-      assertThat(field.getType().getName(), is("String"));
+      assertThat(field.getType().getCanonicalName().getName(), is("String"));
     }
 
     @Test
     public void shouldAddParentNameToDefinition() {
       Class aClass = (Class)parse("Sub");
 
-      assertThat(aClass.getParent().map(Parent::getName).get(), is("Super"));
+      assertThat(aClass.getParent()
+              .map(Parent::getCanonicalName)
+              .map(CanonicalName::getName).get(),
+          is("Super")
+      );
     }
 
     @Nested
@@ -294,14 +299,14 @@ public class JavaFlowTest {
     public void shouldSetNameOfEnum() {
       Type type = parse("Enumeration");
 
-      assertThat(type.getName(), is("Enumeration"));
+      assertThat(type.getCanonicalName().getName(), is("Enumeration"));
     }
 
     @Test
     public void shouldSetPackageNameOfEnum() {
       Type type = parse("Enumeration");
 
-      assertThat(type.getPackageName(), is("com.github.havardh.javaflow.model"));
+      assertThat(type.getCanonicalName().getPackageName(), is("com.github.havardh.javaflow.model"));
     }
 
     @Test
@@ -324,10 +329,10 @@ public class JavaFlowTest {
       Field member = fields.get(0);
       Field packagedMember = fields.get(1);
 
-      assertThat(member.getPackageName(), is("com.github.havardh.javaflow.model"));
-      assertThat(packagedMember.getPackageName(), is("com.github.havardh.javaflow.model.packaged"));
+      assertThat(member.getType().getCanonicalName().getPackageName(), is("com.github.havardh.javaflow.model"));
+      assertThat(packagedMember.getType().getCanonicalName().getPackageName(),
+          is("com.github.havardh.javaflow.model.packaged"));
     }
-
   }
 
   private static Type parse(String name) {
@@ -354,7 +359,7 @@ public class JavaFlowTest {
 
     return types
         .stream()
-        .collect(toMap(Type::getName, identity()));
+        .collect(toMap(type -> type.getCanonicalName().getName(), identity()));
   }
 
   private static Map<String, String> typeMap(Class aClass) {
@@ -364,7 +369,7 @@ public class JavaFlowTest {
   }
 
   private static String fieldToFlow(Field field) {
-    return CONVERTER.convert(field.getCanonicalName());
+    return CONVERTER.convert(field.getType().getCanonicalName());
   }
 
 }
