@@ -1,7 +1,7 @@
 package com.github.havardh.javaflow.phases.writer.flow.converter;
 
-import com.github.havardh.javaflow.definitions.Objects;
-import com.github.havardh.javaflow.definitions.Primitives;
+import com.github.havardh.javaflow.phases.writer.flow.converter.definitions.Objects;
+import com.github.havardh.javaflow.phases.writer.flow.converter.definitions.Primitives;
 import com.github.havardh.javaflow.model.CanonicalName;
 import com.github.havardh.javaflow.model.TypeMap;
 

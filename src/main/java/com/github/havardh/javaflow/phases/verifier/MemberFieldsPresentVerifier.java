@@ -4,8 +4,8 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
-import static com.github.havardh.javaflow.definitions.Objects.isObject;
-import static com.github.havardh.javaflow.definitions.Primitives.isPrimitive;
+import static com.github.havardh.javaflow.phases.writer.flow.converter.definitions.Objects.isObject;
+import static com.github.havardh.javaflow.phases.writer.flow.converter.definitions.Primitives.isPrimitive;
 import static com.github.havardh.javaflow.util.Lists.concat;
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.github.havardh.javaflow.definitions;
+package com.github.havardh.javaflow.phases.writer.flow.converter.definitions;
 
 import java.util.Map;
 
