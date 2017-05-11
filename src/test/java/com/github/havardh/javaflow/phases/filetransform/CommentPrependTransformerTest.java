@@ -5,11 +5,11 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.jupiter.api.Test;
 
-class CommentAppendTransformerTest {
+class CommentPrependTransformerTest {
 
   @Test
   public void shouldPrependFileWithComment() {
-    CommentAppendTransformer transformer = new CommentAppendTransformer("comment");
+    CommentPrependTransformer transformer = new CommentPrependTransformer("comment");
 
     String output = transformer.transform("");
 

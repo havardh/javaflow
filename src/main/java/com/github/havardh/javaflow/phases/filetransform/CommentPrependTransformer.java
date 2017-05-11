@@ -1,10 +1,10 @@
 package com.github.havardh.javaflow.phases.filetransform;
 
-public class CommentAppendTransformer implements FileTransformer {
+public class CommentPrependTransformer implements FileTransformer {
 
   private final String comment;
 
-  public CommentAppendTransformer(String comment) {
+  public CommentPrependTransformer(String comment) {
     this.comment = comment;
   }
 
