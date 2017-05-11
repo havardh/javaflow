@@ -15,8 +15,16 @@ import com.github.havardh.javaflow.phases.writer.flow.converter.Converter;
 import com.github.havardh.javaflow.phases.writer.flow.converter.JavaFlowConverter;
 import com.github.havardh.javaflow.model.TypeMap;
 
+/**
+ * Commmand line runner for JavaFlow
+ */
 public class JavaFlow {
 
+  /**
+   * Main routine for JavaFlow command line runner
+   *
+   * @param args command line arguments
+   */
   public static void main(String args[]) {
     TypeMap typeMap = new TypeMap("types.yml");
     Converter converter = new JavaFlowConverter(typeMap);

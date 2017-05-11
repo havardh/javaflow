@@ -8,14 +8,24 @@ import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.phases.writer.Writer;
 import com.github.havardh.javaflow.phases.writer.flow.converter.Converter;
 
+/**
+ * {@code Writer} for writing {@code Type}.
+ */
 public class TypeWriter implements Writer<Type> {
 
   private final Converter converter;
 
+  /**
+   * Create a {@code Writer} for {@code Type}
+   *
+   * @param converter type converter to convert types from source language
+   *                  flow types.
+   */
   public TypeWriter(Converter converter) {
     this.converter = converter;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void write(Type type, java.io.Writer writer) throws IOException {
     if (type instanceof Map) {

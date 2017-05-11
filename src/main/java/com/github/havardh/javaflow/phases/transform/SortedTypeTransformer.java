@@ -4,8 +4,17 @@ import java.util.List;
 
 import com.github.havardh.javaflow.ast.Type;
 
+/**
+ * Transformer to sort a {@code Type} list alphabetically based
+ * on type names.
+ */
 public class SortedTypeTransformer implements Transformer {
 
+  /**
+   * Sorts the {@code Type} list alphabetically on name
+   *
+   * @param types the list to sort
+   */
   @Override
   public void transform(List<Type> types) {
     types.sort((o1, o2) -> {

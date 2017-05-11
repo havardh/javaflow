@@ -16,6 +16,14 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * JavaFlow Execution runner
+ *
+ * The Execution object is set up with the readers, parsers,
+ * transformers, verifiers, writers and file transformers.
+ * Then the {@code run} method will run the execution for
+ * the given setup.
+ */
 public class Execution {
 
   private final FileReader reader;
@@ -25,6 +33,16 @@ public class Execution {
   private final Writer<Type> writer;
   private final List<FileTransformer> fileTransformers;
 
+  /**
+   * Sets up an Execution with the given set of configurations.
+   *
+   * @param reader           - file reader
+   * @param parser           - code parser
+   * @param transformers     - JavaFlow transforms
+   * @param verifiers        - JavaFlow verifiers
+   * @param writer           - string writer
+   * @param fileTransformers - output file transforms
+   */
   public Execution(
       FileReader reader,
       Parser parser,
@@ -41,6 +59,19 @@ public class Execution {
     this.fileTransformers = fileTransformers;
   }
 
+  /**
+   * Run the execution on the given set of files.
+   *
+   * This is the heart of the JavaFlow program. This method will read
+   * each file with the file {@code reader}, parse the source code with
+   * the {@code parser}. Next it will run all the {@code transforms} and
+   * {@code verifiers}, before it writes the results to a {@code String}
+   * with the {@code writer}. This string is transformed by the
+   * {@code fileTransformers} before the result is returned to the caller.
+   *
+   * @param filenames list of files to create flow types for.
+   * @return the flow type as a {@code String}
+   */
   public String run(String... filenames) {
     List<String> files = read(filenames);
     List<Type> types = parse(files);
@@ -51,10 +82,23 @@ public class Execution {
     return transformFile(output);
   }
 
+  /**
+   * Runs all {@code verifiers} on the list of {$code types}
+   *
+   * @param types list of JavaFlow internal type
+   * @throws com.github.havardh.javaflow.exceptions.MissingTypeException when
+   * a type is references which is not in the given set of types or overrides
+   */
   private void verify(List<Type> types) {
     verifiers.forEach(verifier -> verifier.verify(types));
   }
 
+  /**
+   * Read each {@code file} into a list of {@code String} with the {@code reader}.
+   *
+   * @param filenames list of files to read
+   * @return list of file content
+   */
   private List<String> read(String[] filenames) {
     return Stream.of(filenames)
         .map(reader::read)
@@ -63,6 +107,13 @@ public class Execution {
         .collect(toList());
   }
 
+  /**
+   * Parse each {@code file} to a list of {@code Type}. The {@code Type} is the
+   * internal representation of a model.
+   *
+   * @param files list of file contents
+   * @return list of internal types
+   */
   private List<Type> parse(List<String> files) {
     return files.stream()
         .map(parser::parse)
@@ -71,10 +122,21 @@ public class Execution {
         .collect(toList());
   }
 
+  /**
+   * Transforms each {@code type} with the set of {@code transformers}
+   *
+   * @param types list of types
+   */
   private void transform(List<Type> types) {
     transformers.forEach(transformer -> transformer.transform(types));
   }
 
+  /**
+   * Writes the list of {@code Type} into a {@code String}
+   *
+   * @param types list of types
+   * @return the flow types as a {@code String}
+   */
   private String write(List<Type> types) {
     StringWriter stringWriter = new StringWriter();
 
@@ -96,6 +158,12 @@ public class Execution {
     return stringWriter.toString();
   }
 
+  /**
+   * Transforms a output file with the set of {@code fileTransformers}
+   *
+   * @param inputFile the output file
+   * @return transformed output file
+   */
   private String transformFile(String inputFile) {
     String file = inputFile;
 

@@ -24,10 +24,28 @@ public class MemberFieldsPresentVerifier implements Verifier {
 
   private final TypeMap customTypes;
 
+  /**
+   * Create a {@code MemberFieldPresentVerifier} for the given
+   * {@code TypeMap}.
+   *
+   * @param customTypes the {@code TypeMap} to verify based on
+   */
   public MemberFieldsPresentVerifier(TypeMap customTypes) {
     this.customTypes = customTypes;
   }
 
+  /**
+   * Verifies that there are no missing types referenced
+   * in the list of {@code Type}.
+   *
+   * A missing type is found when a type is referenced which is not
+   * in the given set of types of in the {@code TypeMap} of the verifier
+   * If a any missing types are discovered a {@code MissingTypeException}
+   * is thrown containing the complete list of missing types.
+   *
+   * @param types list of {@code Type} to verify
+   * @throws MissingTypeException when a missing type is found
+   */
   @Override
   public void verify(List<Type> types) {
     Set<CanonicalName> nameSet = types.stream()

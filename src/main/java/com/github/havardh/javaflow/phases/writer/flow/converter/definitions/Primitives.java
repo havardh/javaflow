@@ -4,6 +4,9 @@ import java.util.Map;
 
 import com.github.havardh.javaflow.util.Maps;
 
+/**
+ * Static utility for converting fro java primitive types to flow types
+ */
 public class Primitives {
 
   public static Map<String, String> PRIMITIVES = Maps.collect(
@@ -17,13 +20,24 @@ public class Primitives {
       Maps.entry("char", "string")
   );
 
+  /**
+   * Check if a name is a java primitive
+   *
+   * @param name the name to check
+   * @return true if the name is a primitive
+   */
   public static boolean isPrimitive(String name) {
     return PRIMITIVES.containsKey(name);
   }
 
+  /**
+   * Get the flow type of a java primitive
+   *
+   * @param name the java primitive
+   * @return the flow type
+   */
   public static String get(String name) {
     return PRIMITIVES.get(name);
   }
 
 }
-

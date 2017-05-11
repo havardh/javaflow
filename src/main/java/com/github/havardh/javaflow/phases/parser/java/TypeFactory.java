@@ -6,14 +6,43 @@ import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.ast.builders.TypeBuilder;
 import com.github.havardh.javaflow.model.CanonicalName;
 
+/**
+ * A factory for {@code Type} used to create these objects from
+ * Java models.
+ */
 public class TypeFactory {
 
   private CanonicalNameFactory canonicalNameFactory;
 
+  /**
+   * Constructs a {@code TypeFactory} based on the a package name and a list
+   * of imports.
+   *
+   * The types build by this factory will have their names assigned based on
+   * the package name and or the imported name. The package name should be
+   * the package name for the model the factory is used for. The list of
+   * imported names should be equal to the list of imports in the model the
+   * factory is used for.
+   *
+   * @param packageName the package name for the model to use the factory for
+   * @param imports the list of imports for the model to use the factory for
+   */
   public TypeFactory(String packageName, Map<String, String> imports) {
     this.canonicalNameFactory = new CanonicalNameFactory(packageName, imports);
   }
 
+  /**
+   * Builds a {@code Type} from the given type literal and is primitive flag.
+   *
+   * The canonical name for the {@code Type} is resolved based on the context of
+   * the factory. If the name used in the model is found in the import the canonical
+   * name is build using the imported name. If the name is not imported the {@code Type}
+   * is given the same package name as the factory is initialized for.
+   *
+   * @param typeLiteral the literal name for the type used in the model
+   * @param isPrimitive a flag saying if the type is a primitive or an object
+   * @return the {@code Type} representation for type literal
+   */
   public Type build(String typeLiteral, boolean isPrimitive) {
     if (isList(typeLiteral) || isSet(typeLiteral)) {
       String tagType = extractTagType(typeLiteral);

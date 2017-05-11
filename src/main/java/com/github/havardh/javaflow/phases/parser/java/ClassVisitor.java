@@ -19,11 +19,15 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+/**
+ * A JavaFlow visitor for the {@code enum} java declaration.
+ */
 public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
   private String packageName;
   private Map<String, String> imports = new HashMap<>();
 
+  /** {@inheritDoc} */
   @Override
   public void visit(PackageDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
@@ -32,6 +36,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     builder.withPackageName(n.getPackageName());
   }
 
+  /** {@inheritDoc} */
   @Override
   public void visit(ImportDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
@@ -43,6 +48,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     imports.put(typeName, packageName);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void visit(ClassOrInterfaceDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
@@ -53,6 +59,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
         .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getName()))));
   }
 
+  /** {@inheritDoc} */
   @Override
   public void visit(FieldDeclaration field, ClassBuilder builder) {
     super.visit(field, builder);
