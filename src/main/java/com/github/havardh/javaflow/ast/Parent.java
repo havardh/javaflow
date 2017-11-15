@@ -3,7 +3,6 @@ package com.github.havardh.javaflow.ast;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 
-import java.lang.*;
 import java.util.List;
 
 import com.github.havardh.javaflow.model.CanonicalName;
@@ -31,6 +30,10 @@ public class Parent extends Type {
 
   public List<Field> getFields() {
     return ofNullable(reference).map(Class::getFields).orElse(emptyList());
+  }
+
+  public List<Method> getGetters() {
+    return ofNullable(reference).map(Class::getGetters).orElse(emptyList());
   }
 
   /**

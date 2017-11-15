@@ -1,5 +1,6 @@
 package com.github.havardh.javaflow.phases.parser.java;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.joining;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.github.havardh.javaflow.ast.Field;
+import com.github.havardh.javaflow.ast.Method;
 import com.github.havardh.javaflow.ast.Parent;
 import com.github.havardh.javaflow.ast.builders.ClassBuilder;
 
@@ -14,6 +16,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -43,7 +46,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
     String[] packages = n.getName().toString().split("\\.");
     String typeName = n.getName().getName();
-    String packageName = Stream.of(packages).limit(packages.length-1).collect(joining("."));
+    String packageName = Stream.of(packages).limit(packages.length - 1).collect(joining("."));
 
     imports.put(typeName, packageName);
   }
@@ -72,12 +75,33 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     )));
   }
 
+  @Override
+  public void visit(MethodDeclaration method, ClassBuilder builder) {
+    super.visit(method, builder);
+    TypeFactory factory = new TypeFactory(packageName, imports);
+
+    if (isGetter(method.getName(), method.getType().toString())) {
+      builder.withGetter(new Method(
+          method.getName(),
+          factory.build(method.getType().toString(), method.getType() instanceof PrimitiveType)
+      ));
+    }
+  }
+
   private boolean isNullable(FieldDeclaration field) {
     return field.getAnnotations().stream()
         .map(AnnotationExpr::getName)
         .map(NameExpr::getName)
         .filter(name -> name.equals("Nullable"))
         .count() > 0;
+  }
+
+  private boolean isGetter(String name, String type) {
+    if (singletonList("boolean").contains(type) && name.startsWith("is")) {
+      return true;
+    }
+
+    return name.startsWith("get");
   }
 
 }
