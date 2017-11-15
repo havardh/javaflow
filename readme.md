@@ -14,6 +14,9 @@ A simple example is the following conversion of `Post.java` to `post.js`.
 public class Post {
   private String title;
   private String text;
+  
+  public String getTitle() { return this.title; }
+  public String getText() { return this.text; }
 }
 ```
 
@@ -56,6 +59,8 @@ com.github.havardh.examples;
 
 public class Ssn {
   private String ssn;
+  
+  public String getSsn() { return this.ssn; }
 }
 ```
 
@@ -64,6 +69,8 @@ com.github.havardh.examples;
 
 public class Person {
   private Ssn ssn;
+  
+  public Ssn getSsn() { return this.ssn; }
 }
 ```
 
