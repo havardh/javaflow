@@ -7,7 +7,7 @@ import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.expectThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -63,7 +63,7 @@ public class MemberFieldsPresentVerifierTest {
         .withField(field)
         .build();
 
-    MissingTypeException exception = expectThrows(MissingTypeException.class, () ->
+    MissingTypeException exception = assertThrows(MissingTypeException.class, () ->
         verifier.verify(singletonList(aClass))
     );
 
