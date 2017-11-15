@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.havardh.javaflow.ast.Class;
 import com.github.havardh.javaflow.ast.Field;
+import com.github.havardh.javaflow.ast.Method;
 import com.github.havardh.javaflow.ast.Parent;
 import com.github.havardh.javaflow.model.CanonicalName;
 
@@ -17,6 +18,7 @@ public class ClassBuilder implements Builder<Class> {
   private String name;
   private Parent parent;
   private List<Field> fields = new ArrayList<>();
+  private List<Method> getters = new ArrayList<>();
 
   private ClassBuilder() {
   }
@@ -75,12 +77,22 @@ public class ClassBuilder implements Builder<Class> {
   }
 
   /**
+   * Add a {@code Method} to class builder
+   * @param getterMethod
+   * @return
+   */
+  public ClassBuilder withGetter(Method getterMethod) {
+    this.getters.add(getterMethod);
+    return this;
+  }
+
+  /**
    * Build a {@code Class} with the builder configuration
    *
    * @return the {@code Class}
    */
   public Class build() {
-    return new Class(CanonicalName.object(packageName, name), parent, fields);
+    return new Class(CanonicalName.object(packageName, name), parent, fields, getters);
   }
 
 }

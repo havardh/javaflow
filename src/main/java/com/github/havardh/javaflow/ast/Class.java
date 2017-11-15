@@ -15,6 +15,7 @@ public class Class extends Type {
 
   private final Parent parent;
   private final List<Field> fields;
+  private final List<Method> getters;
 
   /**
    * Create a {@code Class} with the given name, optional parent and
@@ -23,11 +24,13 @@ public class Class extends Type {
    * @param name the name of the class
    * @param parent optional parent of the type
    * @param fields the list of member fields
+   * @param getters the list of getters in the class
    */
-  public Class(CanonicalName name, Parent parent, List<Field> fields) {
+  public Class(CanonicalName name, Parent parent, List<Field> fields, List<Method> getters) {
     super(name);
     this.parent = parent;
     this.fields = fields;
+    this.getters = getters;
   }
 
   /**
@@ -43,6 +46,10 @@ public class Class extends Type {
     return  getParent().map(Parent::getFields).orElse(emptyList());
   }
 
+  private List<Method> getParentGetters() {
+    return  getParent().map(Parent::getGetters).orElse(emptyList());
+  }
+
   /**
    * Get the {@code Parent} reference
    *
@@ -50,5 +57,13 @@ public class Class extends Type {
    */
   public Optional<Parent> getParent() {
     return Optional.ofNullable(parent);
+  }
+
+  /**
+   * Get list of {@code Method} which are getters
+   * @return list of getters
+   */
+  public List<Method> getGetters() {
+    return Lists.concat(getParentGetters(), getters);
   }
 }
