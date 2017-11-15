@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.github.havardh.javaflow.ast.Enum;
 import com.github.havardh.javaflow.ast.Field;
 import com.github.havardh.javaflow.ast.Parent;
 import com.github.havardh.javaflow.ast.Type;
+import com.github.havardh.javaflow.exceptions.FieldGettersMismatchException;
 import com.github.havardh.javaflow.model.CanonicalName;
 import com.github.havardh.javaflow.phases.reader.FileReader;
 import com.github.havardh.javaflow.phases.parser.Parser;
@@ -332,6 +334,39 @@ public class JavaFlowTest {
       assertThat(member.getType().getCanonicalName().getPackageName(), is("com.github.havardh.javaflow.model"));
       assertThat(packagedMember.getType().getCanonicalName().getPackageName(),
           is("com.github.havardh.javaflow.model.packaged"));
+    }
+  }
+
+  @Nested
+  class InvalidDtos {
+
+    @Test
+    public void shouldFailWhenGetterDoesNotHaveMatchingField() {
+      assertThrows(
+          FieldGettersMismatchException.class,
+          () -> parse("ModelWithNotMatchingGetter"),
+          "Model com.github.havardh.javaflow.model.ModelWithNotMatchingGetter is not a pure DTO. Name of getter " +
+              "'getStringFields' does not correspond to any field name."
+      );
+    }
+
+    @Test
+    public void shouldFailWhenBooleanGetterDoesNotHaveMatchingField() {
+      assertThrows(
+          FieldGettersMismatchException.class,
+          () -> parse("ModelWithNotMatchingBooleanGetter"),
+          "Model com.github.havardh.javaflow.model.ModelWithNotMatchingBooleanGetter is not a pure DTO. Name of getter " +
+              "'isBooleanFields' does not correspond to any field name."
+      );
+    }
+
+    @Test
+    public void shouldFailWhenDifferentNumberOfGettersAndFields() {
+      assertThrows(
+          FieldGettersMismatchException.class,
+          () -> parse("ModelWithoutGetters"),
+          "Model com.github.havardh.javaflow.model.ModelWithoutGetters is not a pure DTO. Number of getters and fields is not same."
+      );
     }
   }
 
