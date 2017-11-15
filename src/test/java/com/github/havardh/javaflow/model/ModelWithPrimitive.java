@@ -9,5 +9,37 @@ public class ModelWithPrimitive {
   private double doubleField;
   private boolean booleanField;
   private char charField;
+
+  public byte getByteField() {
+    return byteField;
+  }
+
+  public short getShortField() {
+    return shortField;
+  }
+
+  public int getIntField() {
+    return intField;
+  }
+
+  public long getLongField() {
+    return longField;
+  }
+
+  public float getFloatField() {
+    return floatField;
+  }
+
+  public double getDoubleField() {
+    return doubleField;
+  }
+
+  public boolean isBooleanField() {
+    return booleanField;
+  }
+
+  public char getCharField() {
+    return charField;
+  }
 }
 

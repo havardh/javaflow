@@ -4,4 +4,7 @@ public class Model {
 
   private String yolo;
 
+  public String getYolo() {
+    return yolo;
+  }
 }
