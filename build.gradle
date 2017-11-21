@@ -2,10 +2,11 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'maven-publish'
 
-group = 'no.havard'
-version = '1.1.0'
-mainClassName = "no.havard.javaflow.JavaFlow"
+group = 'com.github.havardh'
+version = '1.2.0'
+mainClassName = "com.github.com.javaflow.JavaFlow"
 
 description = """"""
 
@@ -41,6 +42,13 @@ junitPlatform {
     logManager 'org.apache.logging.log4j.jul.LogManager'
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
 
 dependencies {
     compile group: 'com.github.javaparser', name: 'javaparser-core', version:'2.5.1'

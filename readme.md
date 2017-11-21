@@ -46,7 +46,7 @@ a custom serialized form.
 Consider the model `Person` with the `Ssn` wrapper type below.
 
 ```
-no.havard.examples;
+com.github.havardh.examples;
 
 public class Ssn {
   private String ssn;
@@ -54,7 +54,7 @@ public class Ssn {
 ```
 
 ```
-no.havard.examples;
+com.github.havardh.examples;
 
 public class Person {
   private Ssn ssn;
@@ -86,7 +86,7 @@ This can be achieved by supplying a `types.yml`. The `types.yml` file is
 read from the folder the `javaflow` command is executed from.
 
 ```
-no.havard.examples.Ssn: string
+com.github.havardh.examples.Ssn: string
 ```
 
 The format of the yaml file is `<canonical java type>: <flow type>`.
