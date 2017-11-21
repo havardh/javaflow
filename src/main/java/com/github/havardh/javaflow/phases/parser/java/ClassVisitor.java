@@ -57,9 +57,10 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     super.visit(n, builder);
     builder.withName(n.getName());
     CanonicalNameFactory factory = new CanonicalNameFactory(packageName, imports);
-
-    n.getExtends().stream().findFirst()
-        .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getName()))));
+    if (isClass(n)) {
+      n.getExtends().stream().findFirst()
+          .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getName()))));
+    }
   }
 
   /** {@inheritDoc} */
@@ -80,7 +81,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     super.visit(method, builder);
     TypeFactory factory = new TypeFactory(packageName, imports);
 
-    if (isGetter(method.getName(), method.getType().toString())) {
+    if (isClass((ClassOrInterfaceDeclaration) method.getParentNode()) && isGetter(method.getName(), method.getType().toString())) {
       builder.withGetter(new Method(
           method.getName(),
           factory.build(method.getType().toString(), method.getType() instanceof PrimitiveType)
@@ -94,6 +95,10 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
         .map(NameExpr::getName)
         .filter(name -> name.equals("Nullable"))
         .count() > 0;
+  }
+
+  private boolean isClass(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    return !classOrInterfaceDeclaration.isInterface();
   }
 
   private boolean isGetter(String name, String type) {
