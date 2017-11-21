@@ -16,8 +16,12 @@ public class ClassGetterNamingValidator {
     List<Field> fields = classToValidate.getFields();
     if (getters.size() != fields.size()) {
       throw new FieldGettersMismatchException(format(
-          "Model %s is not a pure DTO. Number of getters and fields is not same.",
-          classToValidate.getFullName()
+          "Model %s is not a pure DTO. Number of getters and fields is not the same.\n" +
+              "Fields in model: %s\n" +
+              "Getters in model: %s",
+          classToValidate.getFullName(),
+          fields,
+          getters
       ));
     }
     for (Method getter : getters) {
