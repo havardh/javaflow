@@ -2,7 +2,9 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 group = 'com.github.havardh'
 version = '1.2.0'
@@ -50,19 +52,77 @@ publishing {
     }
 }
 
+task writeNewPom {
+    doLast {
+        pom {
+            project {
+                inceptionYear '2017'
+            }
+        }.writeTo("$buildDir/pom.xml")
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+artifacts {
+    archives javadocJar, sourcesJar
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'javaflow'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'Java model to flowtype converter'
+                url 'https://github.com/havardh/javaflow'
+
+                scm {
+                    connection 'scm:git:git://github.com/havardh/javaflow'
+                    developerConnection 'scm:git:ssh://github.com:havardh/javaflow.git'
+                    url 'https://github.com/havardh/javaflow/tree/master'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'havardh'
+                        name 'Håvard Wormdal Høiby'
+                        email 'havardwhoiby@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
