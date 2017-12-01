@@ -3,7 +3,7 @@ package com.github.havardh.javaflow.ast.builders;
 /**
  * Interface for builders of the type {@code T}.
  *
- * @param <T>
+ * @param <T> the type to build
  */
 public interface Builder<T> {
 

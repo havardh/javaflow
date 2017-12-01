@@ -14,7 +14,7 @@ public interface Converter {
    * to a type in the target language.
    *
    * @param name a {@code CanonicalName} in the source language
-   * @return the {@String} name in the target language
+   * @return the {@code String} name in the target language
    */
   String convert(CanonicalName name);
 

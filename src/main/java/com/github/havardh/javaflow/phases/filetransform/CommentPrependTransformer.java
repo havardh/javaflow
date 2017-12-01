@@ -10,7 +10,8 @@ public class CommentPrependTransformer implements FileTransformer {
   /**
    * Creates a {@code CommentPrependTransformer} with a
    * comment to prepend files with.
-   * @param comment
+   *
+   * @param comment the comment to prepend the file.
    */
   public CommentPrependTransformer(String comment) {
     this.comment = comment;

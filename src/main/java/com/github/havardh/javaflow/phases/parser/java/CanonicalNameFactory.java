@@ -38,8 +38,9 @@ public class CanonicalNameFactory {
   /**
    * Sets up a factory for the given package name and list of imports. The factory
    * holds an internal list of Java built-in types from the {@code java.lang} package.
-   * @param packageName
-   * @param imports
+   *
+   * @param packageName the package name
+   * @param imports the list of imports
    */
   public CanonicalNameFactory(String packageName, Map<String, String> imports) {
     this.packageName = packageName;
@@ -49,7 +50,7 @@ public class CanonicalNameFactory {
   /**
    * Build a canonical name for the given name.
    *
-   * @param name the name to build a {@CanonicalName} for
+   * @param name the name to build a {@code CanonicalName} for
    * @return the {©code CanonicalName} for the given {@code name}
    */
   CanonicalName build(String name) {

@@ -9,7 +9,7 @@ import com.github.havardh.javaflow.ast.Parent;
 import com.github.havardh.javaflow.model.CanonicalName;
 
 /**
- * Builder for {@codet Class} objects.
+ * Builder for {@code Class} objects.
  */
 public class ClassBuilder implements Builder<Class> {
 
@@ -55,7 +55,7 @@ public class ClassBuilder implements Builder<Class> {
   /**
    * Set the parent link
    *
-   * @param parent the parent link for the {@coda Class}
+   * @param parent the parent link for the {@code Class}
    * @return the builder for method chaining
    */
   public ClassBuilder withParent(Parent parent) {
