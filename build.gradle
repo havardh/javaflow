@@ -8,7 +8,7 @@ apply plugin: 'signing'
 
 group = 'com.github.havardh'
 version = '1.3.0'
-mainClassName = "com.github.com.javaflow.JavaFlow"
+mainClassName = "com.github.havardh.javaflow.JavaFlow"
 
 description = """"""
 
