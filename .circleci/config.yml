@@ -10,9 +10,9 @@ jobs:
          keys:
            - v1-dependencies-{{ checksum "build.gradle" }}
            - v1-dependencies-
-      - run: ./gradlew dependencies
+      - run: ./gradlew dependencies -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD
       - save_cache:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: ./gradlew assemble -x signArchives
+      - run: ./gradlew assemble -x signArchives -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD
