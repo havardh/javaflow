@@ -19,12 +19,24 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+/**
+ * {@code Parser} for parsing Java source code into {@code Type}.
+ */
 public class JavaParser implements Parser {
 
-  public Optional<Type> parse(String file) {
+  /**
+   * Parse a Java model into the internal representation of a model.
+   *
+   * The Java model parser parses {@code class} or {@code enum} definitions
+   * into a {@code Type}.
+   *
+   * @param source the Java source code for a model
+   * @return the parsed source code as a {@code Type}.
+   */
+  public Optional<Type> parse(String source) {
 
     try {
-      CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(file));
+      CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(source));
       return convert(cu);
     } catch (ParseException e) {
       e.printStackTrace();

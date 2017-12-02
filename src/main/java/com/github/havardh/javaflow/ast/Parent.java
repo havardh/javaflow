@@ -8,32 +8,47 @@ import java.util.List;
 
 import com.github.havardh.javaflow.model.CanonicalName;
 
-public class Parent {
+/**
+ * Internal representation of a parent link
+ *
+ * A {@code Parent} link is created during the parsing phase
+ * with the canonical name of the referenced type. During the
+ * {@code InheritanceTransformer} phase the {@code reference}
+ * to the actual internal representation for the link is updated.
+ */
+public class Parent extends Type {
 
-  private final CanonicalName name;
   private Class reference;
 
+  /**
+   * Create a parent link for a {@code CanonicalName}
+   *
+   * @param name the canonical name to refer to
+   */
   public Parent(CanonicalName name) {
-    this.name = name;
-  }
-
-  public String getName() {
-    return name.getName();
-  }
-
-  public String getCanonicalName() {
-    return name.getCanonicalName();
-  }
-
-  public Class getReference() {
-    return reference;
+    super(name);
   }
 
   public List<Field> getFields() {
     return ofNullable(reference).map(Class::getFields).orElse(emptyList());
   }
 
+  /**
+   * Set reference
+   *
+   * @param reference the class of the type to reference
+   */
   public void setReference(Class reference) {
     this.reference = reference;
   }
+
+  /**
+   * Get the {@code Class} referenced to
+   *
+   * @return the {@code Class} reference
+   */
+  public Class getReference() {
+    return reference;
+  }
+
 }

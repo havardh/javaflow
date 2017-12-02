@@ -3,7 +3,7 @@ package com.github.havardh.javaflow.phases.verifier;
 import static java.util.Collections.singletonList;
 
 import static com.github.havardh.javaflow.ast.builders.FieldBuilder.fieldBuilder;
-import static com.github.havardh.javaflow.util.TypeMap.emptyTypeMap;
+import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

@@ -5,7 +5,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
-import static com.github.havardh.javaflow.util.TypeMap.emptyTypeMap;
+import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;

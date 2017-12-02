@@ -1,9 +1,12 @@
-package com.github.havardh.javaflow.definitions;
+package com.github.havardh.javaflow.phases.writer.flow.converter.definitions;
 
 import java.util.Map;
 
 import com.github.havardh.javaflow.util.Maps;
 
+/**
+ * Static utility for converting fro java built-in object types to flow types
+ */
 public class Objects {
 
   public static Map<String, String> OBJECTS = Maps.collect(
@@ -26,13 +29,24 @@ public class Objects {
       Maps.entry("java.lang.String", "string")
   );
 
+  /**
+   * Check if a name is a java built-in object
+   *
+   * @param name the name to check
+   * @return true if the name is a built-in object
+   */
   public static boolean isObject(String name) {
     return OBJECTS.containsKey(name);
   }
 
+  /**
+   * Get the flow type of a java built-in type
+   *
+   * @param name the java built-in type
+   * @return the flow type
+   */
   public static String get(String name) {
     return OBJECTS.get(name);
   }
 
 }
-

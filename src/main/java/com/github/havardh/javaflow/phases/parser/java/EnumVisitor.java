@@ -7,20 +7,26 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+/**
+ * A JavaFlow visitor for the {@code enum} java declaration.
+ */
 public class EnumVisitor extends VoidVisitorAdapter<EnumBuilder> {
 
+  /** {@inheritDoc} */
   @Override
   public void visit(PackageDeclaration n, EnumBuilder builder) {
     super.visit(n, builder);
     builder.withPackageName(n.getPackageName());
   }
 
+  /** {@inheritDoc} */
   @Override
   public void visit(EnumDeclaration n, EnumBuilder builder) {
     super.visit(n, builder);
     builder.withName(n.getName());
   }
 
+  /** {@inheritDoc} */
   @Override
   public void visit(EnumConstantDeclaration n, EnumBuilder builder) {
     super.visit(n, builder);
