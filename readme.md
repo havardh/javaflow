@@ -1,7 +1,7 @@
 # Javaflow #
 
 `javaflow` converts a set of Java models to Flow types.
-[![Build Status](https://travis-ci.org/havardh/javaflow.svg?branch=master)](https://travis-ci.org/havardh/javaflow)
+[![CircleCI](https://circleci.com/gh/havardh/javaflow.svg?style=svg)](https://circleci.com/gh/havardh/javaflow)
 
 ## Example ##
 
