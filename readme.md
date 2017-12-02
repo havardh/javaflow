@@ -31,6 +31,12 @@ export type Post {
 
 ## Installation ##
 
+### Embedding in maven build
+
+See the [readme](https://github.com/havardh/javaflow-maven-plugin/blob/master/Readme.md) of the javaflow-maven-plugin repository.
+
+### Standalone cli tool
+
 Download the most recent zip file under releases.
 Unzip the downloaded file to the desired location like `~/apps/javaflow`.
 Add `~/app/javaflow/bin` to your `PATH` variable.
