@@ -3,6 +3,7 @@ package com.github.havardh.javaflow.phases.parser.java;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
+import static com.github.havardh.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static com.github.havardh.javaflow.ast.builders.EnumBuilder.enumBuilder;
 
 import java.io.StringReader;
@@ -10,10 +11,7 @@ import java.util.Optional;
 
 import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.ast.builders.Builder;
-import com.github.havardh.javaflow.ast.builders.ClassBuilder;
 import com.github.havardh.javaflow.phases.parser.Parser;
-import com.github.havardh.javaflow.phases.validator.ClassGetterNamingValidator;
-
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -50,12 +48,7 @@ public class JavaParser implements Parser {
   private static Optional<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      ClassBuilder classBuilder = ClassBuilder.classBuilder();
-      Type type = convert(cu, classBuilder, new ClassVisitor());
-
-      ClassGetterNamingValidator.validate(classBuilder.build());
-
-      return of(type);
+      return of(convert(cu, classBuilder(), new ClassVisitor()));
     } else if (containsEnum(cu)) {
       return of(convert(cu, enumBuilder(), new EnumVisitor()));
     } else {

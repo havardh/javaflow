@@ -1,17 +1,38 @@
-package com.github.havardh.javaflow.phases.validator;
+package com.github.havardh.javaflow.phases.verifier;
 
 import static java.lang.String.format;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.havardh.javaflow.ast.Class;
 import com.github.havardh.javaflow.ast.Field;
 import com.github.havardh.javaflow.ast.Method;
+import com.github.havardh.javaflow.ast.Type;
+import com.github.havardh.javaflow.exceptions.AggregatedException;
 import com.github.havardh.javaflow.exceptions.FieldGettersMismatchException;
 
-public class ClassGetterNamingValidator {
+public class ClassGetterNamingVerifier implements Verifier {
 
-  public static void validate(Class classToValidate) {
+  @Override
+  public void verify(List<Type> types) {
+    List<Exception> exceptions = new ArrayList<>();
+    for (Type type : types) {
+      if (type instanceof Class) {
+        try {
+          validate((Class) type);
+        } catch (Exception e) {
+          exceptions.add(e);
+        }
+      }
+    }
+
+    if (!exceptions.isEmpty()) {
+      throw new AggregatedException("Class getter naming validation failed", exceptions);
+    }
+  }
+
+  private void validate(Class classToValidate) {
     List<Method> getters = classToValidate.getGetters();
     List<Field> fields = classToValidate.getFields();
     if (getters.size() != fields.size()) {
