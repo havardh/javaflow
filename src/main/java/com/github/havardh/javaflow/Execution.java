@@ -1,6 +1,7 @@
 package com.github.havardh.javaflow;
 
 import com.github.havardh.javaflow.ast.Type;
+import com.github.havardh.javaflow.exceptions.AggregatedException;
 import com.github.havardh.javaflow.phases.filetransform.FileTransformer;
 import com.github.havardh.javaflow.phases.parser.Parser;
 import com.github.havardh.javaflow.phases.reader.FileReader;
@@ -10,6 +11,7 @@ import com.github.havardh.javaflow.phases.writer.Writer;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -90,7 +92,18 @@ public class Execution {
    * a type is references which is not in the given set of types or overrides
    */
   private void verify(List<Type> types) {
-    verifiers.forEach(verifier -> verifier.verify(types));
+    List<Exception> exceptions = new ArrayList<>();
+    for (Verifier verifier : verifiers) {
+      try {
+        verifier.verify(types);
+      } catch(Exception e) {
+        exceptions.add(e);
+      }
+    }
+
+    if (!exceptions.isEmpty()) {
+      throw new AggregatedException("Verification failed:\n", exceptions);
+    }
   }
 
   /**

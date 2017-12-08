@@ -2,26 +2,28 @@ package com.github.havardh.javaflow;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-
-import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
-import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
+import static com.github.havardh.javaflow.util.TypeMap.emptyTypeMap;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.github.havardh.javaflow.exceptions.AggregatedException;
 import com.github.havardh.javaflow.exceptions.MissingTypeException;
 import com.github.havardh.javaflow.phases.parser.java.JavaParser;
 import com.github.havardh.javaflow.phases.reader.FileReader;
 import com.github.havardh.javaflow.phases.transform.InheritanceTransformer;
 import com.github.havardh.javaflow.phases.transform.SortedTypeTransformer;
+import com.github.havardh.javaflow.phases.verifier.ClassGetterNamingVerifier;
 import com.github.havardh.javaflow.phases.verifier.MemberFieldsPresentVerifier;
 import com.github.havardh.javaflow.phases.writer.flow.FlowWriter;
 import com.github.havardh.javaflow.phases.writer.flow.converter.JavaFlowConverter;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class ExecutionIntegrationTest {
 
@@ -38,7 +40,7 @@ public class ExecutionIntegrationTest {
             new InheritanceTransformer(),
             new SortedTypeTransformer()
         ),
-        singletonList(new MemberFieldsPresentVerifier(emptyTypeMap())),
+        asList(new MemberFieldsPresentVerifier(emptyTypeMap()), new ClassGetterNamingVerifier()),
         new FlowWriter(new JavaFlowConverter()),
         emptyList()
     );
@@ -131,9 +133,39 @@ public class ExecutionIntegrationTest {
     try {
       execution.run(BASE_PATH + "Wrapper.java");
       fail("Should fail when member types are not found");
-    } catch (MissingTypeException e) {
-      assertThat(e.getTypes().entrySet(), hasSize(1));
+    } catch (AggregatedException e) {
+      MissingTypeException missingTypeException = (MissingTypeException) e.getExceptions().get(0);
+      assertThat(missingTypeException.getTypes().entrySet(), hasSize(1));
     }
+  }
+
+  @Test
+  public void shouldThrowExceptionWhenGetterDoesNotHaveMatchingField() {
+    assertThrows(
+        AggregatedException.class,
+        () -> execution.run(BASE_PATH + "ModelWithNotMatchingGetter.java"),
+        "Model com.github.havardh.javaflow.model.ModelWithNotMatchingGetter is not a pure DTO. Name of getter " +
+            "'getStringFields' does not correspond to any field name."
+    );
+  }
+
+  @Test
+  public void shouldThrowExceptionWhenBooleanGetterDoesNotHaveMatchingField() {
+    assertThrows(
+        AggregatedException.class,
+        () -> execution.run(BASE_PATH + "ModelWithNotMatchingBooleanGetter.java"),
+        "Model com.github.havardh.javaflow.model.ModelWithNotMatchingBooleanGetter is not a pure DTO. Name of getter " +
+            "'isBooleanFields' does not correspond to any field name."
+    );
+  }
+
+  @Test
+  public void shouldThrowExceptionWhenDifferentNumberOfGettersAndFields() {
+    assertThrows(
+        AggregatedException.class,
+        () -> execution.run(BASE_PATH + "ModelWithoutGetters.java"),
+        "Model com.github.havardh.javaflow.model.ModelWithoutGetters is not a pure DTO. Number of getters and fields is not same."
+    );
   }
 }
 
