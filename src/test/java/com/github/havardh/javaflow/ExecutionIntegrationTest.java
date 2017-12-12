@@ -8,8 +8,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
-import static com.github.havardh.javaflow.util.TypeMap.emptyTypeMap;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

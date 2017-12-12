@@ -40,7 +40,7 @@ public class ClassGetterNamingVerifier implements Verifier {
           "Model %s is not a pure DTO. Number of getters and fields is not the same.\n" +
               "Fields in model: %s\n" +
               "Getters in model: %s",
-          classToValidate.getFullName(),
+          classToValidate.getCanonicalName(),
           fields,
           getters
       ));
@@ -51,7 +51,7 @@ public class ClassGetterNamingVerifier implements Verifier {
           .findFirst()
           .orElseThrow(() -> new FieldGettersMismatchException(format(
               "Model %s is not a pure DTO. Name of getter %s does not correspond to any field name.",
-              classToValidate.getFullName(), getter.getName()
+              classToValidate.getCanonicalName(), getter.getName()
           )));
     }
   }
