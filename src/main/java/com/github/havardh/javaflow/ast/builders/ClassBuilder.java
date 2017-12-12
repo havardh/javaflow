@@ -78,8 +78,8 @@ public class ClassBuilder implements Builder<Class> {
 
   /**
    * Add a {@code Method} to class builder
-   * @param getterMethod
-   * @return
+   * @param getterMethod a {$code Method}
+   * @return the builder for method chaining
    */
   public ClassBuilder withGetter(Method getterMethod) {
     this.getters.add(getterMethod);
