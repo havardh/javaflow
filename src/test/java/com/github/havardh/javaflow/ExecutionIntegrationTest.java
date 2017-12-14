@@ -5,7 +5,6 @@ import static java.util.Collections.emptyList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
@@ -50,7 +49,8 @@ public class ExecutionIntegrationTest {
   public void shouldParseModel() {
     String flowCode = execution.run(BASE_PATH + "Model.java");
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type Model = {",
         "  yolo: string,",
         "};"
@@ -61,7 +61,8 @@ public class ExecutionIntegrationTest {
   public void shouldParseEnum() {
     String flowCode = execution.run(BASE_PATH + "Enumeration.java");
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type Enumeration =",
         "  | \"ONE\"",
         "  | \"TWO\";"
@@ -72,40 +73,48 @@ public class ExecutionIntegrationTest {
   public void shouldParseModelWithList() {
     String flowCode = execution.run(BASE_PATH + "ModelWithList.java");
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type ModelWithList = {",
         "  words: Array<string>,",
-        "};");
+        "};"
+    );
   }
 
   @Test
   public void shouldParseModelWithMap() {
     String flowCode = execution.run(BASE_PATH + "ModelWithMap.java");
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type ModelWithMap = {",
         "  field: {[key: string]: number},",
-        "};");
+        "};"
+    );
   }
 
   @Test
   public void shouldParseModelWithCollection() {
     String flowCode = execution.run(BASE_PATH + "ModelWithCollection.java");
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type ModelWithCollection = {",
         "  strings: Array<string>,",
-        "};");
+        "};"
+    );
   }
 
   @Test
   public void shouldParseModelWithSet() {
     String flowCode = execution.run(BASE_PATH + "ModelWithSet.java");
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type ModelWithSet = {",
         "  strings: Array<string>,",
-        "};");
+        "};"
+    );
   }
 
   @Test
@@ -116,7 +125,8 @@ public class ExecutionIntegrationTest {
         BASE_PATH + "packaged/PackagedMember.java"
     );
 
-    assertStringEqual(flowCode,
+    assertStringEqual(
+        flowCode,
         "export type Member = {};",
         "",
         "export type PackagedMember = {};",
@@ -141,31 +151,72 @@ public class ExecutionIntegrationTest {
 
   @Test
   public void shouldThrowExceptionWhenGetterDoesNotHaveMatchingField() {
-    assertThrows(
-        AggregatedException.class,
-        () -> execution.run(BASE_PATH + "ModelWithNotMatchingGetter.java"),
-        "Model com.github.havardh.javaflow.model.ModelWithNotMatchingGetter is not a pure DTO. Name of getter " +
-            "'getStringFields' does not correspond to any field name."
-    );
+    try {
+      execution.run(BASE_PATH + "ModelWithNotMatchingGetter.java");
+      fail("Should fail when getter does not have matching field");
+    } catch (AggregatedException e) {
+      assertThat(e.getExceptions(), hasSize(1));
+      assertStringEqual(e.getMessage(), "Verification failed:",
+          "",
+          "Class getter naming validation failed with following errors:",
+          "",
+          "1) Model {com.github.havardh.javaflow.model.ModelWithNotMatchingGetter} is not a pure DTO.",
+          "Name of getter getStringFields does not correspond to any field name."
+      );
+    }
   }
 
   @Test
   public void shouldThrowExceptionWhenBooleanGetterDoesNotHaveMatchingField() {
-    assertThrows(
-        AggregatedException.class,
-        () -> execution.run(BASE_PATH + "ModelWithNotMatchingBooleanGetter.java"),
-        "Model com.github.havardh.javaflow.model.ModelWithNotMatchingBooleanGetter is not a pure DTO. Name of getter " +
-            "'isBooleanFields' does not correspond to any field name."
-    );
+    try {
+      execution.run(BASE_PATH + "ModelWithNotMatchingBooleanGetter.java");
+      fail("Should fail when boolean getter does not have matching field");
+    } catch (AggregatedException e) {
+      assertThat(e.getExceptions(), hasSize(1));
+      assertStringEqual(e.getMessage(), "Verification failed:",
+          "",
+          "Class getter naming validation failed with following errors:",
+          "",
+          "1) Model {com.github.havardh.javaflow.model.ModelWithNotMatchingBooleanGetter} is not a pure DTO.",
+          "Name of getter isBooleanFields does not correspond to any field name."
+      );
+    }
   }
 
   @Test
   public void shouldThrowExceptionWhenDifferentNumberOfGettersAndFields() {
-    assertThrows(
-        AggregatedException.class,
-        () -> execution.run(BASE_PATH + "ModelWithoutGetters.java"),
-        "Model com.github.havardh.javaflow.model.ModelWithoutGetters is not a pure DTO. Number of getters and fields is not same."
-    );
+    try {
+      execution.run(BASE_PATH + "ModelWithoutGetters.java");
+      fail("Should fail when model has no getters");
+    } catch (AggregatedException e) {
+      assertThat(e.getExceptions(), hasSize(1));
+      assertStringEqual(e.getMessage(), "Verification failed:",
+          "",
+          "Class getter naming validation failed with following errors:",
+          "",
+          "1) Model {com.github.havardh.javaflow.model.ModelWithoutGetters} is not a pure DTO.",
+          "Number of getters and fields is not the same.",
+          "Fields in model: [stringField: java.lang.String]",
+          "Getters in model: []"
+      );
+    }
+  }
+
+  @Test
+  public void shouldThrowExceptionWhenGetterMatchingToFieldHasDifferentType() {
+    try {
+      execution.run(BASE_PATH + "ModelWithNotMatchingGetterType.java");
+      fail("Should fail when getter type is different than type of field with matching name");
+    } catch (AggregatedException e) {
+      assertThat(e.getExceptions(), hasSize(1));
+      assertStringEqual(e.getMessage(), "Verification failed:",
+          "",
+          "Class getter naming validation failed with following errors:",
+          "",
+          "1) Model {com.github.havardh.javaflow.model.ModelWithNotMatchingGetterType} is not a pure DTO.",
+          "Type of getter getIntegerField (java.lang.String) does not correspond to field integerField (int)"
+      );
+    }
   }
 }
 
