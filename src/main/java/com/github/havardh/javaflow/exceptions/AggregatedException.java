@@ -22,7 +22,7 @@ public class AggregatedException extends RuntimeException {
   }
 
   public String getMessage() {
-    return super.getMessage() + this.getSubMessages();
+    return super.getMessage() + "\n" + this.getSubMessages();
   }
 
   private String getSubMessages() {
