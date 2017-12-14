@@ -102,7 +102,7 @@ public class Execution {
     }
 
     if (!exceptions.isEmpty()) {
-      throw new AggregatedException("Verification failed:\n", exceptions);
+      throw new AggregatedException("Verification failed:\n", exceptions, false);
     }
   }
 

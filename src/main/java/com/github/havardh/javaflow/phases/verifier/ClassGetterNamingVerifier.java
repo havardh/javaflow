@@ -1,6 +1,7 @@
 package com.github.havardh.javaflow.phases.verifier;
 
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,41 +20,47 @@ public class ClassGetterNamingVerifier implements Verifier {
     List<Exception> exceptions = new ArrayList<>();
     for (Type type : types) {
       if (type instanceof Class) {
-        try {
-          validate((Class) type);
-        } catch (Exception e) {
-          exceptions.add(e);
-        }
+        exceptions.addAll(validate((Class) type));
       }
     }
 
     if (!exceptions.isEmpty()) {
-      throw new AggregatedException("Class getter naming validation failed", exceptions);
+      throw new AggregatedException("Class getter naming validation failed with following errors:\n", exceptions, true);
     }
   }
 
-  private void validate(Class classToValidate) {
+  private List<Exception> validate(Class classToValidate) {
     List<Method> getters = classToValidate.getGetters();
     List<Field> fields = classToValidate.getFields();
     if (getters.size() != fields.size()) {
-      throw new FieldGettersMismatchException(format(
-          "Model %s is not a pure DTO. Number of getters and fields is not the same.\n" +
+      return singletonList(new FieldGettersMismatchException(classToValidate.getCanonicalName(), format(
+          "Number of getters and fields is not the same.\n" +
               "Fields in model: %s\n" +
               "Getters in model: %s",
-          classToValidate.getCanonicalName(),
           fields,
           getters
-      ));
+      )));
     }
+    List<Exception> exceptions = new ArrayList<>();
     for (Method getter : getters) {
-      fields.stream()
-          .filter(field -> field.getName().equals(convertGetterNameToFieldName(getter.getName())))
-          .findFirst()
-          .orElseThrow(() -> new FieldGettersMismatchException(format(
-              "Model %s is not a pure DTO. Name of getter %s does not correspond to any field name.",
-              classToValidate.getCanonicalName(), getter.getName()
-          )));
+      try {
+        findFieldByGetter(classToValidate, fields, getter);
+      } catch (FieldGettersMismatchException e) {
+        exceptions.add(e);
+      }
     }
+    return exceptions;
+  }
+
+  private Field findFieldByGetter(Class classToValidate, List<Field> fields, Method getter)
+      throws FieldGettersMismatchException {
+    return fields.stream()
+        .filter(field -> field.getName().equals(convertGetterNameToFieldName(getter.getName())))
+        .findFirst()
+        .orElseThrow(() -> new FieldGettersMismatchException(
+            classToValidate.getCanonicalName(),
+            format("Name of getter %s does not correspond to any field name.", getter.getName())
+        ));
   }
 
   private static String convertGetterNameToFieldName(String getterName) {
