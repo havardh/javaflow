@@ -44,7 +44,20 @@ public class ClassGetterNamingVerifier implements Verifier {
     List<Exception> exceptions = new ArrayList<>();
     for (Method getter : getters) {
       try {
-        findFieldByGetter(classToValidate, fields, getter);
+        Field correspondingField = findFieldByGetter(classToValidate, fields, getter);
+
+        if (!correspondingField.getType().equals(getter.getType())) {
+          throw new FieldGettersMismatchException(
+              classToValidate.getCanonicalName(),
+              format(
+                  "Type of getter %s (%s) does not correspond to field %s (%s)",
+                  getter.getName(),
+                  getter.getType(),
+                  correspondingField.getName(),
+                  correspondingField.getType()
+              )
+          );
+        }
       } catch (FieldGettersMismatchException e) {
         exceptions.add(e);
       }
