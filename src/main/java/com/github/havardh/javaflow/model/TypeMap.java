@@ -43,6 +43,7 @@ public class TypeMap implements Map<String, String> {
 
       map = (Map<String, String>)yamlReader.read();
     } catch (FileNotFoundException e) {
+      map = emptyMap();
     } catch (IOException e) {
       e.printStackTrace();
       System.exit(0);
