@@ -8,6 +8,7 @@ public class ModelWithPrimitive {
   private float floatField;
   private double doubleField;
   private boolean booleanField;
+  private boolean booleanField2;
   private char charField;
 
   public byte getByteField() {
@@ -36,6 +37,10 @@ public class ModelWithPrimitive {
 
   public boolean isBooleanField() {
     return booleanField;
+  }
+
+  public boolean getBooleanField2() {
+    return booleanField2;
   }
 
   public char getCharField() {
