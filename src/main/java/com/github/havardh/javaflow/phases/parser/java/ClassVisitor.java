@@ -1,6 +1,6 @@
 package com.github.havardh.javaflow.phases.parser.java;
 
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
 import java.util.HashMap;
@@ -102,7 +102,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   }
 
   private boolean isGetter(String name, String type) {
-    if (singletonList("boolean").contains(type) && name.startsWith("is")) {
+    if (asList("boolean", "Boolean").contains(type) && name.startsWith("is")) {
       return true;
     }
 

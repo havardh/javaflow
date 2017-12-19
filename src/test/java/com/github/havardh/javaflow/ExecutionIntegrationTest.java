@@ -139,6 +139,47 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithPrimitive() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithPrimitive.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithPrimitive = {",
+        "  byteField: number,",
+        "  shortField: number,",
+        "  intField: number,",
+        "  longField: number,",
+        "  floatField: number,",
+        "  doubleField: number,",
+        "  booleanField: boolean,",
+        "  booleanField2: boolean,",
+        "  charField: string,",
+        "};"
+    );
+  }
+
+  @Test
+  public void shouldParseModelWithJavaLangObjects() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithJavaLangObjects.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithJavaLangObjects = {",
+        "  booleanField: boolean,",
+        "  booleanField2: boolean,",
+        "  byteField: number,",
+        "  characterField: string,",
+        "  doubleField: number,",
+        "  floatField: number,",
+        "  integerField: number,",
+        "  longField: number,",
+        "  shortField: number,",
+        "  stringField: string,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldThrowExceptionWhenFieldIsNotFound() {
     try {
       execution.run(BASE_PATH + "Wrapper.java");

@@ -2,6 +2,7 @@ package com.github.havardh.javaflow.model;
 
 public class ModelWithJavaLangObjects {
   Boolean booleanField;
+  Boolean booleanField2;
   Byte byteField;
   Character characterField;
   Double doubleField;
@@ -13,6 +14,10 @@ public class ModelWithJavaLangObjects {
 
   public Boolean getBooleanField() {
     return booleanField;
+  }
+
+  public Boolean isBooleanField2() {
+    return booleanField2;
   }
 
   public Byte getByteField() {
