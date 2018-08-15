@@ -11,6 +11,7 @@ jobs:
            - v1-dependencies-{{ checksum "build.gradle" }}
            - v1-dependencies-
       - run: ./gradlew dependencies -PossrhUsername=$OSSRH_USERNAME -PossrhPassword=$OSSRH_PASSWORD
+      - run: ./gradlew test
       - save_cache:
           paths:
             - ~/.m2
