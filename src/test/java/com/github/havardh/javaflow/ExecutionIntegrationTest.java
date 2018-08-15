@@ -101,6 +101,7 @@ public class ExecutionIntegrationTest {
         flowCode,
         "export type ModelWithMapGenericValue = {",
         "  field: {[key: string]: Array<number>},",
+        "  multipleNestedField: {[key: string]: Array<Array<{[key: string]: number}>>},",
         "};"
     );
   }

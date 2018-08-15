@@ -38,7 +38,15 @@ public class TypeFactoryTest {
     public void shouldSetSubType() {
       List list = (List)factory.build("Collection<String>", false);
 
-      assertThat(list.getType().getName(), is("String"));
+      assertThat(list.getType().getCanonicalName().getName(), is("String"));
+    }
+
+    @Test
+    public void shouldSetSubTypeOfSubType() {
+      List list = (List)factory.build("Collection<Collection<String>>", false);
+      List subtypeList = (List)list.getType();
+
+      assertThat(subtypeList.getType().getCanonicalName().getName(), is("String"));
     }
   }
 
