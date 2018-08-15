@@ -49,7 +49,7 @@ public class TypeFactory {
       String valType = extractType(typeLiteral);
       return TypeBuilder.list(
           canonicalNameFactory.build(tagType),
-          canonicalNameFactory.build(valType)
+          build(valType, false)
       );
     }
 
@@ -60,8 +60,8 @@ public class TypeFactory {
 
       return TypeBuilder.map(
           canonicalNameFactory.build(tagType),
-          canonicalNameFactory.build(keyType),
-          canonicalNameFactory.build(valType)
+          build(keyType, false),
+          build(valType, false)
       );
     }
 

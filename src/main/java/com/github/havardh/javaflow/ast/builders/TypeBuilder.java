@@ -11,8 +11,8 @@ import com.github.havardh.javaflow.ast.Type;
 public final class TypeBuilder {
   protected CanonicalName name;
 
-  private CanonicalName firstName;
-  private CanonicalName secondName;
+  private Type firstType;
+  private Type secondType;
 
 
   private TypeBuilder() {
@@ -54,7 +54,7 @@ public final class TypeBuilder {
    * @param type the name of the value type
    * @return a {@code List} with the name and value type
    */
-  public static Type list(CanonicalName name, CanonicalName type) {
+  public static Type list(CanonicalName name, Type type) {
     return new List(name, type);
   }
 
@@ -66,7 +66,7 @@ public final class TypeBuilder {
    * @param value the type of the values in the map
    * @return the type for the map
    */
-  public static Type map(CanonicalName name, CanonicalName key, CanonicalName value) {
+  public static Type map(CanonicalName name, Type key, Type value) {
     return new Map(name, key, value);
   }
 
@@ -84,12 +84,12 @@ public final class TypeBuilder {
   /**
    * Set the type of a list type
    *
-   * @param name the type of the list values
+   * @param type the type of the list values
    * @return the builder for method chaining
    */
-  public TypeBuilder withListType(CanonicalName name) {
-    this.firstName = name;
-    this.secondName = null;
+  public TypeBuilder withListType(Type type) {
+    this.firstType = type;
+    this.secondType = null;
     return this;
   }
 
@@ -101,11 +101,11 @@ public final class TypeBuilder {
    * @return the builder for method chaining
    */
   public TypeBuilder withMapType(
-      CanonicalName key,
-      CanonicalName value
+      Type key,
+      Type value
   ) {
-    this.firstName = key;
-    this.secondName = value;
+    this.firstType = key;
+    this.secondType = value;
     return this;
   }
 
@@ -115,10 +115,10 @@ public final class TypeBuilder {
    * @return the type
    */
   public Type build() {
-    if (secondName != null) {
-      return map(name, firstName, secondName);
-    } else if (firstName != null) {
-      return list(name, firstName);
+    if (secondType != null) {
+      return map(name, firstType, secondType);
+    } else if (firstType != null) {
+      return list(name, firstType);
     } else {
       return object(name);
     }

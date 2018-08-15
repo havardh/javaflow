@@ -6,8 +6,8 @@ import com.github.havardh.javaflow.model.CanonicalName;
  * Internal representation of a key value map.
  */
 public class Map extends Type {
-  private final CanonicalName key;
-  private final CanonicalName value;
+  private final Type key;
+  private final Type value;
 
   /**
    * Create a {@code Map} with a name and a type for the key
@@ -17,7 +17,7 @@ public class Map extends Type {
    * @param key the name of the key type
    * @param value the name of the value type
    */
-  public Map(CanonicalName name, CanonicalName key, CanonicalName value) {
+  public Map(CanonicalName name, Type key, Type value) {
     super(name);
     this.key = key;
     this.value = value;
@@ -28,7 +28,7 @@ public class Map extends Type {
    *
    * @return the name of the key type
    */
-  public CanonicalName getKeyType() {
+  public Type getKeyType() {
     return key;
   }
 
@@ -37,7 +37,7 @@ public class Map extends Type {
    *
    * @return the name of the value type
    */
-  public CanonicalName getValueType() {
+  public Type getValueType() {
     return value;
   }
 }

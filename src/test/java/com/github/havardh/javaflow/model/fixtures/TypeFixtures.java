@@ -4,6 +4,7 @@ import static com.github.havardh.javaflow.model.builders.CanonicalNameBuilder.ca
 import static com.github.havardh.javaflow.ast.builders.TypeBuilder.type;
 import static com.github.havardh.javaflow.model.fixtures.CanonicalNameFixtures.stringName;
 
+import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.ast.builders.TypeBuilder;
 
 public class TypeFixtures {
@@ -19,7 +20,7 @@ public class TypeFixtures {
             .withName("List")
             .withPackageName("java.util")
             .build())
-        .withListType(stringName().build());
+        .withListType(new Type(stringName().build()));
   }
 
 
@@ -31,8 +32,8 @@ public class TypeFixtures {
           .withPackageName("java.util")
           .build())
         .withMapType(
-            stringName().build(),
-            stringName().build()
+            new Type(stringName().build()),
+            new Type(stringName().build())
         );
   }
 

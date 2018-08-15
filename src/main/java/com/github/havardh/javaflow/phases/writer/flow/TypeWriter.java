@@ -39,16 +39,16 @@ public class TypeWriter implements Writer<Type> {
 
   private void write(Map map, java.io.Writer writer) throws IOException {
     writer.write("{[key: ");
-    writer.write(converter.convert(map.getKeyType()));
+    write(map.getKeyType(), writer);
     writer.write("]: ");
-    writer.write(converter.convert(map.getValueType()));
+    write(map.getValueType(), writer);
     writer.write("}");
   }
 
   private void write(List list, java.io.Writer writer) throws IOException {
     writer.write(converter.convert(list.getCanonicalName()));
     writer.write("<");
-    writer.write(converter.convert(list.getType()));
+    write(list.getType(), writer);
     writer.write(">");
   }
 }
