@@ -94,6 +94,18 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithMapGenericValue() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithMapGenericValue.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithMapGenericValue = {",
+        "  field: {[key: string]: Array<number>},",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithCollection() {
     String flowCode = execution.run(BASE_PATH + "ModelWithCollection.java");
 
