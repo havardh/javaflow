@@ -12,7 +12,7 @@ public class List extends Type {
    * Create a {@code List} with a name and a type for the values
    *
    * @param name the name of this type
-   * @param type the name of the value type
+   * @param type the type of the value
    */
   public List(CanonicalName name, Type type) {
     super(name);
@@ -20,9 +20,9 @@ public class List extends Type {
   }
 
   /**
-   * Get the name of the type for the values
+   * Get the type of the values
    *
-   * @return the name of type for the value
+   * @return the type of the value
    */
   public Type getType() {
     return type;

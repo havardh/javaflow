@@ -51,7 +51,7 @@ public final class TypeBuilder {
    * Factory method for creating a list type for the given name and value type name
    *
    * @param name the name of the type
-   * @param type the name of the value type
+   * @param type the type of the value
    * @return a {@code List} with the name and value type
    */
   public static Type list(CanonicalName name, Type type) {

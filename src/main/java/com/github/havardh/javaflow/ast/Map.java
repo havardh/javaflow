@@ -14,8 +14,8 @@ public class Map extends Type {
    * and for the value
    *
    * @param name the name of this type
-   * @param key the name of the key type
-   * @param value the name of the value type
+   * @param key the type of the key
+   * @param value the type of the value
    */
   public Map(CanonicalName name, Type key, Type value) {
     super(name);
@@ -24,18 +24,18 @@ public class Map extends Type {
   }
 
   /**
-   * Get the name of the type for the keys
+   * Get the type of the keys
    *
-   * @return the name of the key type
+   * @return the type of the key
    */
   public Type getKeyType() {
     return key;
   }
 
   /**
-   * Get the name of the type for the values
+   * Get the type of the values
    *
-   * @return the name of the value type
+   * @return the type of the value
    */
   public Type getValueType() {
     return value;
