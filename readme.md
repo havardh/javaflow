@@ -44,7 +44,9 @@ Download the most recent zip file under releases.
 Unzip the downloaded file to the desired location like `~/apps/javaflow`.
 Add `~/app/javaflow/bin` to your `PATH` variable.
 
-## Advanced usage - Custom type substitution ##
+## Advanced usage ##
+
+### Custom type substitution ###
 
 Internally `javaflow` contains a mapping from standard Java types like String, int and boolean
 to corresponding flow types. This mapping can be overridden, or additional mappings can be provided.
@@ -116,6 +118,20 @@ export type Person = {
 Note: executing the command `javaflow Person.java` without the `types.yml` file would lead 
 to the program failing due to the `Ssn.java` file not being found. `javaflow` does not look
 for additional files which where not supplied as input.
+
+### Verifiers ###
+
+In case you want to verify that you have specified mappings for all types,
+that the DTOs have getters for all fields,
+or that the type of the fields are same as the return types of their getters,
+`javaflow` offers the possibility to add verifiers.
+
+Available verifiers:
+- `MemberFieldsPresentVerifier`, active by default, verifies that there are no missing types referenced in the list of types.
+- `ClassGetterNamingVerifier`, can be activated by passing the `--verifyGetters` flag in the CLI, verifies if the given types all have:
+    - the same number of fields and getters,
+    - the same type in the field definitions as a return type in the corresponding getters and
+    - their getters for the corresponding fields with the same name, prefixed with `get` or `is`.
 
 ## Development ##
 
