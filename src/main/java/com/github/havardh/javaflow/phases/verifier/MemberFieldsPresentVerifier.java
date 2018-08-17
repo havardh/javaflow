@@ -35,8 +35,12 @@ public class MemberFieldsPresentVerifier implements Verifier {
   }
 
   /**
-   * Verifies that there are no missing types referenced
-   * in the list of {@code Type}.
+   * Verifies that all types used in the types converted are either:
+   * - built-in java types,
+   * - overridden by custom type substitution, or
+   * - included as a type being converted.
+   *
+   * This ensures that the resulting flow file will not contain any references to missing types.
    *
    * A missing type is found when a type is referenced which is not
    * in the given set of types of in the {@code TypeMap} of the verifier
