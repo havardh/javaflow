@@ -127,7 +127,10 @@ or that the type of the fields are same as the return types of their getters,
 `javaflow` offers the possibility to add verifiers.
 
 Available verifiers:
-- `MemberFieldsPresentVerifier`, active by default, verifies that there are no missing types referenced in the list of types.
+- `MemberFieldsPresentVerifier`, active by default, verifies that all types used in the types converted are either:
+    - built-in java types,
+    - overridden by custom type substitution, or
+    - included as a type being converted. 
 - `ClassGetterNamingVerifier`, can be activated by passing the `--verifyGetters` flag in the CLI, verifies that the given types all have:
     - the same number of fields and getters,
     - the same type in the field definitions as the return type in the corresponding getter and
