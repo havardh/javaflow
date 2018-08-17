@@ -16,9 +16,9 @@ import com.github.havardh.javaflow.exceptions.FieldGettersMismatchException;
 public class ClassGetterNamingVerifier implements Verifier {
 
   /**
-   * Verifies if the given types all have:
+   * Verifies that the given types all have:
    * - the same number of fields and getters,
-   * - the same type in the field definitions as a return type in the corresponding getters and
+   * - the same type in the field definitions as the return type in the corresponding getter and
    * - their getters for the corresponding fields with the same name, prefixed with `get` or `is`.
    *
    * @param types list of {@code Type} to verify.

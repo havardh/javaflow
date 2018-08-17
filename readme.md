@@ -128,9 +128,9 @@ or that the type of the fields are same as the return types of their getters,
 
 Available verifiers:
 - `MemberFieldsPresentVerifier`, active by default, verifies that there are no missing types referenced in the list of types.
-- `ClassGetterNamingVerifier`, can be activated by passing the `--verifyGetters` flag in the CLI, verifies if the given types all have:
+- `ClassGetterNamingVerifier`, can be activated by passing the `--verifyGetters` flag in the CLI, verifies that the given types all have:
     - the same number of fields and getters,
-    - the same type in the field definitions as a return type in the corresponding getters and
+    - the same type in the field definitions as the return type in the corresponding getter and
     - their getters for the corresponding fields with the same name, prefixed with `get` or `is`.
 
 ## Development ##
