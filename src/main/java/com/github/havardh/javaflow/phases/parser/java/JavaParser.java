@@ -1,6 +1,5 @@
 package com.github.havardh.javaflow.phases.parser.java;
 
-import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 import static com.github.havardh.javaflow.ast.builders.ClassBuilder.classBuilder;
@@ -11,6 +10,8 @@ import java.util.Optional;
 
 import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.ast.builders.Builder;
+import com.github.havardh.javaflow.exceptions.ExitException;
+import com.github.havardh.javaflow.exceptions.ExitException.ErrorCode;
 import com.github.havardh.javaflow.phases.parser.Parser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
@@ -38,11 +39,8 @@ public class JavaParser implements Parser {
       CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(source));
       return convert(cu);
     } catch (ParseException e) {
-      e.printStackTrace();
-      System.exit(1);
+      throw new ExitException(ErrorCode.COULD_NOT_PARSE_SOURCE_CODE, e);
     }
-
-    return empty();
   }
 
   private static Optional<Type> convert(CompilationUnit cu) {

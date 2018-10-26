@@ -1,5 +1,7 @@
 target
 *.iml
+.idea
 scripts
 build
+out
 .gradle
