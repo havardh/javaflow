@@ -8,6 +8,7 @@ import static java.util.Collections.singletonList;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.havardh.javaflow.exceptions.ExitException;
 import com.github.havardh.javaflow.model.TypeMap;
 import com.github.havardh.javaflow.phases.filetransform.CommentPrependTransformer;
 import com.github.havardh.javaflow.phases.filetransform.EslintDisableTransformer;
@@ -62,7 +63,12 @@ public class JavaFlow {
         )
     );
 
-    System.out.println(execution.run(filterOutArgs(args)));
+    try {
+      System.out.println(execution.run(filterOutArgs(args)));
+    } catch (ExitException e) {
+      e.printStackTrace();
+      System.exit(e.getErrorCode().getCode());
+    }
   }
 
   private static String[] filterOutArgs(String[] args) {

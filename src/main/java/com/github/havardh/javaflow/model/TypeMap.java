@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
+import com.github.havardh.javaflow.exceptions.ExitException;
+import com.github.havardh.javaflow.exceptions.ExitException.ErrorCode;
 
 /**
  * Type map class to contain the map from source language types to
@@ -45,8 +47,7 @@ public class TypeMap implements Map<String, String> {
     } catch (FileNotFoundException e) {
       map = emptyMap();
     } catch (IOException e) {
-      e.printStackTrace();
-      System.exit(0);
+      throw new ExitException(ErrorCode.COULD_NOT_PARSE_TYPE_MAP, e);
     }
   }
 

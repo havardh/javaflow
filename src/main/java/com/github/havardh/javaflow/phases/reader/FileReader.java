@@ -1,7 +1,9 @@
 package com.github.havardh.javaflow.phases.reader;
 
-import static java.util.Optional.empty;
 import static java.util.Optional.of;
+
+import com.github.havardh.javaflow.exceptions.ExitException;
+import com.github.havardh.javaflow.exceptions.ExitException.ErrorCode;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,10 +25,8 @@ public class FileReader {
     try {
       return of(new String(Files.readAllBytes(Paths.get(filename))));
     } catch (IOException e) {
-      e.printStackTrace();
-      System.exit(1);
+      throw new ExitException(ErrorCode.COULD_NOT_READ_FILE, e);
     }
-    return empty();
   }
 
 }

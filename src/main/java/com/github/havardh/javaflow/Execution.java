@@ -2,6 +2,8 @@ package com.github.havardh.javaflow;
 
 import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.exceptions.AggregatedException;
+import com.github.havardh.javaflow.exceptions.ExitException;
+import com.github.havardh.javaflow.exceptions.ExitException.ErrorCode;
 import com.github.havardh.javaflow.phases.filetransform.FileTransformer;
 import com.github.havardh.javaflow.phases.parser.Parser;
 import com.github.havardh.javaflow.phases.reader.FileReader;
@@ -160,8 +162,7 @@ public class Execution {
       try {
         writer.write(types.get(i), stringWriter);
       } catch (IOException e) {
-        e.printStackTrace();
-        System.exit(1);
+        throw new ExitException(ErrorCode.COULD_NOT_WRITE_OUTPUT, e);
       }
       if (i != types.size() - 1) {
         stringWriter.write("\n");
