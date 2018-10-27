@@ -11,13 +11,25 @@ import com.github.havardh.javaflow.phases.transform.Transformer;
 import com.github.havardh.javaflow.phases.verifier.Verifier;
 import com.github.havardh.javaflow.phases.writer.Writer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -73,17 +85,17 @@ public class Execution {
    * with the {@code writer}. This string is transformed by the
    * {@code fileTransformers} before the result is returned to the caller.
    *
-   * @param filenames list of files to create flow types for.
+   * @param patterns list of file patterns to create flow types for.
    * @return the flow type as a {@code String}
    */
-  public String run(String... filenames) {
-    List<String> files = read(filenames);
-    List<Type> types = parse(files);
-    transform(types);
-    verify(types);
-    String output = write(types);
-
-    return transformFile(output);
+  public String run(String... patterns) {
+    return Stream.of(resolve(patterns))
+        .map(this::parse)
+        .peek(this::transform)
+        .peek(this::verify)
+        .map(this::write)
+        .map(this::transformFile)
+        .collect(Collectors.joining());
   }
 
   /**
@@ -98,7 +110,7 @@ public class Execution {
     for (Verifier verifier : verifiers) {
       try {
         verifier.verify(types);
-      } catch(Exception e) {
+      } catch (Exception e) {
         exceptions.add(e);
       }
     }
@@ -108,31 +120,87 @@ public class Execution {
     }
   }
 
+  private List<Path> resolve(String... patterns) {
+    List<Path> paths = new ArrayList<>();
+    Path workdir = Paths.get(".");
+    for (String pattern : patterns) {
+      Path path = workdir.resolve(pattern);
+      if (Files.isRegularFile(path)) {
+        paths.add(path);
+      } else {
+        Path start;
+        PathMatcher pathMatcher;
+        if (Files.isDirectory(path)) {
+          start = path;
+          pathMatcher = (p) -> true;
+        } else {
+          start = workdir;
+          pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
+        }
+        try {
+          Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+              if (attrs.isRegularFile() && pathMatcher.matches(path)) {
+                paths.add(path);
+              }
+              return FileVisitResult.CONTINUE;
+            }
+          });
+        } catch (IOException e) {
+          throw new ExitException(ErrorCode.COULD_NOT_READ_FILE, e);
+        }
+      }
+    }
+    return paths;
+  }
+
   /**
    * Read each {@code file} into a list of {@code String} with the {@code reader}.
    *
    * @param filenames list of files to read
    * @return list of file content
    */
-  private List<String> read(String[] filenames) {
+  private List<File> list(String[] filenames) {
     return Stream.of(filenames)
-        .map(reader::read)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .map(File::new)
+        .flatMap(this::listDirectory)
         .collect(toList());
   }
 
+  private Stream<File> listDirectory(File file) {
+    File[] files = file.listFiles();
+    if (files == null) {
+      // not a directory!
+      return file.getName().endsWith(".java") ? Stream.of(file) : Stream.empty();
+    } else {
+      return Arrays.stream(files).flatMap(this::listDirectory);
+    }
+  }
+
   /**
-   * Parse each {@code file} to a list of {@code Type}. The {@code Type} is the
+   * Parse each {@code path} to a list of {@code Type}. The {@code Type} is the
    * internal representation of a model.
    *
-   * @param files list of file contents
+   * @param paths list of file paths
    * @return list of internal types
    */
-  private List<Type> parse(List<String> files) {
-    return files.stream()
-        .flatMap(source -> parser.parse(source).stream())
+  private List<Type> parse(List<Path> paths) {
+    return paths.stream()
+        .flatMap(path -> parse(path).stream())
         .collect(toList());
+  }
+
+  private List<Type> parse(Path path) {
+    Optional<String> source = reader.read(path.toFile().getPath());
+    if (source.isPresent()) {
+      try {
+        return parser.parse(source.get());
+      } catch (RuntimeException e) {
+        throw new IllegalStateException("Failed to parse file: " + path, e);
+      }
+    }
+    return emptyList();
   }
 
   /**
@@ -153,7 +221,7 @@ public class Execution {
   private String write(List<Type> types) {
     StringWriter stringWriter = new StringWriter();
 
-    for (int i=0; i<types.size(); i++) {
+    for (int i = 0; i < types.size(); i++) {
       if (i != 0) {
         stringWriter.write("\n");
       }
