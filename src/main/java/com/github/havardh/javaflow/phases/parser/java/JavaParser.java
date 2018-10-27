@@ -65,16 +65,12 @@ public class JavaParser implements Parser {
 
   private static boolean containsEnum(CompilationUnit cu) {
     return cu.getTypes().stream()
-        .filter(t -> t instanceof EnumDeclaration)
-        .findFirst()
-        .isPresent();
+        .anyMatch(t -> t instanceof EnumDeclaration);
   }
 
   private static boolean containsClass(CompilationUnit cu) {
     return cu.getTypes().stream()
-        .filter(t -> t instanceof ClassOrInterfaceDeclaration)
-        .findFirst()
-        .isPresent();
+        .anyMatch(t -> t instanceof ClassOrInterfaceDeclaration);
   }
 
 }

@@ -1,5 +1,7 @@
 package com.github.havardh.javaflow.phases.parser.java;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.github.havardh.javaflow.ast.Type;
@@ -11,6 +13,9 @@ import com.github.havardh.javaflow.model.CanonicalName;
  * Java models.
  */
 public class TypeFactory {
+
+  private static final List<String> PRIMITIVES = Arrays.asList("boolean", "byte",
+      "char", "double", "float", "int", "long", "short");
 
   private CanonicalNameFactory canonicalNameFactory;
 
@@ -67,9 +72,17 @@ public class TypeFactory {
 
     if (isPrimitive || typeLiteral.equals("char[]")) {
       return TypeBuilder.primitive(CanonicalName.primitive(typeLiteral));
-    } else {
-      return TypeBuilder.object(canonicalNameFactory.build(typeLiteral));
     }
+
+    if (isArray(typeLiteral)) {
+      String valType = extractArrayType(typeLiteral);
+      return TypeBuilder.list(
+          CanonicalName.fromString(List.class.getName()),
+          build(valType, PRIMITIVES.contains(valType))
+      );
+    }
+
+    return TypeBuilder.object(canonicalNameFactory.build(typeLiteral));
   }
 
   private static boolean isList(String typeLiteral) {
@@ -83,6 +96,10 @@ public class TypeFactory {
 
   private static boolean isMap(String typeLiteral) {
     return typeLiteral.startsWith("Map<") && typeLiteral.endsWith(">");
+  }
+
+  private static boolean isArray(String typeLiteral) {
+    return typeLiteral.endsWith("[]");
   }
 
   private static String extractTagType(String typeLiteral) {
@@ -101,6 +118,10 @@ public class TypeFactory {
   private static String extractValueType(String typeLiteral) {
     int index = typeLiteral.indexOf(",");
     return typeLiteral.substring(index+2, typeLiteral.length() - 1);
+  }
+
+  private static String extractArrayType(String typeLiteral) {
+    return typeLiteral.substring(0, typeLiteral.lastIndexOf("[]"));
   }
 
 }

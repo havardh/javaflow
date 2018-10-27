@@ -189,7 +189,7 @@ public class JavaFlowTest {
 
         @Test
         public void shouldMapCharArrayToString() {
-          Map<String, String> types = typeMap((Class) parse("ModelWithArrays"));
+          Map<String, String> types = typeMap((Class) parse("ModelWithCharArray"));
 
           assertThat(types.get("field"), is("string"));
         }
