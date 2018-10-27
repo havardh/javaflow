@@ -131,6 +131,31 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithCharArray() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithCharArray.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithCharArray = {",
+        "  field: string,",
+        "};"
+    );
+  }
+
+  @Test
+  public void shouldParseModelWithArrays() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithGenericArrays.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithGenericArrays = {",
+        "  field1: Array<string>,",
+        "  field2: Array<number>,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithSet() {
     String flowCode = execution.run(BASE_PATH + "ModelWithSet.java");
 
