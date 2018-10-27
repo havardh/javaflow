@@ -164,6 +164,23 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithAnonymousClass() {
+    String flowCode = execution.run(
+        BASE_PATH + "ModelWithAnonymousClass.java",
+        BASE_PATH + "Member.java"
+    );
+
+    assertStringEqual(
+        flowCode,
+        "export type Member = {};",
+        "",
+        "export type ModelWithAnonymousClass = {",
+        "  field: Member,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithPrimitive() {
     String flowCode = execution.run(BASE_PATH + "ModelWithPrimitive.java");
 
