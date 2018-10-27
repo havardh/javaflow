@@ -24,6 +24,16 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public class JavaParser implements Parser {
 
+  private final boolean skipStaticFields;
+
+  public JavaParser() {
+    this(true);
+  }
+
+  public JavaParser(boolean skipStaticFields) {
+    this.skipStaticFields = skipStaticFields;
+  }
+
   /**
    * Parse a Java model into the internal representation of a model.
    *
@@ -43,10 +53,10 @@ public class JavaParser implements Parser {
     }
   }
 
-  private static Optional<Type> convert(CompilationUnit cu) {
+  private Optional<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      return of(convert(cu, classBuilder(), new ClassVisitor()));
+      return of(convert(cu, classBuilder(), new ClassVisitor(skipStaticFields)));
     } else if (containsEnum(cu)) {
       return of(convert(cu, enumBuilder(), new EnumVisitor()));
     } else {

@@ -17,6 +17,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -27,8 +28,14 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  */
 public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
+  private final boolean skipStaticFields;
+
   private String packageName;
   private Map<String, String> imports = new HashMap<>();
+
+  public ClassVisitor(boolean skipStaticFields) {
+    this.skipStaticFields = skipStaticFields;
+  }
 
   /** {@inheritDoc} */
   @Override
@@ -69,11 +76,13 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     super.visit(field, builder);
     TypeFactory factory = new TypeFactory(packageName, imports);
 
-    field.getVariables().forEach(variable -> builder.withField(new Field(
-        isNullable(field),
-        variable.getId().getName(),
-        factory.build(field.getType().toString(), field.getType() instanceof PrimitiveType)
-    )));
+    if (!skipFieldOrGetter(field.getModifiers())) {
+      field.getVariables().forEach(variable -> builder.withField(new Field(
+          isNullable(field),
+          variable.getId().getName(),
+          factory.build(field.getType().toString(), field.getType() instanceof PrimitiveType)
+      )));
+    }
   }
 
   @Override
@@ -83,12 +92,17 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
     if (method.getParentNode() instanceof ClassOrInterfaceDeclaration
         && isClass((ClassOrInterfaceDeclaration) method.getParentNode())
-        && isGetter(method.getName(), method.getType().toString())) {
+        && isGetter(method.getName(), method.getType().toString())
+        && !skipFieldOrGetter(method.getModifiers())) {
       builder.withGetter(new Method(
           method.getName(),
           factory.build(method.getType().toString(), method.getType() instanceof PrimitiveType)
       ));
     }
+  }
+
+  private boolean skipFieldOrGetter(int modifiers) {
+    return skipStaticFields && ModifierSet.isStatic(modifiers);
   }
 
   private boolean isNullable(FieldDeclaration field) {
