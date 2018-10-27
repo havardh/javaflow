@@ -247,6 +247,16 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithStaticFields() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithStaticFields.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithStaticFields = {};"
+    );
+  }
+
+  @Test
   public void shouldThrowExceptionWhenFieldIsNotFound() {
     try {
       execution.run(BASE_PATH + "Wrapper.java");
