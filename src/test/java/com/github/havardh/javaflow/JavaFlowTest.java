@@ -14,6 +14,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -339,7 +341,8 @@ public class JavaFlowTest {
   private static Type parse(String name) {
     return new FileReader().read(BASE_PATH + name + ".java")
         .map(new JavaParser()::parse)
-        .map(Optional::get)
+        .filter(result -> !result.isEmpty())
+        .map(result -> result.get(0))
         .orElse(null);
   }
 
@@ -352,9 +355,8 @@ public class JavaFlowTest {
         .map(name -> BASE_PATH + name + ".java")
         .map(adapter::read)
         .map(Optional::get)
-        .map(parser::parse)
-        .map(Optional::get)
-        .collect(toList());
+        .flatMap(source -> parser.parse(source).stream())
+        .collect(Collectors.toList());
 
     transformer.transform(types);
 

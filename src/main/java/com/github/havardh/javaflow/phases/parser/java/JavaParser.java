@@ -1,13 +1,15 @@
 package com.github.havardh.javaflow.phases.parser.java;
 
-import static java.util.Optional.of;
-
 import static com.github.havardh.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static com.github.havardh.javaflow.ast.builders.EnumBuilder.enumBuilder;
 
 import java.io.StringReader;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.github.havardh.javaflow.ast.Class;
 import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.ast.builders.Builder;
 import com.github.havardh.javaflow.exceptions.ExitException;
@@ -38,12 +40,12 @@ public class JavaParser implements Parser {
    * Parse a Java model into the internal representation of a model.
    *
    * The Java model parser parses {@code class} or {@code enum} definitions
-   * into a {@code Type}.
+   * into a list of {@code Type} objects.
    *
    * @param source the Java source code for a model
-   * @return the parsed source code as a {@code Type}.
+   * @return the parsed source code as a {@code List<Type>}.
    */
-  public Optional<Type> parse(String source) {
+  public List<Type> parse(String source) {
 
     try {
       CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(source));
@@ -53,24 +55,32 @@ public class JavaParser implements Parser {
     }
   }
 
-  private Optional<Type> convert(CompilationUnit cu) {
+  private List<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      return of(convert(cu, classBuilder(), new ClassVisitor(skipStaticFields)));
+      return convert(cu, classBuilder(), new ClassVisitor(skipStaticFields));
     } else if (containsEnum(cu)) {
-      return of(convert(cu, enumBuilder(), new EnumVisitor()));
+      return convert(cu, enumBuilder(), new EnumVisitor());
     } else {
-      return Optional.empty();
+      return Collections.emptyList();
     }
   }
 
-  private static <T extends Type> T convert(
+  private static List<Type> convert(
       CompilationUnit cu,
-      Builder<T> builder,
+      Builder<? extends Type> builder,
       VoidVisitor visitor
   ) {
     visitor.visit(cu, builder);
-    return builder.build();
+    return toTypes(builder.build()).collect(Collectors.toList());
+  }
+
+  private static Stream<Type> toTypes(Type type) {
+    if (type instanceof Class) {
+      return Stream.concat(Stream.of(type), ((Class) type).getInnerClasses().stream().flatMap(JavaParser::toTypes));
+    } else {
+      return Stream.of(type);
+    }
   }
 
   private static boolean containsEnum(CompilationUnit cu) {

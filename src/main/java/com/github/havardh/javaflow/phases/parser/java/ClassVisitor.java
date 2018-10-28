@@ -3,6 +3,8 @@ package com.github.havardh.javaflow.phases.parser.java;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -12,6 +14,7 @@ import com.github.havardh.javaflow.ast.Method;
 import com.github.havardh.javaflow.ast.Parent;
 import com.github.havardh.javaflow.ast.builders.ClassBuilder;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -32,6 +35,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
   private String packageName;
   private Map<String, String> imports = new HashMap<>();
+  private Deque<String> classNames = new ArrayDeque<>();
 
   public ClassVisitor(boolean skipStaticFields) {
     this.skipStaticFields = skipStaticFields;
@@ -61,10 +65,31 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   /** {@inheritDoc} */
   @Override
   public void visit(ClassOrInterfaceDeclaration n, ClassBuilder builder) {
-    super.visit(n, builder);
+    classNames.addLast(n.getName());
+
+    if (n.getParentNode() instanceof CompilationUnit) {
+      super.visit(n, builder);
+      setAttributes(builder, n);
+    } else {
+      String fullPackageName = packageName + "."
+          + classNames.stream().limit(classNames.size() - 1).collect(joining("."));
+
+      imports.put(n.getName(), fullPackageName);
+
+      ClassBuilder child = ClassBuilder.classBuilder();
+      child.withPackageName(fullPackageName);
+      setAttributes(child, n);
+      super.visit(n, child);
+      builder.withInnerClass(child.build());
+    }
+
+    classNames.removeLast();
+  }
+
+  private void setAttributes(ClassBuilder builder, ClassOrInterfaceDeclaration n) {
     builder.withName(n.getName());
-    CanonicalNameFactory factory = new CanonicalNameFactory(packageName, imports);
     if (isClass(n)) {
+      CanonicalNameFactory factory = new CanonicalNameFactory(packageName, imports);
       n.getExtends().stream().findFirst()
           .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getName()))));
     }
