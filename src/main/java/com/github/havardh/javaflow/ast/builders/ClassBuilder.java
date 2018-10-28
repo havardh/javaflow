@@ -7,6 +7,7 @@ import com.github.havardh.javaflow.ast.Class;
 import com.github.havardh.javaflow.ast.Field;
 import com.github.havardh.javaflow.ast.Method;
 import com.github.havardh.javaflow.ast.Parent;
+import com.github.havardh.javaflow.ast.Type;
 import com.github.havardh.javaflow.model.CanonicalName;
 
 /**
@@ -17,6 +18,7 @@ public class ClassBuilder implements Builder<Class> {
   private String packageName;
   private String name;
   private Parent parent;
+  private List<Class> innerClasses = new ArrayList<>();
   private List<Field> fields = new ArrayList<>();
   private List<Method> getters = new ArrayList<>();
 
@@ -66,6 +68,17 @@ public class ClassBuilder implements Builder<Class> {
   }
 
   /**
+   * Add an inner {@code Class} to class builder
+   *
+   * @param innerClass an inner {@code Class}
+   * @return the builder for method chaining
+   */
+  public ClassBuilder withInnerClass(Class innerClass) {
+    this.innerClasses.add(innerClass);
+    return this;
+  }
+
+  /**
    * Add a {@code Field} to class builder
    *
    * @param field a {@code Field}
@@ -92,7 +105,7 @@ public class ClassBuilder implements Builder<Class> {
    * @return the {@code Class}
    */
   public Class build() {
-    return new Class(CanonicalName.object(packageName, name), parent, fields, getters);
+    return new Class(CanonicalName.object(packageName, name), parent, innerClasses, fields, getters);
   }
 
 }

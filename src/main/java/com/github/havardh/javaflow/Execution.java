@@ -131,9 +131,7 @@ public class Execution {
    */
   private List<Type> parse(List<String> files) {
     return files.stream()
-        .map(parser::parse)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .flatMap(source -> parser.parse(source).stream())
         .collect(toList());
   }
 

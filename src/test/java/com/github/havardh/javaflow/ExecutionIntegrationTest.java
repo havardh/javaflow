@@ -206,6 +206,35 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithInnerClasses() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithInnerClasses.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithInnerClasses = {",
+        "  child1: Child1,",
+        "  child2: Child2,",
+        "  child3: Child3,",
+        "  child4: Child4,",
+        "};",
+        "",
+        "export type Child1 = {};",
+        "",
+        "export type Child2 = {",
+        "  field1: number,",
+        "};",
+        "",
+        "export type Child3 = {",
+        "  field1: string,",
+        "};",
+        "",
+        "export type Child4 = {",
+        "  field1: string,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithPrimitive() {
     String flowCode = execution.run(BASE_PATH + "ModelWithPrimitive.java");
 

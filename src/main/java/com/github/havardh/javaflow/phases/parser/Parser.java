@@ -1,6 +1,6 @@
 package com.github.havardh.javaflow.phases.parser;
 
-import java.util.Optional;
+import java.util.List;
 
 import com.github.havardh.javaflow.ast.Type;
 
@@ -13,11 +13,11 @@ import com.github.havardh.javaflow.ast.Type;
 public interface Parser {
 
   /**
-   * Parse the given source code into a {@code Type}.
+   * Parse the given source code into a list of {@code Type} objects.
    *
    * @param sourceCode the source to parse
-   * @return the parsed source as a {@code Type}
+   * @return the parsed source as a {@code List<Type>}
    */
-  Optional<Type> parse(String sourceCode);
+  List<Type> parse(String sourceCode);
 }
 
