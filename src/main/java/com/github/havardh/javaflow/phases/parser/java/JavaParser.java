@@ -15,7 +15,8 @@ import com.github.havardh.javaflow.ast.builders.Builder;
 import com.github.havardh.javaflow.exceptions.ExitException;
 import com.github.havardh.javaflow.exceptions.ExitException.ErrorCode;
 import com.github.havardh.javaflow.phases.parser.Parser;
-import com.github.javaparser.ParseException;
+
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -50,7 +51,7 @@ public class JavaParser implements Parser {
     try {
       CompilationUnit cu = com.github.javaparser.JavaParser.parse(new StringReader(source));
       return convert(cu);
-    } catch (ParseException e) {
+    } catch (ParseProblemException e) {
       throw new ExitException(ErrorCode.COULD_NOT_PARSE_SOURCE_CODE, e);
     }
   }

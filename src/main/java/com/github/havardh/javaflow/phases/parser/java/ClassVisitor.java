@@ -7,6 +7,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import com.github.havardh.javaflow.ast.Field;
@@ -16,13 +17,13 @@ import com.github.havardh.javaflow.ast.builders.ClassBuilder;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.ModifierSet;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
@@ -46,8 +47,8 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   public void visit(PackageDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
 
-    packageName = n.getPackageName();
-    builder.withPackageName(n.getPackageName());
+    packageName = n.getNameAsString();
+    builder.withPackageName(n.getNameAsString());
   }
 
   /** {@inheritDoc} */
@@ -55,9 +56,8 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   public void visit(ImportDeclaration n, ClassBuilder builder) {
     super.visit(n, builder);
 
-    String[] packages = n.getName().toString().split("\\.");
-    String typeName = n.getName().getName();
-    String packageName = Stream.of(packages).limit(packages.length - 1).collect(joining("."));
+    String typeName = n.getName().getIdentifier();
+    String packageName = n.getName().getQualifier().map(Name::asString).orElse("");
 
     imports.put(typeName, packageName);
   }
@@ -65,16 +65,16 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   /** {@inheritDoc} */
   @Override
   public void visit(ClassOrInterfaceDeclaration n, ClassBuilder builder) {
-    classNames.addLast(n.getName());
+    classNames.addLast(n.getNameAsString());
 
-    if (n.getParentNode() instanceof CompilationUnit) {
+    if (n.getParentNode().isPresent() && n.getParentNode().get() instanceof CompilationUnit) {
       super.visit(n, builder);
       setAttributes(builder, n);
     } else {
       String fullPackageName = packageName + "."
           + classNames.stream().limit(classNames.size() - 1).collect(joining("."));
 
-      imports.put(n.getName(), fullPackageName);
+      imports.put(n.getNameAsString(), fullPackageName);
 
       ClassBuilder child = ClassBuilder.classBuilder();
       child.withPackageName(fullPackageName);
@@ -87,11 +87,11 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
   }
 
   private void setAttributes(ClassBuilder builder, ClassOrInterfaceDeclaration n) {
-    builder.withName(n.getName());
+    builder.withName(n.getNameAsString());
     if (isClass(n)) {
       CanonicalNameFactory factory = new CanonicalNameFactory(packageName, imports);
-      n.getExtends().stream().findFirst()
-          .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getName()))));
+      n.getExtendedTypes().stream().findFirst()
+          .ifPresent(parent -> builder.withParent(new Parent(factory.build(parent.getNameAsString()))));
     }
   }
 
@@ -104,8 +104,8 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     if (!skipFieldOrGetter(field.getModifiers())) {
       field.getVariables().forEach(variable -> builder.withField(new Field(
           isNullable(field),
-          variable.getId().getName(),
-          factory.build(field.getType().toString(), field.getType() instanceof PrimitiveType)
+          variable.getNameAsString(),
+          factory.build(variable.getType().asString(), variable.getType() instanceof PrimitiveType)
       )));
     }
   }
@@ -115,25 +115,25 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     super.visit(method, builder);
     TypeFactory factory = new TypeFactory(packageName, imports);
 
-    if (method.getParentNode() instanceof ClassOrInterfaceDeclaration
-        && isClass((ClassOrInterfaceDeclaration) method.getParentNode())
-        && isGetter(method.getName(), method.getType().toString())
+    if (method.getParentNode().isPresent()
+        && method.getParentNode().get() instanceof ClassOrInterfaceDeclaration
+        && isClass((ClassOrInterfaceDeclaration) method.getParentNode().get())
+        && isGetter(method.getNameAsString(), method.getType().asString())
         && !skipFieldOrGetter(method.getModifiers())) {
       builder.withGetter(new Method(
-          method.getName(),
-          factory.build(method.getType().toString(), method.getType() instanceof PrimitiveType)
+          method.getNameAsString(),
+          factory.build(method.getType().asString(), method.getType() instanceof PrimitiveType)
       ));
     }
   }
 
-  private boolean skipFieldOrGetter(int modifiers) {
-    return skipStaticFields && ModifierSet.isStatic(modifiers);
+  private boolean skipFieldOrGetter(Set<Modifier> modifiers) {
+    return skipStaticFields && modifiers.contains(Modifier.STATIC);
   }
 
   private boolean isNullable(FieldDeclaration field) {
     return field.getAnnotations().stream()
-        .map(AnnotationExpr::getName)
-        .map(NameExpr::getName)
+        .map(AnnotationExpr::getNameAsString)
         .anyMatch(name -> name.equals("Nullable"));
   }
 
