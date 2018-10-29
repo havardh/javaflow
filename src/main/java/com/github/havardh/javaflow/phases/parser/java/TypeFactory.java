@@ -117,7 +117,7 @@ public class TypeFactory {
 
   private static String extractValueType(String typeLiteral) {
     int index = typeLiteral.indexOf(",");
-    return typeLiteral.substring(index+2, typeLiteral.length() - 1);
+    return typeLiteral.substring(index + 1, typeLiteral.length() - 1).trim();
   }
 
   private static String extractArrayType(String typeLiteral) {

@@ -16,21 +16,21 @@ public class EnumVisitor extends VoidVisitorAdapter<EnumBuilder> {
   @Override
   public void visit(PackageDeclaration n, EnumBuilder builder) {
     super.visit(n, builder);
-    builder.withPackageName(n.getPackageName());
+    builder.withPackageName(n.getNameAsString());
   }
 
   /** {@inheritDoc} */
   @Override
   public void visit(EnumDeclaration n, EnumBuilder builder) {
     super.visit(n, builder);
-    builder.withName(n.getName());
+    builder.withName(n.getNameAsString());
   }
 
   /** {@inheritDoc} */
   @Override
   public void visit(EnumConstantDeclaration n, EnumBuilder builder) {
     super.visit(n, builder);
-    builder.withEnumValue(n.getName());
+    builder.withEnumValue(n.getNameAsString());
   }
 
 }

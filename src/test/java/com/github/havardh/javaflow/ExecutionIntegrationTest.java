@@ -70,6 +70,20 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithFieldComments() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithFieldComments.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithFieldComments = {",
+        "  field1: string,",
+        "  field2: string,",
+        "  field3: string,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithList() {
     String flowCode = execution.run(BASE_PATH + "ModelWithList.java");
 
