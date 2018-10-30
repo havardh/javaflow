@@ -7,29 +7,21 @@ import com.github.havardh.javaflow.exceptions.ExitException.ErrorCode;
 import com.github.havardh.javaflow.phases.filetransform.FileTransformer;
 import com.github.havardh.javaflow.phases.parser.Parser;
 import com.github.havardh.javaflow.phases.reader.FileReader;
+import com.github.havardh.javaflow.phases.resolver.FileResolver;
 import com.github.havardh.javaflow.phases.transform.Transformer;
 import com.github.havardh.javaflow.phases.verifier.Verifier;
 import com.github.havardh.javaflow.phases.writer.Writer;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Collections.emptyList;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -42,6 +34,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class Execution {
 
+  private final FileResolver resolver;
   private final FileReader reader;
   private final Parser parser;
   private final List<Transformer> transformers;
@@ -60,6 +53,7 @@ public class Execution {
    * @param fileTransformers - output file transforms
    */
   public Execution(
+      FileResolver resolver,
       FileReader reader,
       Parser parser,
       List<Transformer> transformers,
@@ -67,6 +61,7 @@ public class Execution {
       Writer<Type> writer,
       List<FileTransformer> fileTransformers
   ) {
+    this.resolver = resolver;
     this.reader = reader;
     this.parser = parser;
     this.transformers = transformers;
@@ -78,7 +73,8 @@ public class Execution {
   /**
    * Run the execution on the given set of files.
    *
-   * This is the heart of the JavaFlow program. This method will read
+   * This is the heart of the JavaFlow program. This method will resolve
+   * all matching files with the {@code resolver}, read
    * each file with the file {@code reader}, parse the source code with
    * the {@code parser}. Next it will run all the {@code transforms} and
    * {@code verifiers}, before it writes the results to a {@code String}
@@ -89,7 +85,10 @@ public class Execution {
    * @return the flow type as a {@code String}
    */
   public String run(String... patterns) {
-    return Stream.of(resolve(patterns))
+
+    return Stream.of(asList(patterns))
+        .map(this::resolve)
+        .map(this::read)
         .map(this::parse)
         .peek(this::transform)
         .peek(this::verify)
@@ -120,39 +119,17 @@ public class Execution {
     }
   }
 
-  private List<Path> resolve(String... patterns) {
-    List<Path> paths = new ArrayList<>();
-    Path workdir = Paths.get(".");
-    for (String pattern : patterns) {
-      Path path = workdir.resolve(pattern);
-      if (Files.isRegularFile(path)) {
-        paths.add(path);
-      } else {
-        Path start;
-        PathMatcher pathMatcher;
-        if (Files.isDirectory(path)) {
-          start = path;
-          pathMatcher = (p) -> true;
-        } else {
-          start = workdir;
-          pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
-        }
-        try {
-          Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-              if (attrs.isRegularFile() && pathMatcher.matches(path)) {
-                paths.add(path);
-              }
-              return FileVisitResult.CONTINUE;
-            }
-          });
-        } catch (IOException e) {
-          throw new ExitException(ErrorCode.COULD_NOT_READ_FILE, e);
-        }
-      }
-    }
-    return paths;
+  /**
+   * Resolves all files matching the pattern.
+   *
+   * @param pattern  a file, directory or glob pattern
+   * @return list of files matching the pattern
+   */
+  private List<Path> resolve(List<String> pattern) {
+    return pattern.stream()
+            .map(resolver::resolve)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
   }
 
   /**
@@ -161,21 +138,13 @@ public class Execution {
    * @param filenames list of files to read
    * @return list of file content
    */
-  private List<File> list(String[] filenames) {
-    return Stream.of(filenames)
-        .map(File::new)
-        .flatMap(this::listDirectory)
-        .collect(toList());
-  }
-
-  private Stream<File> listDirectory(File file) {
-    File[] files = file.listFiles();
-    if (files == null) {
-      // not a directory!
-      return file.getName().endsWith(".java") ? Stream.of(file) : Stream.empty();
-    } else {
-      return Arrays.stream(files).flatMap(this::listDirectory);
-    }
+  private List<String> read(List<Path> filenames) {
+    return filenames.stream()
+            .map(path -> path.toFile().getPath())
+            .map(reader::read)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
   }
 
   /**
@@ -185,24 +154,11 @@ public class Execution {
    * @param paths list of file paths
    * @return list of internal types
    */
-  private List<Type> parse(List<Path> paths) {
+  private List<Type> parse(List<String> paths) {
     return paths.stream()
-        .flatMap(path -> parse(path).stream())
+        .flatMap(source -> parser.parse(source).stream())
         .collect(toList());
   }
-
-  private List<Type> parse(Path path) {
-    Optional<String> source = reader.read(path.toFile().getPath());
-    if (source.isPresent()) {
-      try {
-        return parser.parse(source.get());
-      } catch (RuntimeException e) {
-        throw new IllegalStateException("Failed to parse file: " + path, e);
-      }
-    }
-    return emptyList();
-  }
-
   /**
    * Transforms each {@code type} with the set of {@code transformers}
    *
