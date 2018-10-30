@@ -5,7 +5,8 @@ public class ExitException extends RuntimeException {
     COULD_NOT_PARSE_TYPE_MAP(1),
     COULD_NOT_PARSE_SOURCE_CODE(2),
     COULD_NOT_READ_FILE(3),
-    COULD_NOT_WRITE_OUTPUT(4);
+    COULD_NOT_RESOLVE_PATTERN(4),
+    COULD_NOT_WRITE_OUTPUT(5);
 
     private final int code;
 

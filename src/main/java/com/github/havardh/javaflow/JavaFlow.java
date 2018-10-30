@@ -7,6 +7,8 @@ import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.github.havardh.javaflow.exceptions.ExitException;
 import com.github.havardh.javaflow.model.TypeMap;
@@ -14,6 +16,7 @@ import com.github.havardh.javaflow.phases.filetransform.CommentPrependTransforme
 import com.github.havardh.javaflow.phases.filetransform.EslintDisableTransformer;
 import com.github.havardh.javaflow.phases.parser.java.JavaParser;
 import com.github.havardh.javaflow.phases.reader.FileReader;
+import com.github.havardh.javaflow.phases.resolver.FileResolver;
 import com.github.havardh.javaflow.phases.transform.InheritanceTransformer;
 import com.github.havardh.javaflow.phases.transform.SortedTypeTransformer;
 import com.github.havardh.javaflow.phases.verifier.ClassGetterNamingVerifier;
@@ -48,6 +51,7 @@ public class JavaFlow {
     }
 
     Execution execution = new Execution(
+        new FileResolver(),
         new FileReader(),
         new JavaParser(),
         asList(

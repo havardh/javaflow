@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
 
+import com.github.havardh.javaflow.phases.resolver.FileResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +34,7 @@ public class ExecutionIntegrationTest {
   @BeforeEach
   public void setup() {
     this.execution = new Execution(
+        new FileResolver(),
         new FileReader(),
         new JavaParser(),
         asList(
