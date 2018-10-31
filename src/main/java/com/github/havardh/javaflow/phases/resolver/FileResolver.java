@@ -66,11 +66,7 @@ public class FileResolver {
     }
 
     private FileVisitor(String pattern) {
-      if (pattern.startsWith("/")) {
-        this.pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
-      } else {
-        this.pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/" + pattern);
-      }
+      this.pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
     }
 
     static FileVisitor matchAllFiles() {
@@ -88,8 +84,11 @@ public class FileResolver {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-      if (attrs.isRegularFile() && pathMatcher.matches(file.normalize().toAbsolutePath())) {
-        paths.add(file);
+      if (attrs.isRegularFile()) {
+        Path normalized = file.normalize();
+        if (pathMatcher.matches(normalized) || pathMatcher.matches(normalized.toAbsolutePath())) {
+          paths.add(file);
+        }
       }
 
       return FileVisitResult.CONTINUE;
