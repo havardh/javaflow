@@ -148,14 +148,14 @@ public class Execution {
   }
 
   /**
-   * Parse each {@code path} to a list of {@code Type}. The {@code Type} is the
+   * Parse each {@code source} to a list of {@code Type}. The {@code Type} is the
    * internal representation of a model.
    *
-   * @param paths list of file paths
+   * @param sources list of source code
    * @return list of internal types
    */
-  private List<Type> parse(List<String> paths) {
-    return paths.stream()
+  private List<Type> parse(List<String> sources) {
+    return sources.stream()
         .flatMap(source -> parser.parse(source).stream())
         .collect(toList());
   }
