@@ -7,7 +7,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 group = 'com.github.havardh'
-version = '1.5.0'
+version = '1.5.1-SNAPSHOT'
 mainClassName = "com.github.havardh.javaflow.JavaFlow"
 
 description = """"""
