@@ -73,4 +73,11 @@ public class FileResolverTest {
         Path expectedPath = Paths.get(BASE_PATH, "packaged/PackagedMember.java");
         assertThat(paths, contains(equalTo(expectedPath)));
     }
+
+    @Test
+    public void shouldResolveRelativeGlobPatternLocally() {
+        List<Path> paths = resolver.resolve("*.java");
+
+        assertThat(paths, hasSize(0));
+    }
 }
