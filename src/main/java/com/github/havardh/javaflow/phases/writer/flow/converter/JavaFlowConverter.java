@@ -42,6 +42,10 @@ public final class JavaFlowConverter implements Converter {
   }
 
   private static String getOrDefault(String name, String defaultName) {
+    if (name.equals("?") || name.endsWith(".?")) {
+      return "any";
+    }
+
     if (Objects.isObject(name)) {
       return Objects.get(name);
     }

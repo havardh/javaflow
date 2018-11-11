@@ -303,6 +303,19 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithWildcardTypeParams() {
+    String flowCode = execution.run(BASE_PATH + "ModelWithWildcardTypeParams.java");
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithWildcardTypeParams = {",
+        "  wildcardList: Array<any>,",
+        "  wildcardMap: {[key: any]: Array<any>},",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldThrowExceptionWhenFieldIsNotFound() {
     try {
       execution.run(BASE_PATH + "Wrapper.java");
