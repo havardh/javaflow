@@ -5,6 +5,8 @@ import com.github.havardh.javaflow.phases.writer.flow.converter.definitions.Prim
 import com.github.havardh.javaflow.model.CanonicalName;
 import com.github.havardh.javaflow.model.TypeMap;
 
+import java.util.function.Supplier;
+
 /**
  * Type {@code Converter} from Java to flowtypes.
  */
@@ -38,14 +40,15 @@ public final class JavaFlowConverter implements Converter {
     String name = canonicalName.getName();
     String fullName = canonicalName.toString();
 
-    return customTypeMap.getOrDefault(fullName, getOrDefault(fullName, name));
+    return firstNonNull(
+        () -> customTypeMap.get(fullName),
+        () -> customTypeMap.get(name),
+        () -> get(fullName),
+        () -> name
+    );
   }
 
-  private static String getOrDefault(String name, String defaultName) {
-    if (name.equals("?") || name.endsWith(".?")) {
-      return "any";
-    }
-
+  private static String get(String name) {
     if (Objects.isObject(name)) {
       return Objects.get(name);
     }
@@ -54,7 +57,17 @@ public final class JavaFlowConverter implements Converter {
       return Primitives.get(name);
     }
 
-    return defaultName;
+    return null;
+  }
+
+  private static <T> T firstNonNull(Supplier<T>... suppliers) {
+    for (Supplier<T> supplier : suppliers) {
+      T value = supplier.get();
+      if (value != null) {
+        return value;
+      }
+    }
+    return null;
   }
 
 }
