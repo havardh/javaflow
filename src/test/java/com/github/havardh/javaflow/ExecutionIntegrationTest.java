@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
 
+import com.github.havardh.javaflow.model.TypeMap;
 import com.github.havardh.javaflow.phases.resolver.FileResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ public class ExecutionIntegrationTest {
 
   @BeforeEach
   public void setup() {
+    TypeMap typeMap = TypeMap.of("?", "any");
     this.execution = new Execution(
         new FileResolver(),
         new FileReader(),
@@ -41,8 +43,8 @@ public class ExecutionIntegrationTest {
             new InheritanceTransformer(),
             new SortedTypeTransformer()
         ),
-        asList(new MemberFieldsPresentVerifier(emptyTypeMap()), new ClassGetterNamingVerifier()),
-        new FlowWriter(new JavaFlowConverter()),
+        asList(new MemberFieldsPresentVerifier(typeMap), new ClassGetterNamingVerifier()),
+        new FlowWriter(new JavaFlowConverter(typeMap)),
         emptyList()
     );
   }
