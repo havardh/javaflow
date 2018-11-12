@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,6 +50,10 @@ public class TypeMap implements Map<String, String> {
     } catch (IOException e) {
       throw new ExitException(ErrorCode.COULD_NOT_PARSE_TYPE_MAP, e);
     }
+  }
+
+  public static TypeMap of(String k1, String v1) {
+    return new TypeMap(Collections.singletonMap(k1, v1));
   }
 
   /** {@inheritDoc} */
