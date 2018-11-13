@@ -1,8 +1,8 @@
 package com.github.havardh.javaflow;
 
+import static com.github.havardh.javaflow.phases.parser.java.JavaParserFlags.defaultFlags;
 import static java.util.Arrays.stream;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,7 +14,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -340,7 +339,7 @@ public class JavaFlowTest {
 
   private static Type parse(String name) {
     return new FileReader().read(BASE_PATH + name + ".java")
-        .map(new JavaParser()::parse)
+        .map(new JavaParser(defaultFlags())::parse)
         .filter(result -> !result.isEmpty())
         .map(result -> result.get(0))
         .orElse(null);
@@ -348,7 +347,7 @@ public class JavaFlowTest {
 
   private static Map<String, Type> parseAll(String ...modelNames) {
     FileReader adapter = new FileReader();
-    Parser parser = new JavaParser();
+    Parser parser = new JavaParser(defaultFlags());
     Transformer transformer = new InheritanceTransformer();
 
     List<Type> types = stream(modelNames)
