@@ -12,6 +12,7 @@ import com.github.havardh.javaflow.model.TypeMap;
 import com.github.havardh.javaflow.phases.filetransform.CommentPrependTransformer;
 import com.github.havardh.javaflow.phases.filetransform.EslintDisableTransformer;
 import com.github.havardh.javaflow.phases.parser.java.JavaParser;
+import com.github.havardh.javaflow.phases.parser.java.JavaParserFlags;
 import com.github.havardh.javaflow.phases.reader.FileReader;
 import com.github.havardh.javaflow.phases.resolver.FileResolver;
 import com.github.havardh.javaflow.phases.transform.InheritanceTransformer;
@@ -37,6 +38,9 @@ public class JavaFlow implements Runnable {
 
   @CommandLine.Option(names = { "--verifyGetters" }, description = "Verify that field and getter names match")
   private boolean verifyGetters;
+
+  @CommandLine.Option(names = { "--includeStaticFields"}, description = "Include static fields", defaultValue = "false")
+  private boolean includeStaticFields;
 
   @CommandLine.Parameters(arity = "1..*", paramLabel = "file|folder|glob", description = "File(s), directorie(s) or glob patterns to process")
   private String[] patterns;
@@ -68,7 +72,7 @@ public class JavaFlow implements Runnable {
     Execution execution = new Execution(
         new FileResolver(),
         new FileReader(),
-        new JavaParser(),
+        new JavaParser(JavaParserFlags.config().includeStaticFields(includeStaticFields).build()),
         asList(
             new InheritanceTransformer(),
             new SortedTypeTransformer()
