@@ -1,5 +1,6 @@
 package com.github.havardh.javaflow;
 
+import static com.github.havardh.javaflow.phases.parser.java.JavaParserFlags.defaultFlags;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
@@ -7,7 +8,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import static com.github.havardh.javaflow.model.TypeMap.emptyTypeMap;
 import static com.github.havardh.javaflow.testutil.Assertions.assertStringEqual;
 
 import com.github.havardh.javaflow.model.TypeMap;
@@ -38,7 +38,7 @@ public class ExecutionIntegrationTest {
     this.execution = new Execution(
         new FileResolver(),
         new FileReader(),
-        new JavaParser(),
+        new JavaParser(defaultFlags()),
         asList(
             new InheritanceTransformer(),
             new SortedTypeTransformer()

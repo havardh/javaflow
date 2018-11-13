@@ -32,14 +32,14 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  */
 public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
 
-  private final boolean skipStaticFields;
+  private final boolean includeStaticFields;
 
   private String packageName;
   private Map<String, String> imports = new HashMap<>();
   private Deque<String> classNames = new ArrayDeque<>();
 
-  public ClassVisitor(boolean skipStaticFields) {
-    this.skipStaticFields = skipStaticFields;
+  public ClassVisitor(boolean includeStaticFields) {
+    this.includeStaticFields = includeStaticFields;
   }
 
   /** {@inheritDoc} */
@@ -101,7 +101,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     super.visit(field, builder);
     TypeFactory factory = new TypeFactory(packageName, imports);
 
-    if (!skipFieldOrGetter(field.getModifiers())) {
+    if (shouldIncludeStaticFields(field.getModifiers())) {
       field.getVariables().forEach(variable -> builder.withField(new Field(
           isNullable(field),
           variable.getNameAsString(),
@@ -119,7 +119,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
         && method.getParentNode().get() instanceof ClassOrInterfaceDeclaration
         && isClass((ClassOrInterfaceDeclaration) method.getParentNode().get())
         && isGetter(method.getNameAsString(), method.getType().asString())
-        && !skipFieldOrGetter(method.getModifiers())) {
+        && shouldIncludeStaticFields(method.getModifiers())) {
       builder.withGetter(new Method(
           method.getNameAsString(),
           factory.build(method.getType().asString(), method.getType() instanceof PrimitiveType)
@@ -127,8 +127,8 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     }
   }
 
-  private boolean skipFieldOrGetter(Set<Modifier> modifiers) {
-    return skipStaticFields && modifiers.contains(Modifier.STATIC);
+  private boolean shouldIncludeStaticFields(Set<Modifier> modifiers) {
+    return includeStaticFields || !modifiers.contains(Modifier.STATIC);
   }
 
   private boolean isNullable(FieldDeclaration field) {

@@ -2,6 +2,7 @@ package com.github.havardh.javaflow.phases.parser.java;
 
 import static com.github.havardh.javaflow.ast.builders.ClassBuilder.classBuilder;
 import static com.github.havardh.javaflow.ast.builders.EnumBuilder.enumBuilder;
+import static com.github.havardh.javaflow.phases.parser.java.JavaParserFlags.defaultFlags;
 
 import java.io.StringReader;
 import java.util.Collections;
@@ -27,14 +28,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public class JavaParser implements Parser {
 
-  private final boolean skipStaticFields;
+  private final JavaParserFlags flags;
 
   public JavaParser() {
-    this(true);
+    flags = defaultFlags();
   }
 
-  public JavaParser(boolean skipStaticFields) {
-    this.skipStaticFields = skipStaticFields;
+  public JavaParser(JavaParserFlags flags) {
+    this.flags = flags;
   }
 
   /**
@@ -59,7 +60,7 @@ public class JavaParser implements Parser {
   private List<Type> convert(CompilationUnit cu) {
 
     if (containsClass(cu)) {
-      return convert(cu, classBuilder(), new ClassVisitor(skipStaticFields));
+      return convert(cu, classBuilder(), new ClassVisitor(flags.shouldIncludeStaticFields()));
     } else if (containsEnum(cu)) {
       return convert(cu, enumBuilder(), new EnumVisitor());
     } else {
