@@ -2,13 +2,10 @@ package com.github.havardh.javaflow;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.Arrays.stream;
 import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import com.github.havardh.javaflow.exceptions.ExitException;
 import com.github.havardh.javaflow.model.TypeMap;
@@ -26,14 +23,23 @@ import com.github.havardh.javaflow.phases.writer.flow.FlowWriter;
 import com.github.havardh.javaflow.phases.writer.flow.converter.Converter;
 import com.github.havardh.javaflow.phases.writer.flow.converter.JavaFlowConverter;
 import com.github.havardh.javaflow.util.App;
+import picocli.CommandLine;
 
 /**
  * Commmand line runner for JavaFlow
  */
-public class JavaFlow {
+@CommandLine.Command(
+    name = "javaflow",
+    description = "convert java models to flow types",
+    footer = "Open source MIT --- https://www.github.com/havardh/javaflow"
+)
+public class JavaFlow implements Runnable {
 
-  private static String VERIFY_GETTERS_ARG = "--verifyGetters";
-  private static List<String> ARGS = singletonList(VERIFY_GETTERS_ARG);
+  @CommandLine.Option(names = { "-vg", "--verifyGetters" }, description = "Verify that field and getter names match")
+  private boolean verifyGetters;
+
+  @CommandLine.Parameters(arity = "1..*", paramLabel = "file|folder|glob", description = "File(s), directorie(s) or glob patterns to process")
+  private String[] patterns;
 
   /**
    * Main routine for JavaFlow command line runner
@@ -41,12 +47,21 @@ public class JavaFlow {
    * @param args command line arguments
    */
   public static void main(String args[]) {
+    CommandLine.run(new JavaFlow(), args);
+  }
+
+  /**
+   * Execute the javaflow progam with command line arguments
+   *
+   * Runnable.run method executed by picocli.Commandline.run
+   */
+  public void run() {
     TypeMap typeMap = new TypeMap("types.yml");
     Converter converter = new JavaFlowConverter(typeMap);
 
     List<Verifier> verifierList = new ArrayList<>();
     verifierList.add(new MemberFieldsPresentVerifier(typeMap));
-    if (stream(args).anyMatch(arg -> arg.equals(VERIFY_GETTERS_ARG))) {
+    if (verifyGetters) {
       verifierList.add(new ClassGetterNamingVerifier());
     }
 
@@ -68,15 +83,11 @@ public class JavaFlow {
     );
 
     try {
-      System.out.println(execution.run(filterOutArgs(args)));
+      System.out.println(execution.run(patterns));
     } catch (ExitException e) {
       e.printStackTrace();
       System.exit(e.getErrorCode().getCode());
     }
-  }
-
-  private static String[] filterOutArgs(String[] args) {
-    return stream(args).filter(arg -> !ARGS.contains(arg)).toArray(String[]::new);
   }
 
 }

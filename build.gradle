@@ -134,6 +134,7 @@ uploadArchives {
 dependencies {
     compile group: 'com.github.javaparser', name: 'javaparser-core', version:'3.7.0'
     compile group: 'com.esotericsoftware.yamlbeans', name: 'yamlbeans', version:'1.08'
+    compile 'info.picocli:picocli:3.8.0'
     testRuntime group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.7'
     testRuntime group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.7'
     testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.0.2'
