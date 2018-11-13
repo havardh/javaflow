@@ -35,7 +35,7 @@ import picocli.CommandLine;
 )
 public class JavaFlow implements Runnable {
 
-  @CommandLine.Option(names = { "-vg", "--verifyGetters" }, description = "Verify that field and getter names match")
+  @CommandLine.Option(names = { "--verifyGetters" }, description = "Verify that field and getter names match")
   private boolean verifyGetters;
 
   @CommandLine.Parameters(arity = "1..*", paramLabel = "file|folder|glob", description = "File(s), directorie(s) or glob patterns to process")
