@@ -1,5 +1,6 @@
 package com.github.havardh.javaflow;
 
+import static com.github.havardh.javaflow.phases.parser.java.JavaParserFlags.flagsBuilder;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -12,7 +13,6 @@ import com.github.havardh.javaflow.model.TypeMap;
 import com.github.havardh.javaflow.phases.filetransform.CommentPrependTransformer;
 import com.github.havardh.javaflow.phases.filetransform.EslintDisableTransformer;
 import com.github.havardh.javaflow.phases.parser.java.JavaParser;
-import com.github.havardh.javaflow.phases.parser.java.JavaParserFlags;
 import com.github.havardh.javaflow.phases.reader.FileReader;
 import com.github.havardh.javaflow.phases.resolver.FileResolver;
 import com.github.havardh.javaflow.phases.transform.InheritanceTransformer;
@@ -72,7 +72,7 @@ public class JavaFlow implements Runnable {
     Execution execution = new Execution(
         new FileResolver(),
         new FileReader(),
-        new JavaParser(JavaParserFlags.config().includeStaticFields(includeStaticFields).build()),
+        new JavaParser(flagsBuilder().includeStaticFields(includeStaticFields).build()),
         asList(
             new InheritanceTransformer(),
             new SortedTypeTransformer()

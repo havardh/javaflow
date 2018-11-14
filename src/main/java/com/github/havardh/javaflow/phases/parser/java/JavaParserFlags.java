@@ -8,30 +8,26 @@ public class JavaParserFlags {
   }
 
   public static JavaParserFlags defaultFlags() {
-    return Config.withDefaults().build();
+    return Builder.withDefaults().build();
   }
 
-  public boolean shouldIncludeStaticFields() {
+  boolean shouldIncludeStaticFields() {
     return includeStaticFields;
   }
 
-  public static Config config() {
-    return new Config();
+  public static Builder flagsBuilder() {
+    return new Builder();
   }
 
-  public static class Config {
+  public static class Builder {
 
     private boolean includeStaticFields;
 
-    public static Config emptyConfig() {
-      return new Config();
+    static Builder withDefaults() {
+      return new Builder().includeStaticFields(false);
     }
 
-    public static Config withDefaults() {
-      return new Config().includeStaticFields(false);
-    }
-
-    public Config includeStaticFields(boolean includeStaticFields) {
+    public Builder includeStaticFields(boolean includeStaticFields) {
       this.includeStaticFields = includeStaticFields;
       return this;
     }
