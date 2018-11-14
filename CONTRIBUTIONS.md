@@ -30,6 +30,8 @@ Circle CI is used for continuous integration.
 ## Conventions
 
 The [angular commit guide][angular-commit] line is used to govern commit messages.
+If possible do not force push changes to branches with open pull requests, unless
+it is done to rebase on the master branch. This will make code reviews easier.   
 
 ## Help needed
 
