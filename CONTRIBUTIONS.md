@@ -21,7 +21,7 @@ This project uses a bundled `gradle`package manager.
 
 Tests are mainly added as integration tests in [`ExecutionIntegrationTest`]([integration-tests]).
 
-- `./gradlew test` - Runs the all the tests
+- `./gradlew test` - Runs all the tests
 
 #### Continuous integration
 
