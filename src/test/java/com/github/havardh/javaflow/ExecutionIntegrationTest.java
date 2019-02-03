@@ -208,6 +208,20 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithNullableField() {
+    String flowCode = execution.run(
+        BASE_PATH + "ModelWithNullableField.java"
+    );
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithNullableField = {",
+        "  field: ?string,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithAnonymousClass() {
     String flowCode = execution.run(
         BASE_PATH + "ModelWithAnonymousClass.java",

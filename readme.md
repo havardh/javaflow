@@ -136,6 +136,10 @@ Available verifiers:
     - the same type in the field definitions as the return type in the corresponding getter and
     - their getters for the corresponding fields with the same name, prefixed with `get` or `is`.
 
+### Annotations ###
+
+ - A field annotated with a `Nullable` annotation will translated to a Maybe type. 
+
 ## Development ##
 
 ### Package ###
