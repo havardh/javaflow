@@ -44,5 +44,16 @@ public class FieldWriterTest extends WriterTest<Field> {
     );
   }
 
+  @Test
+  public void shouldNotWriteIgnoredType() throws IOException {
+    String flow = toFlow(fieldBuilder()
+        .withName("field")
+        .withIsIgnored(true)
+        .withType(TypeFixtures.stringType().build())
+        .build());
+
+    assertStringEqual(flow, "");
+  }
+
 }
 

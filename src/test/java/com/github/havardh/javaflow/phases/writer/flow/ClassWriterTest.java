@@ -40,5 +40,18 @@ public class ClassWriterTest extends WriterTest<Class> {
     );
   }
 
+  @Test
+  public void shouldSkipIgnoredFieldDefinitions() throws IOException {
+    String flow = toFlow(ClassBuilder.classBuilder()
+        .withName("Model")
+        .withField(stringFieldDefinition().withIsIgnored(true).build())
+        .build());
+
+    assertStringEqual(flow,
+        "export type Model = {",
+        "};"
+    );
+  }
+
 }
 

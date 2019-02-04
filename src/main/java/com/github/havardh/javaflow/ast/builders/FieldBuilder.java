@@ -10,6 +10,7 @@ public final class FieldBuilder {
   private boolean isNullable;
   private String name;
   private Type type;
+  private boolean isIgnored;
 
   private FieldBuilder() {
   }
@@ -31,6 +32,18 @@ public final class FieldBuilder {
    */
   public FieldBuilder withIsNullable(boolean isNullable) {
     this.isNullable = isNullable;
+    return this;
+  }
+
+  /**
+   * Set the isIgnored value
+   *
+   * @param isIgnored set to true if the field is ignored
+   *
+   * @return the builder for method chaining
+   */
+  public FieldBuilder withIsIgnored(boolean isIgnored) {
+    this.isIgnored = isIgnored;
     return this;
   }
 
@@ -62,7 +75,7 @@ public final class FieldBuilder {
    * @return the {@code Field}
    */
   public Field build() {
-    return new Field(isNullable, name, type);
+    return new Field(isNullable, isIgnored, name, type);
   }
 }
 

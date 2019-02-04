@@ -39,9 +39,11 @@ class ClassWriter implements Writer<Class> {
       writer.write("\n");
     }
     for (Field field : aClass.getFields()) {
-      writer.write("  ");
-      fieldWriter.write(field, writer);
-      writer.write(",\n");
+      if (!field.isIgnored()) {
+        writer.write("  ");
+        fieldWriter.write(field, writer);
+        writer.write(",\n");
+      }
     }
   }
 }

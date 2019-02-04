@@ -11,6 +11,7 @@ import com.github.havardh.javaflow.model.CanonicalName;
 public class Field {
 
   private final boolean isNullable;
+  private final boolean isIgnored;
   private final String name;
   private final Type type;
 
@@ -21,8 +22,9 @@ public class Field {
    * @param name the name of the field
    * @param type the type of the field
    */
-  public Field(boolean isNullable, String name, Type type) {
+  public Field(boolean isNullable, boolean isIgnored, String name, Type type) {
     this.isNullable = isNullable;
+    this.isIgnored = isIgnored;
     this.type = requireNonNull(type);
     this.name = requireNonNull(name);
   }
@@ -52,6 +54,15 @@ public class Field {
    */
   public boolean isNullable() {
     return isNullable;
+  }
+
+  /**
+   * Check if the field is ignored by json serialization
+   *
+   * @return true if the field is ignored
+   */
+  public boolean isIgnored() {
+    return isIgnored;
   }
 
   /** {@inheritDoc} */

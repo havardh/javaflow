@@ -104,6 +104,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     if (shouldIncludeStaticFields(field.getModifiers())) {
       field.getVariables().forEach(variable -> builder.withField(new Field(
           isNullable(field),
+          isIgnored(field),
           variable.getNameAsString(),
           factory.build(variable.getType().asString(), variable.getType() instanceof PrimitiveType)
       )));
@@ -135,6 +136,12 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     return field.getAnnotations().stream()
         .map(AnnotationExpr::getNameAsString)
         .anyMatch(name -> name.equals("Nullable"));
+  }
+
+  private boolean isIgnored(FieldDeclaration field) {
+    return field.getAnnotations().stream()
+        .map(AnnotationExpr::getNameAsString)
+        .anyMatch(name -> name.equals("JsonIgnore"));
   }
 
   private boolean isClass(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {

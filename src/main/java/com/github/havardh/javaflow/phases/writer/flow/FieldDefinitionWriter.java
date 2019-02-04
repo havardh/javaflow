@@ -27,6 +27,9 @@ public class FieldDefinitionWriter implements Writer<Field> {
   /** {@inheritDoc} */
   @Override
   public void write(Field field, java.io.Writer writer) throws IOException {
+    if (field.isIgnored()) {
+      return;
+    }
     writer.write(field.getName());
     writer.write(": ");
     if (field.isNullable()) {

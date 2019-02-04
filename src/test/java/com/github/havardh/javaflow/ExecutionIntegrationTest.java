@@ -239,6 +239,19 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithIgnoredField() {
+    String flowCode = execution.run(
+        BASE_PATH + "ModelWithIgnoredField.java"
+    );
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithIgnoredField = {",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithInnerClasses() {
     String flowCode = execution.run(BASE_PATH + "ModelWithInnerClasses.java");
 
