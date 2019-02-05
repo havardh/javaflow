@@ -123,12 +123,6 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     }
   }
 
-  @Override
-  public void visit(AnnotationMemberDeclaration n, ClassBuilder arg) {
-    super.visit(n, arg);
-    System.out.println(n.getDefaultValue().map(a -> a.asStringLiteralExpr().asString()));
-  }
-
   private boolean shouldIncludeStaticFields(Set<Modifier> modifiers) {
     return includeStaticFields || !modifiers.contains(Modifier.STATIC);
   }
