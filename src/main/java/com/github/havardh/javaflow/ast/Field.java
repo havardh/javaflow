@@ -2,6 +2,7 @@ package com.github.havardh.javaflow.ast;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
 import com.github.havardh.javaflow.model.CanonicalName;
 
@@ -12,6 +13,7 @@ public class Field {
 
   private final boolean isNullable;
   private final boolean isIgnored;
+  private final String jsonName;
   private final String name;
   private final Type type;
 
@@ -19,12 +21,15 @@ public class Field {
    * Create a {@code Field} with the name, type and flag for nullable
    *
    * @param isNullable flag which is true when the type is nullable
+   * @param isIgnored flag which is true when the field is ignored
+   * @param jsonName the json property name
    * @param name the name of the field
    * @param type the type of the field
    */
-  public Field(boolean isNullable, boolean isIgnored, String name, Type type) {
+  public Field(boolean isNullable, boolean isIgnored, String jsonName, String name, Type type) {
     this.isNullable = isNullable;
     this.isIgnored = isIgnored;
+    this.jsonName = jsonName;
     this.type = requireNonNull(type);
     this.name = requireNonNull(name);
   }
@@ -45,6 +50,27 @@ public class Field {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Get the json property name of the field
+   *
+   * @return the json property nam of the field
+   */
+  public String getJsonName() {
+    return jsonName;
+  }
+
+  /**
+   * Get the name of the field as it would appear in json
+   *
+   * Gets the json overridden name if set and defaults to
+   * the name of the field.
+   *
+   * @return the name of the field
+   */
+  public String getJsonNameOrName() {
+    return ofNullable(jsonName).orElse(name);
   }
 
   /**

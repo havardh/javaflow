@@ -252,6 +252,20 @@ public class ExecutionIntegrationTest {
   }
 
   @Test
+  public void shouldParseModelWithPropertyFieldAnnotation() {
+    String flowCode = execution.run(
+        BASE_PATH + "ModelWithPropertyFieldAnnotation.java"
+    );
+
+    assertStringEqual(
+        flowCode,
+        "export type ModelWithPropertyFieldAnnotation = {",
+        "  annotatedFieldName: string,",
+        "};"
+    );
+  }
+
+  @Test
   public void shouldParseModelWithInnerClasses() {
     String flowCode = execution.run(BASE_PATH + "ModelWithInnerClasses.java");
 

@@ -75,7 +75,7 @@ public final class FieldBuilder {
    * @return the {@code Field}
    */
   public Field build() {
-    return new Field(isNullable, isIgnored, name, type);
+    return new Field(isNullable, isIgnored, null, name, type);
   }
 }
 

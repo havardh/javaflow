@@ -1,13 +1,10 @@
 package com.github.havardh.javaflow.phases.parser.java;
 
 import static java.util.Arrays.asList;
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.joining;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 import com.github.havardh.javaflow.ast.Field;
@@ -19,11 +16,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
@@ -105,6 +99,7 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
       field.getVariables().forEach(variable -> builder.withField(new Field(
           isNullable(field),
           isIgnored(field),
+          getJsonPropertyName(field).orElse(null),
           variable.getNameAsString(),
           factory.build(variable.getType().asString(), variable.getType() instanceof PrimitiveType)
       )));
@@ -128,6 +123,12 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     }
   }
 
+  @Override
+  public void visit(AnnotationMemberDeclaration n, ClassBuilder arg) {
+    super.visit(n, arg);
+    System.out.println(n.getDefaultValue().map(a -> a.asStringLiteralExpr().asString()));
+  }
+
   private boolean shouldIncludeStaticFields(Set<Modifier> modifiers) {
     return includeStaticFields || !modifiers.contains(Modifier.STATIC);
   }
@@ -142,6 +143,14 @@ public class ClassVisitor extends VoidVisitorAdapter<ClassBuilder> {
     return field.getAnnotations().stream()
         .map(AnnotationExpr::getNameAsString)
         .anyMatch(name -> name.equals("JsonIgnore"));
+  }
+
+  private Optional<String> getJsonPropertyName(FieldDeclaration field) {
+    return field.getAnnotationByName("JsonProperty")
+        .flatMap(expr -> expr.isSingleMemberAnnotationExpr() ? of(expr.asSingleMemberAnnotationExpr()) : empty())
+        .flatMap(expr -> of(expr.getMemberValue()))
+        .flatMap(value -> value.isStringLiteralExpr() ? of(value.asStringLiteralExpr()) : empty())
+        .map(StringLiteralExpr::asString);
   }
 
   private boolean isClass(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {

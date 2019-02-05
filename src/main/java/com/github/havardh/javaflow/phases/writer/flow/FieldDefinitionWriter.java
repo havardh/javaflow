@@ -30,7 +30,7 @@ public class FieldDefinitionWriter implements Writer<Field> {
     if (field.isIgnored()) {
       return;
     }
-    writer.write(field.getName());
+    writer.write(field.getJsonNameOrName());
     writer.write(": ");
     if (field.isNullable()) {
       writer.write("?");
